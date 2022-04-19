@@ -75,6 +75,5 @@ const hashPassword = async (user) => {
 };
 
 User.beforeCreate(hashPassword);
-// User.afterCreate(new ShoppingCart({ name: this.username }));
 User.beforeUpdate(hashPassword);
 User.beforeBulkCreate((users) => Promise.all(users.map(hashPassword)));
