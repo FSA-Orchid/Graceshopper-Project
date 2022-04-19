@@ -16,10 +16,6 @@ const Product = db.define("product", {
     type: Sequelize.STRING,
     validate: {
       notEmpty: true,
-      isIn: {
-        args: [["Fender", "Squire", "Gibson"]],
-        msg: "We dont sell that item. Must be Fender, Squire, or Gibson",
-      },
     },
   },
   model: {

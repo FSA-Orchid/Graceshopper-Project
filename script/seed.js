@@ -22,7 +22,7 @@ async function seed() {
   console.log(`seeded ${users.length} users`);
 
   //Creating Pruducts
-  const products = await Promise.all([
+  const products = [
     Product.create({
       instrament: "guitar",
       make: "Fender",
@@ -68,7 +68,13 @@ async function seed() {
       condition: "new",
       description: "smooth jazz",
     }),
-  ]);
+  ];
+  
+  await Promise.all(
+    products.map((product) => {
+      return Product.create(product);
+    }),
+
   console.log(`seeded ${products.length} users`);
   console.log(`seeded successfully`);
   return {
