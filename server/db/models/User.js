@@ -3,6 +3,7 @@ const db = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const axios = require("axios");
+const ShoppingCart = require("./ShoppingCart");
 
 const SALT_ROUNDS = 5;
 
@@ -74,5 +75,6 @@ const hashPassword = async (user) => {
 };
 
 User.beforeCreate(hashPassword);
+User.afterCreate(new ShoppingCart({ name: this.username }));
 User.beforeUpdate(hashPassword);
 User.beforeBulkCreate((users) => Promise.all(users.map(hashPassword)));
