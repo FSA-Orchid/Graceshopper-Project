@@ -2,11 +2,9 @@ const Sequelize = require("sequelize");
 const pkg = require("../../package.json");
 
 // const databaseName = pkg.name + (process.env.NODE_ENV === 'test' ? '-test' : '')
-<<<<<<< HEAD
-const databaseName = "orchid"
-=======
 
->>>>>>> a100a92196919804a0650162d787e24a8311f45f
+const databaseName = "orchid"
+
 const config = {
   logging: false,
 };
