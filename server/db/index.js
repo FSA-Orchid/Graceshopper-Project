@@ -9,9 +9,7 @@ const ShoppingCart = require("./models/ShoppingCart");
 
 module.exports = {
   db,
-  models: {
-    User,
-    Product,
-    ShoppingCart,
-  },
+  User,
+  Product,
+  ShoppingCart,
 };
