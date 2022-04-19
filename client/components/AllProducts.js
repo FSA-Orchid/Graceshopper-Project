@@ -25,12 +25,19 @@ class AllProducts extends React.Component {
   }
 
   render () {
-    if(!this.props.products){return <h1>Loading Page!</h1>}
+    if(!this.props.)
+    if(!this.props.products){return <h1>No Products!</h1>}
     let products = this.state.products
 
 
     return (
       <div className="AllProducts">
+        <form className='filters'>
+
+
+        </form>
+
+
         <div className='Flex-Products-Container'>
           {products.map((product) => {
          return (
@@ -41,6 +48,15 @@ class AllProducts extends React.Component {
           <h5>A {product.model} from {product.year}</h5>
           <img src={product.imageUrl} />
          </Link>
+          <button
+                  type="submit"
+                  className=""
+                  onClick={() => {
+                    this.props.addToCart(product.id);
+                  }}
+                >
+                  Add To Cart
+          </button>
          </form>
          )})}
         </div>
@@ -54,8 +70,11 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    loadProducts: () => dispatch(setProductsThunk())
+    loadProducts: () => dispatch(setProductsThunk()),
+    addToCart: () => dispatch(addToCart())
   }
 }
+
+
 
 export default connect(mapState, mapDispatch)(AllProducts)
