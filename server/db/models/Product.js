@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
 
-module.exports = db.define("product", {
+const Product = db.define("product", {
   instrament: {
     type: Sequelize.STRING,
     validate: {
@@ -16,10 +16,6 @@ module.exports = db.define("product", {
     type: Sequelize.STRING,
     validate: {
       notEmpty: true,
-      isIn: {
-        args: [["Fender", "Squire", "Gibson"]],
-        msg: "We dont sell that item. Must be Fender, Squire, or Gibson",
-      },
     },
   },
   model: {
@@ -29,8 +25,8 @@ module.exports = db.define("product", {
     },
   },
   year: {
+    type: Sequelize.STRING,
     validate: {
-      isNumeric: true,
       notEmpty: true,
     },
   },
@@ -53,3 +49,5 @@ module.exports = db.define("product", {
     },
   },
 });
+
+module.exports = Product;
