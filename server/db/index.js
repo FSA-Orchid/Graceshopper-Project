@@ -7,6 +7,10 @@ const Product = require("./models/Product");
 const ShoppingCart = require("./models/ShoppingCart");
 //associations could go here!
 
+ShoppingCart.belongsTo(User);
+Product.belongsToMany(User, { through: ShoppingCart });
+User.hasMany(ShoppingCart);
+
 module.exports = {
   db,
   User,
