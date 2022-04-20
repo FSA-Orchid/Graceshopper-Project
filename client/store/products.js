@@ -1,91 +1,93 @@
 import axios from "axios";
 
-const initialState = []
+const initialState = [];
 
 //action constants
-const SetProducts = 'SET_PRODUCTS'
-const DeleteProduct = 'DELETE_PRODUCT'
-const AddProduct = 'ADD_PRODUCT'
-const UpdateProduct = 'UPDATE_PRODUCT'
-
+const SetProducts = "SET_PRODUCTS";
+const DeleteProduct = "DELETE_PRODUCT";
+const AddProduct = "ADD_PRODUCT";
+const UpdateProduct = "UPDATE_PRODUCT";
 
 //action creators
 export const setProducts = (products) => {
-  return {type: SetProducts,
-          products}
-}
+  return { type: SetProducts, products };
+};
 
 export const deleteProduct = (id) => {
-  return {type: DeleteProduct,
-          id: id}
-}
+  return { type: DeleteProduct, id: id };
+};
 
 export const addProduct = (product) => {
-  return {type: AddProduct,
-          product: product}
-}
+  return { type: AddProduct, product: product };
+};
 
 export const updateProduct = (product) => {
-  return {type: UpdateProduct,
-          product: product}
-}
+  return { type: UpdateProduct, product: product };
+};
 
 //THUNKS BELOW
 export const setProductsThunk = () => {
   return async function (dispatch) {
-  try {  let response = await axios.get('PLACEHOLDERFORROUTE')
-    let products = response.data
-    dispatch(setProducts(products))
-  }
-  catch (err){console.log(err)}
-}}
+    try {
+      let response = await axios.get("PLACEHOLDERFORROUTE");
+      let products = response.data;
+      dispatch(setProducts(products));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 
 export const deleteProductThunk = (id) => {
   return async function (dispatch) {
     try {
-      await axios.delete(`INSERTROUTE/${id}`)
-      await dispatch(deleteProduct(id))
+      await axios.delete(`INSERTROUTE/${id}`);
+      await dispatch(deleteProduct(id));
+    } catch (err) {
+      console.log(err);
     }
-    catch (err){console.log(err)}
-  }
-}
+  };
+};
 
 export const addProductThunk = (product) => {
   return async function (dispatch) {
     try {
-      let response = await axios.post(`PLACEHOLDER`, product)
-      let newProduct = response.data
-      dispatch(addProduct(newProduct))
+      let response = await axios.post(`PLACEHOLDER`, product);
+      let newProduct = response.data;
+      dispatch(addProduct(newProduct));
+    } catch (err) {
+      console.log(err);
     }
-    catch (err){console.log(err)}
-  }
-}
+  };
+};
 
 export const editProductThunk = (product) => {
   return async function (dispatch) {
     try {
-      let response = await axios.put(`PLACEHOLDER/${product.id}`, product)
-      let updatedProduct = response.data
-      dispatch(updateProduct(updatedProduct))
+      let response = await axios.put(`PLACEHOLDER/${product.id}`, product);
+      let updatedProduct = response.data;
+      dispatch(updateProduct(updatedProduct));
+    } catch (err) {
+      console.log(err);
     }
-    catch(err){console.log(err)}
-  }
-}
-
-
-
+  };
+};
 
 export default function productsReducer(state = initialState, action) {
-  switch (action.type){
+  switch (action.type) {
     case SetProducts:
-      return [...state, action.products]
+      return action.products;
     case UpdateProduct:
-      return [state.map((product)=> product.id === action.product.id ? action.product : product)]
+      return [
+        state.map((product) =>
+          product.id === action.product.id ? action.product : product
+        ),
+      ];
     case AddProduct:
-      return [...state, action.product]
+      return [...state, action.product];
     case DeleteProduct:
-      return [state.filter((product) => product.id !== action.id)]
+      return [state.filter((product) => product.id !== action.id)];
     default:
-      return state
+      return state;
   }
 }

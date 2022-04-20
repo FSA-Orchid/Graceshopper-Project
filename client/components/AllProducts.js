@@ -3,11 +3,15 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { setProductsThunk } from "../store/products";
 
-class AllProducts extends React.Component {
+export class AllProducts extends React.Component {
   componentDidMount() {
     this.props.fetchProducts();
   }
   render() {
+    {
+      console.log(this.props);
+    }
+
     return (
       <div className="productList">
         {this.props.products.length ? (
@@ -41,12 +45,11 @@ const mapStateToProps = (reduxState) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchProducts: () => dispatch(fetchProducts()),
+  fetchProducts: () => dispatch(setProductsThunk()),
   deleteProduct: (id) => dispatch(deleteProductThunk(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts);
-
 // class AllProducts extends React.Component {
 //   constructor(props) {
 //     super(props)
