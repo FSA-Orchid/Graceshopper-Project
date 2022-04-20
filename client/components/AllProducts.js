@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import { setProductsThunk } from '../store/products'
 
+
 class AllProducts extends React.Component {
   constructor(props) {
     super(props)
@@ -24,9 +25,11 @@ class AllProducts extends React.Component {
     }
   }
 
+
+
   render () {
-    if(!this.props.)
-    if(!this.props.products){return <h1>No Products!</h1>}
+    if(!this.props.addToCart){return <h1>Page Loading!</h1>}
+    if(!this.props.products.length){return <h1>No Products!</h1>}
     let products = this.state.products
 
 
@@ -76,5 +79,5 @@ const mapDispatch = (dispatch) => {
 }
 
 
-
+export const AllProductsPaged = connect(null, mapDispatch)(AllProducts)
 export default connect(mapState, mapDispatch)(AllProducts)
