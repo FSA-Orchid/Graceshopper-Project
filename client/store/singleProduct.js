@@ -14,7 +14,7 @@ export const setSingleProduct = (product) => {
 export const setProductThunk = (id) => {
   return async function (dispatch) {
   try {
-    let response = await axios.get(`PLACEHOLDERFORROUTE/${id}`)
+    let response = await axios.get(`/api/products/${id}`)
     let product = response.data
     dispatch(setSingleProduct(product))
   }
@@ -24,7 +24,7 @@ export const setProductThunk = (id) => {
 export default function singleProductReducer(state = initialState, action) {
   switch (action.type){
     case SetSingleProduct:
-      return {...state, product : action.product}
+      return action.product
     default:
       return state
   }
