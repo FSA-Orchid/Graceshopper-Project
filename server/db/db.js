@@ -3,6 +3,8 @@ const pkg = require("../../package.json");
 
 //const databaseName = "orchid";
 
+const databaseName = "orchid"
+
 const config = {
   logging: false,
 };
