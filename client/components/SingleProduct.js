@@ -28,7 +28,8 @@ class SingleProduct extends React.Component {
         <p>color: {product.color}</p>
         <p>condition: {product.condition}</p>
         <p>description: {product.description}</p>
-        <Link to={`/products`}>All Products</Link>
+        <Link to={`/products`}>All Products</Link><br/>
+        <input type='number' min='1' max='5' placeholder='1'></input>
       </div>
     );
   }
