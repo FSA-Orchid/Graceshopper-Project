@@ -15,11 +15,13 @@ class AllProducts extends React.Component {
             <div key={product.id}>
               <img src={product.imageUrl} className="photo" />
               <h2>
-                <Link to={`/campuses/${product.id}/`}>{campus.name}</Link>
+                <Link to={`/products/${product.id}/`}>
+                  {product.instrument} - {product.make} - {product.model}
+                </Link>
                 <button
                   type="submit"
                   className="delete"
-                  onClick={() => this.props.deleteCampus(product.id)}
+                  onClick={() => this.props.deleteProduct(product.id)}
                 >
                   X
                 </button>
