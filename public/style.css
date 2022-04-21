@@ -19,3 +19,19 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.productList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+img {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.listingInfo {
+  color: blue;
+  font-size: smaller;
+}
