@@ -1,30 +1,27 @@
 const router = require("express").Router();
-const { User, Cart, Product, orderProduct } = require("../db");
+const { User, ShoppingCart, Product, OrderProducts } = require("../db");
 module.exports = router;
 
 //get cart
 router.get("/:id/cart", async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
-      attributes: {exclude: ['password']},
-      include: [
+      attributes: {exclude: 'password'},
+      include:
         {
-        model: Cart,
-        where: {status: 'pending'},
-        include:[{
-          model: orderProduct,
-          include: Product
-        }]
+        model: ShoppingCart,
+        where: {orderFilled: 'false'},
+        include:
+          Product
         }
-      ]
     });
-    if(!user.cart.length){
-     user.cart = await Cart.create({
+    console.log(user)
+    if(!user.carts.length){
+     user.carts = await ShoppingCart.create({
        userId: user.id,
-       status: 'pending'
       })
     }
-    let cart = user.cart
+    let cart = user.carts[0]
     res.send(cart);
     //we want to return an array of items for the cart page, OR we can return the whole user.
   } catch (err) {
@@ -36,24 +33,25 @@ router.get("/:id/cart", async (req, res, next) => {
 router.put("/:id/cart/add", async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
-      attributes: {exclude: ['password']},
-      include: [{
-        model: Cart,
-        where: {status: 'pending'},
-        include:[{
-          model: orderProduct,
-          include: Product
+      attributes: {exclude: 'password'},
+      include:
+        {
+        model: ShoppingCart,
+        where: {orderFilled: 'false'},
+        include: [{
+          model: Product,
+          where: {id: req.body.id}
         }]
-      }]
-    });
-    if(!user.cart.orderProduct[req.body.productId]){
-      user.cart = await orderProduct.create({
-        cartId: user.cart.cartId,
+    }});
+    if(!user.carts.products.length){
+      user.carts = await OrderProducts.create({
+        cartId: user.carts.cartId,
+        productId: req.body.productId,
         quantity: req.body.quantity
       })
     }
     else {
-      user.cart.orderProduct[req.body.productId] = {
+      user.carts.products[req.body.productId] = {
         quantity: this.quantity + req.body.quantity}
     }
   const cart = user.cart
@@ -69,24 +67,20 @@ router.put("/:id/cart/add", async (req, res, next) => {
 router.delete("/:id/cart/remove"), async (req,res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
-      attributes: ["id", "username"],
-      include: [
+      attributes: {exclude: 'password'},
+      include:
         {
-        model: Cart,
-        where: {status: 'pending'},
-        include:[{
-          model: orderProduct,
-          where: {productId: req.body.productId},
-          include: Product
-        }]
+        model: ShoppingCart,
+        where: {orderFilled: 'false'},
+        include:
+          Product
         }
-      ]
     });
-    if(!user.cart.orderProduct[req.body.productId]){
+    if(!user.carts.orderProduct[req.body.productId]){
       res.status(404).send('Item not in cart')
     }
-    user.cart.orderProduct.destroy()
-    res.status(200)
+    let removed = await user.cart.orderProduct.destroy()
+    res.send(removed)
     }
   catch (err) {
     next(err);

@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../store';
+import { setProductsThunk } from '../store/allproducts';
 
-const Navbar = ({ handleClick, isLoggedIn }) => (
+const Navbar = ({ handleClick, isLoggedIn, fetchAllProducts }) => (
   <div>
     <h1 className="storeTitle">Some Guitar Store</h1>
     <nav>
@@ -13,7 +14,11 @@ const Navbar = ({ handleClick, isLoggedIn }) => (
           <Link className="navText" to="/home">
             Home
           </Link>
-          <Link className="navText" to="/products">
+          <Link
+            className="navText"
+            to="/products"
+            onClick={() => fetchAllProducts()}
+          >
             All Products
           </Link>
           <a className="navText" href="#" onClick={handleClick}>
@@ -50,6 +55,7 @@ const mapDispatch = (dispatch) => {
     handleClick() {
       dispatch(logout());
     },
+    fetchAllProducts: () => dispatch(setProductsThunk),
   };
 };
 

@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
 
-module.exports = db.define("ShoppingCart", {
+module.exports = db.define("cart", {
   orderFilled: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
