@@ -1,7 +1,12 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { setProductsThunk } from '../store/allproducts';
+import React from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import {
+  setGuitarsThunk,
+  setBassThunk,
+  setProductsThunk,
+  deleteProductThunk,
+} from "../store/allproducts";
 
 export class AllProducts extends React.Component {
   componentDidMount() {
@@ -9,11 +14,13 @@ export class AllProducts extends React.Component {
   }
   render() {
     {
-      console.log(this.props, 'These are props');
+      console.log(this.props, "These are props");
     }
 
     return (
       <div className="productList">
+        <Link onClick={() => this.props.fetchGuitars()}>Guitars</Link>
+        <Link onClick={() => this.props.fetchbass()}>Bass</Link>
         {this.props.products.length ? (
           this.props.products.map((product) => (
             <div key={product.id}>
@@ -46,10 +53,13 @@ const mapStateToProps = (reduxState) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchProducts: () => dispatch(setProductsThunk()),
+  fetchGuitars: () => dispatch(setGuitarsThunk()),
+  fetchBass: () => dispatch(setBassThunk()),
   deleteProduct: (id) => dispatch(deleteProductThunk(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts);
+
 // class AllProducts extends React.Component {
 //   constructor(props) {
 //     super(props)
