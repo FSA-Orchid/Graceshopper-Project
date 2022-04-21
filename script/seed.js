@@ -62,8 +62,7 @@ const products = [
  *      match the models, and populates the database.
  */
 
-const users = [
-  {
+const users = [{
     username: "cody",
     password: "123",
     email: "cody@coder.com",

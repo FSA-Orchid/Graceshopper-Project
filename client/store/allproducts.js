@@ -118,14 +118,17 @@ export default function productsReducer(state = initialState, action) {
     case SetProducts:
       return action.products;
     case SetGuitars:
-      console.log(action.products);
-      return action.products.filter((product) => {
-        product.instrument === "guitar";
-      });
+      console.log(
+        "gats",
+        action.products.filter((product) => {
+          product.instrument === "Guitar";
+        })
+      );
+      return action.products.filter(
+        (product) => product.instrument === "Guitar"
+      );
     case SetBass:
-      return action.products.filter((product) => {
-        product.instrument === "bass";
-      });
+      return action.products.filter((product) => product.instrument === "Bass");
     case UpdateProduct:
       return [
         state.map((product) =>
