@@ -22,6 +22,7 @@ export class AllProducts extends React.Component {
         <div className="guitarFilter">
           <Link onClick={() => this.props.fetchGuitars()}>Guitars</Link>
           <Link onClick={() => this.props.fetchBass()}>Bass</Link>
+          <Link onClick={() => this.props.fetchProducts()}>All Products</Link>
         </div>
         <div className="productList">
           {this.props.products.length ? (
@@ -46,6 +47,7 @@ export class AllProducts extends React.Component {
             <h2>No Products</h2>
           )}
         </div>
+      </div>
     );
   }
 }
@@ -62,5 +64,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts);
-
-
