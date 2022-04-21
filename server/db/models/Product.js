@@ -13,8 +13,10 @@ const Product = db.define("product", {
     validate: {
       notEmpty: true,
       isIn: {
+
         args: [["Bass", "Guitar"]],
         msg: "Must be bass or guitar",
+
       },
     },
   },
