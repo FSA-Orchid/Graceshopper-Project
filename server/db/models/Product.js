@@ -1,23 +1,31 @@
-const Sequelize = require("sequelize");
-const db = require("../db");
+const Sequelize = require('sequelize');
+const db = require('../db');
 
-const Product = db.define("product", {
-  instrament: {
+const Product = db.define('product', {
+  instrument: {
     type: Sequelize.STRING,
     validate: {
       notEmpty: true,
       isIn: {
-        args: [["bass", "guitar"]],
-        msg: "Must be bass or guitar",
+        args: [['bass', 'guitar']],
+        msg: 'Must be bass or guitar',
       },
     },
   },
+
   make: {
     type: Sequelize.STRING,
     validate: {
       notEmpty: true,
     },
   },
+
+  imageUrl: {
+    type: Sequelize.STRING,
+    defaultValue:
+      'https://clipartix.com/wp-content/uploads/2016/04/Guitar-clip-art-image-free-clipart-images.jpeg',
+  },
+
   model: {
     type: Sequelize.STRING,
     validate: {
