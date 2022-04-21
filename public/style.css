@@ -35,3 +35,22 @@ img {
   color: blue;
   font-size: smaller;
 }
+
+.navBar {
+  display: flex;
+  justify-content: space-evenly;
+  background-color: lightgray;
+}
+
+.storeTitle {
+  text-align: center;
+}
+
+.navText {
+  color: black;
+}
+
+.guitarFilter {
+  display: flex;
+  margin: auto;
+}
