@@ -47,7 +47,7 @@ const updateCart = (product) => {
 export const setCartThunk = (id) => {
   return async function (dispatch) {
     try {
-      let response = await axios.get(`/api/cart/${id}`);
+      let response = await axios.get(`/api/users/${id}/cart`);
       let cart = response.data;
       dispatch(setCart(cart));
     } catch (err) {
@@ -59,7 +59,7 @@ export const setCartThunk = (id) => {
 export const clearCartThunk = (id) => {
   return async function (dispatch) {
     try {
-      await axios.delete(`/api/cart/${id}`)
+      await axios.delete(`/api/users/${id}/cart`)
       dispatch(clearCart())
     }
     catch (err) {
