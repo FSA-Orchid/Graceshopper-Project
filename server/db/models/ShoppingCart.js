@@ -2,10 +2,12 @@ const Sequelize = require("sequelize");
 const db = require("../db");
 
 module.exports = db.define("ShoppingCart", {
-  name: {
-    type: Sequelize.STRING, // default value, this.owner.name shopping cart?
+  orderFilled: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
   },
-  // userId: {
-  //   defaultValue: 1234,
-  // },
 });
