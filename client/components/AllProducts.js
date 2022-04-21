@@ -20,7 +20,7 @@ export class AllProducts extends React.Component {
     return (
       <div className="productList">
         <Link onClick={() => this.props.fetchGuitars()}>Guitars</Link>
-        <Link onClick={() => this.props.fetchbass()}>Bass</Link>
+        <Link onClick={() => this.props.fetchBass()}>Bass</Link>
         {this.props.products.length ? (
           this.props.products.map((product) => (
             <div key={product.id}>

@@ -2,7 +2,7 @@
 const { db, User, Product, ShoppingCart } = require("../server/db");
 const products = [
   {
-    instrument: "guitar",
+    instrument: "Guitar",
     make: "Fender",
     model: "Stratocaster",
     year: "1997",
@@ -11,7 +11,7 @@ const products = [
     description: "Jimmi Hendrix Costume Model",
   },
   {
-    instrument: "guitar",
+    instrument: "Guitar",
     make: "Fender",
     model: "Stratocaster",
     year: "1997",
@@ -20,7 +20,7 @@ const products = [
     description: "Jimmi Hendrix Costume Model",
   },
   {
-    instrument: "guitar",
+    instrument: "Guitar",
     make: "Squire",
     model: "Telecaster",
     year: "2008",
@@ -29,7 +29,7 @@ const products = [
     description: "nashville tweeter",
   },
   {
-    instrument: "guitar",
+    instrument: "Guitar",
     make: "Gibson",
     model: "Les Paul",
     year: "1966",
@@ -38,7 +38,7 @@ const products = [
     description: "chug chug",
   },
   {
-    instrument: "bass",
+    instrument: "Bass",
     make: "Fender",
     model: "JazzMaster",
     year: "2002",
