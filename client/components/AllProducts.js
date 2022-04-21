@@ -1,7 +1,7 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { setProductsThunk } from "../store/allproducts";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { setProductsThunk } from '../store/allproducts';
 
 export class AllProducts extends React.Component {
   componentDidMount() {
@@ -9,7 +9,7 @@ export class AllProducts extends React.Component {
   }
   render() {
     {
-      console.log(this.props);
+      console.log(this.props, 'These are props');
     }
 
     return (
@@ -20,7 +20,7 @@ export class AllProducts extends React.Component {
               <img src={product.imageUrl} className="photo" />
               <h2>
                 <Link to={`/products/${product.id}/`}>
-                  {product.instrument} - {product.make} - {product.model}
+                  {product.year} {product.make} - {product.model}
                 </Link>
                 <button
                   type="submit"
