@@ -1,12 +1,12 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   setGuitarsThunk,
   setBassThunk,
   setProductsThunk,
   deleteProductThunk,
-} from '../store/allproducts';
+} from "../store/allproducts";
 
 export class AllProducts extends React.Component {
   componentDidMount() {
@@ -14,7 +14,7 @@ export class AllProducts extends React.Component {
   }
   render() {
     {
-      console.log(this.props, 'These are props');
+      console.log(this.props, "These are props");
     }
 
     return (
@@ -46,6 +46,7 @@ export class AllProducts extends React.Component {
             <h2>No Products</h2>
           )}
         </div>
+      </div>
     );
   }
 }
@@ -62,5 +63,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts);
-
-
