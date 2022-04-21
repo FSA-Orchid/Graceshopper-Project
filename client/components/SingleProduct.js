@@ -6,7 +6,8 @@ import Link from "react-router-dom/Link";
 class SingleProduct extends React.Component {
   componentDidMount() {
     try {
-      const productId = this.props.match.params.productId;
+      console.log(this.props)
+      const productId = this.props.match.params.id;
       this.props.getProduct(productId);
     } catch (error) {
       console.log(error);
@@ -27,7 +28,8 @@ class SingleProduct extends React.Component {
         <p>color: {product.color}</p>
         <p>condition: {product.condition}</p>
         <p>description: {product.description}</p>
-        <Link to={`/products`}>All Products</Link>
+        <Link to={`/products`}>All Products</Link><br/>
+        <input type='number' min='1' max='5' placeholder='1'></input>
       </div>
     );
   }
