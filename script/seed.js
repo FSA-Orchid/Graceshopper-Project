@@ -9,6 +9,8 @@ const products = [
     color: "olympic white",
     condition: "new",
     description: "Jimmi Hendrix Costume Model",
+    price: 59900,
+    inventory: 9,
   },
   {
     instrument: "Guitar",
@@ -18,6 +20,8 @@ const products = [
     color: "olympic white",
     condition: "new",
     description: "Jimmi Hendrix Costume Model",
+    price: 39900,
+    inventory: 5,
   },
   {
     instrument: "Guitar",
@@ -27,6 +31,8 @@ const products = [
     color: "sun burst",
     condition: "new",
     description: "nashville tweeter",
+    price: 79900,
+    inventory: 6,
   },
   {
     instrument: "Guitar",
@@ -36,6 +42,8 @@ const products = [
     color: "sun burst",
     condition: "new",
     description: "chug chug",
+    price: 69900,
+    inventory: 8,
   },
   {
     instrument: "Bass",
@@ -45,6 +53,8 @@ const products = [
     color: "white",
     condition: "new",
     description: "smooth jazz",
+    price: 49900,
+    inventory: 2,
   },
 ];
 /**
@@ -52,9 +62,18 @@ const products = [
  *      match the models, and populates the database.
  */
 
-const users = [
-  { username: "cody", password: "123" },
-  { username: "murphy", password: "123" },
+const users = [{
+    username: "cody",
+    password: "123",
+    email: "cody@coder.com",
+    address: "9430 Grace Hopper Ln",
+  },
+  {
+    username: "murphy",
+    password: "123",
+    email: "murphy@coder.com",
+    address: "134 Fullstack Ave",
+  },
 ];
 
 async function seed() {
