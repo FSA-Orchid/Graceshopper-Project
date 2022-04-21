@@ -1,6 +1,6 @@
 import axios from "axios"
 
-//axios routes not implemented, cart interface not yet decided on. when added, remove this comment.
+//axios routes not implemented, cart interface not yet decided on. when added, remove this comment, and revise page
 
 //NOT YET ADDED TO STORE Index
 
@@ -44,10 +44,10 @@ const updateCart = (product) => {
 }
 
 //THUNKS
-export const setCartThunk = () => {
+export const setCartThunk = (id) => {
   return async function (dispatch) {
     try {
-      let response = await axios.get(`/api/me/cart`);
+      let response = await axios.get(`/api/cart/${id}`);
       let cart = response.data;
       dispatch(setCart(cart));
     } catch (err) {
@@ -56,10 +56,10 @@ export const setCartThunk = () => {
   };
 };
 
-export const clearCartThunk = () => {
+export const clearCartThunk = (id) => {
   return async function (dispatch) {
     try {
-      await axios.delete(`/api/me/cart`)
+      await axios.delete(`/api/cart/${id}`)
       dispatch(clearCart())
     }
     catch (err) {
@@ -71,7 +71,7 @@ export const clearCartThunk = () => {
 export const removeFromCartThunk = (product) => {
   return async function (dispatch) {
     try {
-      await axios.delete(`/api/me/cart/${product.id}`)
+      await axios.delete(`/api/cart/${product.id}`)
       dispatch(removeFromCart(product))
     }
     catch (err) {
