@@ -1,50 +1,50 @@
-'use strict';
-const { db, User, Product, ShoppingCart } = require('../server/db');
+"use strict";
+const { db, User, Product, ShoppingCart } = require("../server/db");
 const products = [
   {
-    instrument: 'Guitar',
-    make: 'Fender',
-    model: 'Stratocaster',
-    year: '1997',
-    color: 'olympic white',
-    condition: 'new',
-    description: 'Jimmi Hendrix Costume Model',
+    instrument: "guitar",
+    make: "Fender",
+    model: "Stratocaster",
+    year: "1997",
+    color: "olympic white",
+    condition: "new",
+    description: "Jimmi Hendrix Costume Model",
   },
   {
-    instrument: 'Guitar',
-    make: 'Fender',
-    model: 'Stratocaster',
-    year: '1997',
-    color: 'olympic white',
-    condition: 'new',
-    description: 'Jimmi Hendrix Costume Model',
+    instrument: "guitar",
+    make: "Fender",
+    model: "Stratocaster",
+    year: "1997",
+    color: "olympic white",
+    condition: "new",
+    description: "Jimmi Hendrix Costume Model",
   },
   {
-    instrument: 'Guitar',
-    make: 'Squire',
-    model: 'Telecaster',
-    year: '2008',
-    color: 'sun burst',
-    condition: 'new',
-    description: 'nashville tweeter',
+    instrument: "guitar",
+    make: "Squire",
+    model: "Telecaster",
+    year: "2008",
+    color: "sun burst",
+    condition: "new",
+    description: "nashville tweeter",
   },
   {
-    instrument: 'Guitar',
-    make: 'Gibson',
-    model: 'Les Paul',
-    year: '1966',
-    color: 'sun burst',
-    condition: 'new',
-    description: 'chug chug',
+    instrument: "guitar",
+    make: "Gibson",
+    model: "Les Paul",
+    year: "1966",
+    color: "sun burst",
+    condition: "new",
+    description: "chug chug",
   },
   {
-    instrument: 'Bass',
-    make: 'Fender',
-    model: 'JazzMaster',
-    year: '2002',
-    color: 'white',
-    condition: 'new',
-    description: 'smooth jazz',
+    instrument: "bass",
+    make: "Fender",
+    model: "JazzMaster",
+    year: "2002",
+    color: "white",
+    condition: "new",
+    description: "smooth jazz",
   },
 ];
 /**
@@ -53,13 +53,13 @@ const products = [
  */
 
 const users = [
-  { username: 'cody', password: '123' },
-  { username: 'murphy', password: '123' },
+  { username: "cody", password: "123" },
+  { username: "murphy", password: "123" },
 ];
 
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
-  console.log('db synced!');
+  console.log("db synced!");
 
   // Creating Users
   await Promise.all(
@@ -86,16 +86,16 @@ console.log(`seeded successfully`);
  The `seed` function is concerned only with modifying the database.
 */
 async function runSeed() {
-  console.log('seeding...');
+  console.log("seeding...");
   try {
     await seed();
   } catch (err) {
     console.error(err);
     process.exitCode = 1;
   } finally {
-    console.log('closing db connection');
+    console.log("closing db connection");
     await db.close();
-    console.log('db connection closed');
+    console.log("db connection closed");
   }
 }
 
