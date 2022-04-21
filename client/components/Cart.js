@@ -10,7 +10,7 @@ import { clearCartThunk, updateQuantityCartThunk, removeFromCartThunk, setCartTh
 
 export class Cart extends React.Component {
   componentDidMount() {
-    this.props.fetchCart(this.props.params.id);
+    this.props.fetchCart();
   }
   render() {
     {
