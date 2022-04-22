@@ -59,7 +59,7 @@ export const setCartThunk = (id) => {
 export const clearCartThunk = (id) => {
   return async function (dispatch) {
     try {
-      await axios.delete(`/api/users/${id}/cart`)
+      await axios.delete(`/api/users/${id}/cart/clear`)
       dispatch(clearCart())
     }
     catch (err) {
@@ -68,10 +68,23 @@ export const clearCartThunk = (id) => {
   }
 }
 
-export const removeFromCartThunk = (product) => {
+//this will complete the order and clear the state for this cart
+export const closeOrderThunk = (id) => {
   return async function (dispatch) {
     try {
-      await axios.delete(`/api/cart/${product.id}`)
+      await axios.put(`/api/users/${id}/cart/complete`)
+      dispatch(clearCart())
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+export const removeFromCartThunk = (id, product) => {
+  return async function (dispatch) {
+    try {
+      await axios.delete(`/api/users/${id}/cart/remove`, product.id)
       dispatch(removeFromCart(product))
     }
     catch (err) {
@@ -80,11 +93,11 @@ export const removeFromCartThunk = (product) => {
   }
 }
 
-export const addToCartThunk = (product) => {
+export const addToCartThunk = (id, product, quantity, price) => {
   return async function (dispatch) {
     try {
       //Or it would be an axios.post
-      let response = await axios.put(`api/me/cart/${product.id}`)
+      let response = await axios.post(`/api/users/${id}/cart/add`, product, quantity, price)
       const newProduct = response.data
       dispatch(addToCart(newProduct))
     }
@@ -97,7 +110,7 @@ export const addToCartThunk = (product) => {
 export const updateQuantityCartThunk = (product) => {
   return async function (dispatch) {
     try {
-      let response = await axios.put(`api/me/cart/${product.id}`)
+      let response = await axios.put(`api/me/cart/${product.id}/update`, product.id,  )
       let newProduct = response.data
       dispatch(updateCart(newProduct))
     }

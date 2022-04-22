@@ -15,14 +15,16 @@ router.get("/:id/cart", async (req, res, next) => {
           Product
         }
     });
-    console.log(user)
-    if(!user.carts.length){
-     user.carts = await ShoppingCart.create({
-       userId: user.id,
+    if(!user){
+     let newCart = await ShoppingCart.create({
+       userId: req.params.id,
       })
+      res.send(newCart)
     }
+    else {
     let cart = user.carts[0]
-    res.send(cart);
+    res.send(cart.products);
+    }
     //we want to return an array of items for the cart page, OR we can return the whole user.
   } catch (err) {
     next(err);
@@ -30,7 +32,36 @@ router.get("/:id/cart", async (req, res, next) => {
 });
 
 //add to cart, needs a userId, quantity, and productId
-router.put("/:id/cart/add", async (req, res, next) => {
+router.post("/:id/cart/add", async (req, res, next) => {
+  try {
+    let cart = await ShoppingCart.findOne({where: {
+      userId: req.params.id,
+      orderFilled: false
+    }})
+    if(!cart){
+      cart = await ShoppingCart.create({
+        userId: req.params.id,
+
+       })
+    }
+
+    //This finds and gives a cart with only the value pending
+
+    let newOrder = await OrderProducts.create({
+        cartId: cart.id,
+        productId: req.body.id,
+        quantity: req.body.quantity,
+        totalPrice: req.body.totalPrice
+      })
+  res.send(newOrder)
+  }
+  catch (err) {
+    next(err);
+  }
+})
+
+
+router.put("/:id/cart/update", async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
       attributes: {exclude: 'password'},
@@ -43,18 +74,15 @@ router.put("/:id/cart/add", async (req, res, next) => {
           where: {id: req.body.id}
         }]
     }});
-    if(!user.carts.products.length){
-      user.carts = await OrderProducts.create({
-        cartId: user.carts.cartId,
-        productId: req.body.productId,
-        quantity: req.body.quantity
+    //This finds us the path to the relevant item
+    let cart = user.carts[0].products[0].orderProduct
+    //item path
+
+    await cart.set({
+        quantity: 1*(req.body.quantity),
       })
-    }
-    else {
-      user.carts.products[req.body.productId] = {
-        quantity: this.quantity + req.body.quantity}
-    }
-  const cart = user.cart
+    //item quantity gets updated
+
   res.send(cart)
   }
   catch (err) {
@@ -62,9 +90,8 @@ router.put("/:id/cart/add", async (req, res, next) => {
   }
 })
 
-
-//remove item
-router.delete("/:id/cart/remove"), async (req,res, next) => {
+//remove item from cart
+router.delete("/:id/cart/remove", async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
       attributes: {exclude: 'password'},
@@ -72,20 +99,83 @@ router.delete("/:id/cart/remove"), async (req,res, next) => {
         {
         model: ShoppingCart,
         where: {orderFilled: 'false'},
-        include:
-          Product
-        }
-    });
-    if(!user.carts.orderProduct[req.body.productId]){
+        include: [{
+          model: Product,
+          where: {id: req.body.id}
+        }]
+    }});
+    let cart = user.carts[0].products[0].orderProduct
+    if(!cart){
       res.status(404).send('Item not in cart')
     }
-    let removed = await user.cart.orderProduct.destroy()
-    res.send(removed)
-    }
+
+   await cart.destroy()
+  res.sendStatus(200)
+  }
   catch (err) {
     next(err);
   }
-}
+})
+
+//this route will delete the entire cart, but only carts that are pending
+router.delete("/:id/cart/clear", async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.id, {
+      attributes: {exclude: 'password'},
+      include:
+        {
+        model: ShoppingCart,
+        where: {orderFilled: 'false'},
+    }});
+    let cart = user.carts[0]
+    if(!cart){
+      res.status(404).send('Item not in cart')
+    }
+
+   await cart.destroy()
+  res.sendStatus(200)
+  }
+  catch (err) {
+    next(err);
+  }
+})
+
+
+//this route will set the cart to being an archive of the order and will change quantites
+router.put("/:id/cart/complete", async (req, res, next) => {
+  try {
+    let cart = await ShoppingCart.findOne({
+      where: {
+        userId: req.params.id,
+        orderFilled: 'false'
+      },
+        include: Product
+    })
+    if(!cart){
+      res.status(404).send('There is no order to fulfill')
+    }
+
+    //closes the order
+    let finalCart = await cart.set({
+      orderFilled: 'true'
+      })
+
+    //item quantity gets updated
+
+    finalCart.products.map(async (product) => {
+     await product.set({inventory: product.inventory - product.orderProduct.quantity})
+     await product.save()
+    })
+    await finalCart.save()
+    //just to make sure it saves, will check if redundant
+
+  res.send(finalCart)
+  }
+  catch (err) {
+    next(err);
+  }
+})
+
 
 
 router.get("/", async (req, res, next) => {
