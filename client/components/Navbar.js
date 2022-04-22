@@ -21,6 +21,7 @@ const Navbar = ({ handleClick, isLoggedIn, fetchAllProducts }) => (
           >
             All Products
           </Link>
+          <Link to="/cart/">Cart</Link>
           <a className="navText" href="#" onClick={handleClick}>
             Logout
           </a>
@@ -31,7 +32,7 @@ const Navbar = ({ handleClick, isLoggedIn, fetchAllProducts }) => (
           <Link to="/login">Login</Link>
           <Link to="/signup">Sign Up</Link>
 
-          <Link to="/cart/:id">Cart</Link>
+          <Link to="/cart/">Cart</Link>
 
           {/* <Link to="/products">All Products</Link> */}
         </div>
