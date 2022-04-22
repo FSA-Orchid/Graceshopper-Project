@@ -1,35 +1,39 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { setProductsThunk } from "../store/allproducts";
-import { clearCartThunk, updateQuantityCartThunk, removeFromCartThunk, setCartThunk } from "../store/cart";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { setProductsThunk } from '../store/allproducts';
+import {
+  clearCartThunk,
+  updateQuantityCartThunk,
+  removeFromCartThunk,
+  setCartThunk,
+} from '../store/cart';
 
 //Possible rendition of Cart, piggy-backed off of AllProducts page, have to add quantity change option.
 // NOT ADDED TO ROUTES YET
 
-
 export class Cart extends React.Component {
-constructor(){
-  super()
-  this.state = {
-    cart: []
+  constructor() {
+    super();
+    this.state = {
+      cart: [],
+    };
   }
-}
 
   componentDidMount() {
     this.props.fetchCart(this.props.auth.id);
   }
   componentDidUpdate(prevProps) {
-    if(prevProps.cart !== this.props.cart){
+    if (prevProps.cart !== this.props.cart) {
       this.setState({
         cart: this.props.cart || [],
-      })
+      });
     }
   }
 
   render() {
-      const products = this.props.cart.products
-    console.log(this.props)
+    const products = this.props.cart.products;
+    console.log(this.props);
     return (
       <div className="productList">
         {this.props.cart.length ? (
@@ -48,8 +52,13 @@ constructor(){
                   X
                 </button>
               </h2>
-              <button type='submit' className="clear"
-              onClick={() => this.props.clearCart(this.props.auth.id)}>Clear Cart</button>
+              <button
+                type="submit"
+                className="clear"
+                onClick={() => this.props.clearCart(this.props.auth.id)}
+              >
+                Clear Cart
+              </button>
             </div>
           ))
         ) : (
@@ -62,15 +71,14 @@ constructor(){
 
 const mapStateToProps = (reduxState) => ({
   cart: reduxState.cart,
-  auth: reduxState.auth
+  auth: reduxState.auth,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchCart: (id) => dispatch(setCartThunk(id)),
   removeProduct: (id) => dispatch(removeFromCartThunk(id)),
   clearCart: (id) => dispatch(clearCartThunk(id)),
-  changeQuantity: (id) => dispatch(updateQuantityCartThunk(id))
-
+  changeQuantity: (id) => dispatch(updateQuantityCartThunk(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);
