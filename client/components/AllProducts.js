@@ -7,16 +7,14 @@ import {
   setProductsThunk,
   deleteProductThunk,
 } from '../store/allproducts';
+import { addToCartThunk } from '../store/cart';
 
 export class AllProducts extends React.Component {
   componentDidMount() {
     this.props.fetchProducts();
   }
   render() {
-    {
-      console.log(this.props, 'These are props');
-    }
-
+    console.log(this.props, 'current props');
     return (
       <div>
         <div className="guitarFilter">
@@ -40,6 +38,19 @@ export class AllProducts extends React.Component {
                   >
                     X
                   </button>
+                  <button
+                    type="submit"
+                    onClick={() =>
+                      this.props.addToCart(
+                        this.props.user.id,
+                        product.id,
+                        product.inventory,
+                        product.price
+                      )
+                    }
+                  >
+                    Add to Cart
+                  </button>
                 </h2>
               </div>
             ))
@@ -54,6 +65,7 @@ export class AllProducts extends React.Component {
 
 const mapStateToProps = (reduxState) => ({
   products: reduxState.products,
+  user: reduxState.auth,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -61,6 +73,8 @@ const mapDispatchToProps = (dispatch) => ({
   fetchGuitars: () => dispatch(setGuitarsThunk()),
   fetchBass: () => dispatch(setBassThunk()),
   deleteProduct: (id) => dispatch(deleteProductThunk(id)),
+  addToCart: (id, product, inventory, price) =>
+    dispatch(addToCartThunk(id, product, inventory, price)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts);

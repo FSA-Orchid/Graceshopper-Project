@@ -1,47 +1,45 @@
-import axios from "axios"
+import axios from 'axios';
 
 //Input for the axios routes is up to being change, routes work with postman/insomnia
-
-
 
 const initialState = [];
 
 //Action Constants
-const SetCart = "SET_CART"
-const ClearCart = "CLEAR_CART"
-const RemoveFromCart = "REMOVE_FROM_CART"
-const AddToCart = "ADD_TO_CART"
-const UpdateQuantityCart = "UPDATE_QUANTITY_CART"
+const SetCart = 'SET_CART';
+const ClearCart = 'CLEAR_CART';
+const RemoveFromCart = 'REMOVE_FROM_CART';
+const AddToCart = 'ADD_TO_CART';
+const UpdateQuantityCart = 'UPDATE_QUANTITY_CART';
 
 //Action Creators
 const setCart = (cart) => {
-  return {type: SetCart, cart}
-}
+  return { type: SetCart, cart };
+};
 
 const clearCart = () => {
-  return {type: ClearCart}
-}
+  return { type: ClearCart };
+};
 
 const removeFromCart = (product) => {
   return {
     type: RemoveFromCart,
-    product
-  }
-}
+    product,
+  };
+};
 
-const addToCart = (product) => {
+const addToCart = (newProduct) => {
   return {
     type: AddToCart,
-    product
-  }
-}
+    newProduct,
+  };
+};
 
 const updateCart = (product) => {
   return {
     type: UpdateQuantityCart,
-    product
-  }
-}
+    product,
+  };
+};
 
 //THUNKS
 export const setCartThunk = (id) => {
@@ -59,66 +57,69 @@ export const setCartThunk = (id) => {
 export const clearCartThunk = (id) => {
   return async function (dispatch) {
     try {
-      await axios.delete(`/api/users/${id}/cart/clear`)
-      dispatch(clearCart())
-    }
-    catch (err) {
+      await axios.delete(`/api/users/${id}/cart/clear`);
+      dispatch(clearCart());
+    } catch (err) {
       console.log(err);
     }
-  }
-}
+  };
+};
 
 //this will complete the order and clear the state for this cart
 export const closeOrderThunk = (id) => {
   return async function (dispatch) {
     try {
-      await axios.put(`/api/users/${id}/cart/complete`)
-      dispatch(clearCart())
-    }
-    catch (err) {
+      await axios.put(`/api/users/${id}/cart/complete`);
+      dispatch(clearCart());
+    } catch (err) {
       console.log(err);
     }
-  }
-}
+  };
+};
 
 export const removeFromCartThunk = (id, product) => {
   return async function (dispatch) {
     try {
-      await axios.delete(`/api/users/${id}/cart/remove`, product.id)
-      dispatch(removeFromCart(product))
-    }
-    catch (err) {
+      await axios.delete(`/api/users/${id}/cart/remove`, product.id);
+      dispatch(removeFromCart(product));
+    } catch (err) {
       console.log(err);
     }
-  }
-}
+  };
+};
 
-export const addToCartThunk = (id, product, quantity, price) => {
+export const addToCartThunk = (id, productId, inventory, price) => {
   return async function (dispatch) {
     try {
       //Or it would be an axios.post
-      let response = await axios.post(`/api/users/${id}/cart/add`, product, quantity, price)
-      const newProduct = response.data
-      dispatch(addToCart(newProduct))
-    }
-    catch (err) {
+      console.log('I DISPATCHED ADDTOCART');
+      let response = await axios.post(`/api/users/${id}/cart/add`, {
+        productId,
+        inventory,
+        price,
+      });
+      const newProduct = response.data;
+      dispatch(addToCart(newProduct));
+    } catch (err) {
       console.log(err);
     }
-  }
-}
+  };
+};
 
 export const updateQuantityCartThunk = (product) => {
   return async function (dispatch) {
     try {
-      let response = await axios.put(`api/me/cart/${product.id}/update`, product.id,  )
-      let newProduct = response.data
-      dispatch(updateCart(newProduct))
-    }
-    catch (err) {
+      let response = await axios.put(
+        `api/me/cart/${product.id}/update`,
+        product.id
+      );
+      let newProduct = response.data;
+      dispatch(updateCart(newProduct));
+    } catch (err) {
       console.log(err);
     }
-  }
-}
+  };
+};
 
 export default function cartReducer(state = initialState, action) {
   switch (action.type) {
@@ -135,7 +136,7 @@ export default function cartReducer(state = initialState, action) {
     case ClearCart:
       return initialState;
     case RemoveFromCart:
-      return state.filter((product) => product.id !== action.product.id)
+      return state.filter((product) => product.id !== action.product.id);
     default:
       return state;
   }
