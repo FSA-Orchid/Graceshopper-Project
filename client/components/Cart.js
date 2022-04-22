@@ -9,18 +9,31 @@ import { clearCartThunk, updateQuantityCartThunk, removeFromCartThunk, setCartTh
 
 
 export class Cart extends React.Component {
-  componentDidMount() {
-    this.props.fetchCart();
+constructor(){
+  super()
+  this.state = {
+    cart: []
   }
-  render() {
-    {
-      console.log(this.props);
-    }
+}
 
+  componentDidMount() {
+    this.props.fetchCart(this.props.auth.id);
+  }
+  componentDidUpdate(prevProps) {
+    if(prevProps.cart !== this.props.cart){
+      this.setState({
+        cart: this.props.cart || [],
+      })
+    }
+  }
+
+  render() {
+      const products = this.props.cart.products
+    console.log(this.props)
     return (
       <div className="productList">
-        {this.props.products.length ? (
-          this.props.products.map((product) => (
+        {this.props.cart.length ? (
+          this.props.cart.map((product) => (
             <div key={product.id}>
               <img src={product.imageUrl} className="photo" />
               <h2>
@@ -36,7 +49,7 @@ export class Cart extends React.Component {
                 </button>
               </h2>
               <button type='submit' className="clear"
-              onClick={() => this.props.clearCart(product.id)}>Clear Cart</button>
+              onClick={() => this.props.clearCart(this.props.auth.id)}>Clear Cart</button>
             </div>
           ))
         ) : (
@@ -48,7 +61,8 @@ export class Cart extends React.Component {
 }
 
 const mapStateToProps = (reduxState) => ({
-  products: reduxState.cart,
+  cart: reduxState.cart,
+  auth: reduxState.auth
 });
 
 const mapDispatchToProps = (dispatch) => ({
