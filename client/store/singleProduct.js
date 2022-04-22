@@ -4,7 +4,7 @@ const initialState = {};
 
 const SetSingleProduct = 'SET_SINGLE_PRODUCT'
 
-
+//for single product view
 export const setSingleProduct = (product) => {
   return {type: SetSingleProduct,
           product}

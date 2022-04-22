@@ -3,6 +3,7 @@ const initialState = []
 
 const SetOrders = "SET_ORDERS"
 
+//for a user to access their orders
 const setOrders = (orders) => {
   return {type: SetOrders, orders}
 }

@@ -104,7 +104,7 @@ export const addProductThunk = (product) => {
 export const editProductThunk = (product) => {
   return async function (dispatch) {
     try {
-      let response = await axios.put(`/api/products/${id}`, product);
+      let response = await axios.put(`/api/products/${product.id}`, product);
       let updatedProduct = response.data;
       dispatch(updateProduct(updatedProduct));
     } catch (err) {

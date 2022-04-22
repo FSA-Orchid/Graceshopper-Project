@@ -31,7 +31,7 @@ router.get("/:id/cart", async (req, res, next) => {
   }
 });
 
-//add to cart, needs a userId, quantity, and productId
+//add to cart, needs a userId, inventory, and productId
 router.post("/:id/cart/add", async (req, res, next) => {
   try {
     let cart = await ShoppingCart.findOne({where: {
@@ -41,16 +41,14 @@ router.post("/:id/cart/add", async (req, res, next) => {
     if(!cart){
       cart = await ShoppingCart.create({
         userId: req.params.id,
-
        })
     }
-
     //This finds and gives a cart with only the value pending
 
     let newOrder = await OrderProducts.create({
         cartId: cart.id,
         productId: req.body.id,
-        quantity: req.body.quantity,
+        inventory: req.body.inventory,
         totalPrice: req.body.totalPrice
       })
   res.send(newOrder)
@@ -79,9 +77,9 @@ router.put("/:id/cart/update", async (req, res, next) => {
     //item path
 
     await cart.set({
-        quantity: 1*(req.body.quantity),
+        inventory: 1*(req.body.inventory),
       })
-    //item quantity gets updated
+    //item inventory gets updated
 
   res.send(cart)
   }
@@ -160,10 +158,10 @@ router.put("/:id/cart/complete", async (req, res, next) => {
       orderFilled: 'true'
       })
 
-    //item quantity gets updated
+    //item inventory gets updated
 
     finalCart.products.map(async (product) => {
-     await product.set({inventory: product.inventory - product.orderProduct.quantity})
+     await product.set({inventory: product.inventory - product.orderProduct.inventory})
      await product.save()
     })
     await finalCart.save()
@@ -176,7 +174,7 @@ router.put("/:id/cart/complete", async (req, res, next) => {
   }
 })
 
-
+//Routes specific to users
 
 router.get("/", async (req, res, next) => {
   try {
@@ -186,11 +184,12 @@ router.get("/", async (req, res, next) => {
 
       // send everything to anyone who asks!
 
-      attributes: ["id", "username"],
+      exclude: ["password"],
     });
     res.json(users);
   } catch (err) {
     next(err);
   }
 });
+
 
