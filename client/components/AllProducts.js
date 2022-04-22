@@ -1,20 +1,23 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   setGuitarsThunk,
   setBassThunk,
   setProductsThunk,
   deleteProductThunk,
-} from '../store/allproducts';
+
+} from "../store/allproducts";
+
 import { addToCartThunk } from '../store/cart';
+
 
 export class AllProducts extends React.Component {
   componentDidMount() {
     this.props.fetchProducts();
   }
   render() {
-    console.log(this.props, 'current props');
+
     return (
       <div>
         <div className="guitarFilter">
