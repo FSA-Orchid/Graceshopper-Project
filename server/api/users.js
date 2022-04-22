@@ -117,7 +117,7 @@ router.delete("/:id/cart/remove", async (req, res, next) => {
   }
 })
 
-//this route will delete the entire cart, but only carts that are pending
+//this route will delete the entire cart, but only for carts that are pending
 router.delete("/:id/cart/clear", async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {

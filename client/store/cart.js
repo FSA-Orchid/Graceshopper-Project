@@ -1,8 +1,8 @@
 import axios from "axios"
 
-//axios routes not implemented, cart interface not yet decided on. when added, remove this comment, and revise page
+//Input for the axios routes is up to being change, routes work with postman/insomnia
 
-//NOT YET ADDED TO STORE Index
+
 
 const initialState = [];
 
