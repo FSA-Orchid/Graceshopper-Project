@@ -20,8 +20,8 @@ export class AllProducts extends React.Component {
     super();
     this.state = {
       make: "",
-      sortByYear: "",
-      sortByPrice: "",
+      sortByYear: "select",
+      sortByPrice: "select",
     };
 
     this.handleMakeSubmit = this.handleMakeSubmit.bind(this);
@@ -37,7 +37,9 @@ export class AllProducts extends React.Component {
 
   handleYearSubmit(evt) {
     evt.preventDefault();
-    if (this.state.sortByYear === "newToOld") {
+    if (this.state.sortByYear === "select") {
+      this.props.fetchProducts();
+    } else if (this.state.sortByYear === "newToOld") {
       this.props.fetchNewToOld();
     } else if (this.state.sortByYear === "oldToNew") {
       this.props.fetchOldToNew();
@@ -46,7 +48,9 @@ export class AllProducts extends React.Component {
 
   handlePriceSubmit(evt) {
     evt.preventDefault();
-    if (this.state.sortByPrice === "maxToMin") {
+    if (this.state.sortByPrice === "select") {
+      this.props.fetchProducts();
+    } else if (this.state.sortByPrice === "maxToMin") {
       this.props.fetchNewToOld();
     } else if (this.state.sortByYear === "minToMax") {
       this.props.fetchOldToNew();
@@ -54,7 +58,7 @@ export class AllProducts extends React.Component {
   }
 
   handleChange(evt) {
-    this.setState({ [evt.target.name]: +evt.target.value });
+    this.setState({ [evt.target.name]: evt.target.value });
   }
 
   componentDidMount() {
@@ -63,7 +67,7 @@ export class AllProducts extends React.Component {
   render() {
     return (
       <div>
-        <div className="guitarFilter">
+        <div>
           <Link onClick={() => this.props.fetchGuitars()}>Guitars</Link>
           <Link onClick={() => this.props.fetchBass()}>Bass</Link>
           <Link onClick={() => this.props.fetchProducts()}>All Products</Link>
@@ -83,6 +87,7 @@ export class AllProducts extends React.Component {
                 onChange={this.handleChange}
               />
             </label>
+            <button type="submit">Submit</button>
           </form>
           <form onSubmit={this.handleYearSubmit}>
             <label>
@@ -92,25 +97,28 @@ export class AllProducts extends React.Component {
                 onChange={this.handleChange}
                 value={this.state.sortByYear}
               >
+                <option value="select">select</option>
                 <option value="newToOld">Newest to Oldest</option>
                 <option value="oldToNew">Oldest to Newest</option>
               </select>
             </label>
+            <button type="submit">Submit</button>
           </form>
-          <form onSubmit={this.handleYearSubmit}>
-            <label>
+          <form>
+            <label onSubmit={this.handlePriceSubmit}>
               Price:
               <select
                 name="sortByPrice"
                 onChange={this.handleChange}
-                value={this.state.sortByYear}
+                value={this.state.sortByPrice}
               >
+                <option value="select">select</option>
                 <option value="maxToMin">Highest To Lowest</option>
                 <option value="minToMax">Lowest to Highest</option>
               </select>
             </label>
+            <button type="submit">Submit</button>
           </form>
-          ;
         </div>
         <div className="productList">
           {this.props.products.length ? (

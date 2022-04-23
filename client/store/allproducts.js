@@ -266,12 +266,13 @@ export default function productsReducer(state = initialState, action) {
       }
       return sortedProductsNew;
     case SetPriceMax:
-      action.productsPrice.sort(function (a, b) {
+      let sortedPriceMax = [...action.productsPrice];
+      sortedPriceMax.sort(function (a, b) {
         return b - a;
       });
       let maxToMinPrice = [];
-      for (let i = 0; i < action.productsPrice.length; i++) {
-        curPrice = action.productsPrice[i];
+      for (let i = 0; i < sortedPriceMax.length; i++) {
+        curPrice = sortedPriceMax[i];
         for (let j = 0; j < action.products.length; j++) {
           let curProduct = action.products[j];
           if (curPrice === curProduct.price) {
@@ -281,12 +282,13 @@ export default function productsReducer(state = initialState, action) {
       }
       return maxToMinPrice;
     case SetPriceMin:
-      action.productsPrice.sort(function (a, b) {
+      let sortedPriceMin = [...action.productsPrice];
+      sortedPriceMin.sort(function (a, b) {
         return a - b;
       });
       let minToMaxPrice = [];
-      for (let i = 0; i < action.productsPrice.length; i++) {
-        curPrice = action.productsPrice[i];
+      for (let i = 0; i < sortedPriceMin.length; i++) {
+        curPrice = sortedPriceMin[i];
         for (let j = 0; j < action.products.length; j++) {
           let curProduct = action.products[j];
           if (curPrice === curProduct.price) {
