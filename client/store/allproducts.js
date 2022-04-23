@@ -235,12 +235,12 @@ export default function productsReducer(state = initialState, action) {
       return action.products;
     case SetOldToNew:
       let sortedYearsOld = [...action.productsYears];
-      sortedYears.sort(function (a, b) {
+      sortedYearsOld.sort(function (a, b) {
         return a - b;
       });
       let sortedProductsOld = [];
       for (let i = 0; i < sortedYearsOld.length; i++) {
-        curYear = sortedYearsOld[i];
+        let curYear = sortedYearsOld[i];
         for (let j = 0; j < action.products.length; j++) {
           let curProduct = action.products[j];
           if (curYear === curProduct.year) {
@@ -256,7 +256,7 @@ export default function productsReducer(state = initialState, action) {
       });
       let sortedProductsNew = [];
       for (let i = 0; i < sortedYearsNew.length; i++) {
-        curYear = sortedYearsNew[i];
+        let curYear = sortedYearsNew[i];
         for (let j = 0; j < action.products.length; j++) {
           let curProduct = action.products[j];
           if (curYear === curProduct.year) {
