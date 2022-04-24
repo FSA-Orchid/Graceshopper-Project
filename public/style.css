@@ -20,13 +20,9 @@ form div {
   display: inline-block;
 }
 
-.productList {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
 img {
+  min-width: 150px;
+  min-height: 150px;
   max-width: 150px;
   max-height: 150px;
 }
@@ -53,4 +49,16 @@ img {
 .guitarFilter {
   display: flex;
   margin: auto;
+}
+
+.productContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.productItem {
+  width: 32%;
+  padding-bottom: 5%; /* 32:18, i.e. 16:9 */
+  margin-bottom: 2%; /* (100-32*3)/2 */
 }

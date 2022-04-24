@@ -40,7 +40,7 @@ export class Cart extends React.Component {
           this.props.cart.map((product) => (
             <div key={product.id}>
               <img src={product.imageUrl} className="photo" />
-              <h2>
+              <h4>
                 <Link to={`/products/${product.id}/`}>
                   {product.instrument} - {product.make} - {product.model}
                 </Link>
@@ -51,7 +51,7 @@ export class Cart extends React.Component {
                 >
                   X
                 </button>
-              </h2>
+              </h4>
               <button
                 type="submit"
                 className="clear"
