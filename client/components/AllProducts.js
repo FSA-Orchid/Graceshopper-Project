@@ -1,23 +1,20 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   setGuitarsThunk,
   setBassThunk,
   setProductsThunk,
   deleteProductThunk,
-
-} from "../store/allproducts";
+} from '../store/allproducts';
 
 import { addToCartThunk } from '../store/cart';
-
 
 export class AllProducts extends React.Component {
   componentDidMount() {
     this.props.fetchProducts();
   }
   render() {
-
     return (
       <div>
         <div className="guitarFilter">
@@ -25,10 +22,10 @@ export class AllProducts extends React.Component {
           <Link onClick={() => this.props.fetchBass()}>Bass</Link>
           <Link onClick={() => this.props.fetchProducts()}>All Products</Link>
         </div>
-        <div className="productList">
+        <div className="productContainer">
           {this.props.products.length ? (
             this.props.products.map((product) => (
-              <div key={product.id}>
+              <div className="productItem" key={product.id}>
                 <img src={product.imageUrl} className="photo" />
                 <h2>
                   <Link className="listingInfo" to={`/products/${product.id}/`}>
