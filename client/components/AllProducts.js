@@ -80,16 +80,7 @@ export class AllProducts extends React.Component {
   render() {
     return (
       <div>
-        <div>
-          {/* <Link onClick={() => this.props.fetchGuitars()}>Guitars</Link>
-          <Link onClick={() => this.props.fetchBass()}>Bass</Link>
-          <Link onClick={() => this.props.fetchProducts()}>All Products</Link> */}
-          {/* <Link onClick={() => this.props.fetchNewToOld()}>
-            Production Year: New To Old
-          </Link>
-          <Link onClick={() => this.props.fetchOldToNew()}>
-            Production Year: Old To New
-          </Link> */}
+        <div className="guitarFilter">
           <form onSubmit={this.handleInstSubmit}>
             <label>
               instrument:
