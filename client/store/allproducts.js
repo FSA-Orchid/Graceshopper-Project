@@ -238,6 +238,7 @@ export default function productsReducer(state = initialState, action) {
       sortedYearsOld.sort(function (a, b) {
         return a - b;
       });
+      console.log("old to new years", sortedYearsOld);
       let sortedProductsOld = [];
       for (let i = 0; i < sortedYearsOld.length; i++) {
         let curYear = sortedYearsOld[i];

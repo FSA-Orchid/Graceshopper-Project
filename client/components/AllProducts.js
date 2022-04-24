@@ -22,12 +22,25 @@ export class AllProducts extends React.Component {
       make: "",
       sortByYear: "select",
       sortByPrice: "select",
+      instrument: "select",
     };
 
     this.handleMakeSubmit = this.handleMakeSubmit.bind(this);
     this.handleYearSubmit = this.handleYearSubmit.bind(this);
     this.handlePriceSubmit = this.handlePriceSubmit.bind(this);
+    this.handleInstSubmit = this.handleInstSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleInstSubmit(evt) {
+    evt.preventDefault();
+    if (this.state.instrument === "select") {
+      this.props.fetchProducts();
+    } else if (this.state.instrument === "guitar") {
+      this.props.fetchGuitars();
+    } else if (this.state.instrument === "bass") {
+      this.props.fetchBass();
+    }
   }
 
   handleMakeSubmit(evt) {
@@ -68,15 +81,30 @@ export class AllProducts extends React.Component {
     return (
       <div>
         <div>
-          <Link onClick={() => this.props.fetchGuitars()}>Guitars</Link>
+          {/* <Link onClick={() => this.props.fetchGuitars()}>Guitars</Link>
           <Link onClick={() => this.props.fetchBass()}>Bass</Link>
-          <Link onClick={() => this.props.fetchProducts()}>All Products</Link>
+          <Link onClick={() => this.props.fetchProducts()}>All Products</Link> */}
           {/* <Link onClick={() => this.props.fetchNewToOld()}>
             Production Year: New To Old
           </Link>
           <Link onClick={() => this.props.fetchOldToNew()}>
             Production Year: Old To New
           </Link> */}
+          <form onSubmit={this.handleInstSubmit}>
+            <label>
+              instrument:
+              <select
+                name="instrument"
+                onChange={this.handleChange}
+                value={this.state.instrument}
+              >
+                <option value="select">select</option>
+                <option value="guitar">guitar</option>
+                <option value="bass">bass</option>
+              </select>
+            </label>
+            <button type="submit">Submit</button>
+          </form>
           <form onSubmit={this.handleMakeSubmit}>
             <label>
               Make:
