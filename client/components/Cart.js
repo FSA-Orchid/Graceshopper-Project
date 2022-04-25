@@ -20,8 +20,8 @@ export class Cart extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.props.fetchCart(this.props.auth.id);
+  async componentDidMount () {
+    await this.props.fetchCart(this.props.auth.id);
   }
   componentDidUpdate(prevProps) {
     if (prevProps.cart !== this.props.cart) {
@@ -38,8 +38,8 @@ export class Cart extends React.Component {
     return (
       <div className="productList">
         {this.props.cart.length ? (
-          this.props.cart.map((product) => (
-            <div key={product.id}>
+          this.props.cart.map((product) => {
+           return <div key={product.id}>
               <img src={product.imageUrl} className="photo" />
               <h4>
                 <Link to={`/products/${product.id}/`}>
@@ -64,7 +64,7 @@ export class Cart extends React.Component {
               </button>
               <Link to='/checkout'>Checkout</Link>
             </div>
-          ))
+  })
         ) : (
           <h2>Cart Empty</h2>
         )}

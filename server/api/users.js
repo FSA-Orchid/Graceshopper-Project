@@ -38,6 +38,7 @@ router.post('/:id/cart/add', async (req, res, next) => {
         userId: req.params.id,
         orderFilled: false,
       },
+      include: Product
     });
     if (!cart) {
       cart = await ShoppingCart.create({
@@ -49,10 +50,13 @@ router.post('/:id/cart/add', async (req, res, next) => {
     let newOrder = await OrderProducts.create({
       cartId: cart.id,
       productId: req.body.productId,
-      inventory: req.body.inventory,
+      inventory: 1*req.body.inventory,
       totalPrice: 1 * req.body.inventory * req.body.price,
     });
-    res.send(newOrder);
+    console.log(newOrder)
+    console.log(cart.products)
+
+    res.send(cart.products[cart.products.length-1]);
   } catch (err) {
     next(err);
   }
@@ -76,6 +80,7 @@ router.put('/:id/cart/update', async (req, res, next) => {
     let order = cart.products[0].orderProduct
     await order.set({
       inventory: 1 * req.body.inventory,
+      totalPrice: cart.products[0].price* req.body.inventory
     });
     //item inventory gets updated
     res.send(cart);
