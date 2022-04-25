@@ -43,6 +43,7 @@ class EditProduct extends React.Component {
   render() {
     const { instrument, make, model, year, color, condition, description } =
       this.state;
+    if(!this.props.auth.isAdmin === false) {return <h1>You lack the authority to access this page.</h1>}
     const { handleSubmit, handleChange } = this;
     return (
       <div>

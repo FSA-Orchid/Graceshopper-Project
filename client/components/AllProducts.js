@@ -3,8 +3,16 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { setProductsThunk, deleteProductThunk } from "../store/allproducts";
 import FilterProduct from "./FilterProduct";
+import {
+  setGuitarsThunk,
+  setBassThunk,
+  setProductsThunk,
+  deleteProductThunk,
+} from "../store/allproducts";
 
-import { addToCartThunk } from "../store/cart";
+
+
+import { addToCartThunk } from '../store/cart';
 
 export class AllProducts extends React.Component {
   componentDidMount() {
@@ -17,7 +25,10 @@ export class AllProducts extends React.Component {
     } else
       return (
         <div>
+
           <FilterProduct />
+
+
           <div className="productContainer">
             {this.props.user.isAdmin
               ? this.props.products.map((product) => (
@@ -43,7 +54,7 @@ export class AllProducts extends React.Component {
                           this.props.addToCart(
                             this.props.user.id,
                             product.id,
-                            product.inventory,
+                            1,
                             product.price
                           )
                         }
@@ -69,7 +80,7 @@ export class AllProducts extends React.Component {
                           this.props.addToCart(
                             this.props.user.id,
                             product.id,
-                            product.inventory,
+                            1,
                             product.price
                           )
                         }

@@ -31,7 +31,6 @@ router.get('/:id/cart', async (req, res, next) => {
 //add to cart, needs a userId, inventory, and productId
 
 router.post('/:id/cart/add', async (req, res, next) => {
-
   try {
     console.log(req.body, 'this is reqbody');
     let cart = await ShoppingCart.findOne({
@@ -43,14 +42,11 @@ router.post('/:id/cart/add', async (req, res, next) => {
     if (!cart) {
       cart = await ShoppingCart.create({
         userId: req.params.id,
-
       });
-
     }
     //This finds and gives a cart with only the value pending
 
     let newOrder = await OrderProducts.create({
-
       cartId: cart.id,
       productId: req.body.productId,
       inventory: req.body.inventory,
@@ -58,37 +54,30 @@ router.post('/:id/cart/add', async (req, res, next) => {
     });
     res.send(newOrder);
   } catch (err) {
-
     next(err);
   }
 });
 
 router.put('/:id/cart/update', async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.params.id, {
-      attributes: { exclude: 'password' },
-      include: {
-        model: ShoppingCart,
-        where: { orderFilled: 'false' },
-        include: [
-          {
-            model: Product,
-            where: { id: req.body.id },
-          },
-        ],
+    let cart = await ShoppingCart.findOne({
+      where: {
+        userId: req.params.id,
+        orderFilled: false,
       },
+      include: {
+        model: Product,
+        where: {id: req.body.productId}
+      }
     });
-    //This finds us the path to the relevant item
-    let cart = user.carts[0].products[0].orderProduct;
-    //item path
 
-    await cart.set({
-
+    //This finds us the path to the relevant product, and its order information for the cart.
+    //The path to what we want to change is below
+    let order = cart.products[0].orderProduct
+    await order.set({
       inventory: 1 * req.body.inventory,
     });
-
     //item inventory gets updated
-
     res.send(cart);
   } catch (err) {
     next(err);
@@ -167,7 +156,6 @@ router.put('/:id/cart/complete', async (req, res, next) => {
     //item inventory gets updated
 
     finalCart.products.map(async (product) => {
-
       await product.set({
         inventory: product.inventory - product.orderProduct.inventory,
       });
@@ -181,7 +169,6 @@ router.put('/:id/cart/complete', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-
 });
 
 router.get('/', async (req, res, next) => {
@@ -192,9 +179,32 @@ router.get('/', async (req, res, next) => {
 
       // send everything to anyone who asks!
 
-
       attributes: ['id', 'username'],
+    });
+    res.json(users);
+  } catch (err) {
+    next(err);
+  }
+});
 
+
+router.get('/:id', async (req, res, next) => {
+  try {
+    const users = await User.findOne({
+      where: {id: req.params.id},
+      attributes: ['id', 'username'],
+    });
+    res.json(users);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put('/:id', async (req, res, next) => {
+  try {
+    const users = await User.findOne({
+      where: {id: req.params.id},
+      attributes: ['id', 'username'],
     });
     res.json(users);
   } catch (err) {

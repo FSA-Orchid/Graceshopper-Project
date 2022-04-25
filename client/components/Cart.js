@@ -32,8 +32,9 @@ export class Cart extends React.Component {
   }
 
   render() {
+
     const products = this.props.cart.products;
-    console.log(this.props);
+
     return (
       <div className="productList">
         {this.props.cart.length ? (
@@ -42,7 +43,9 @@ export class Cart extends React.Component {
               <img src={product.imageUrl} className="photo" />
               <h4>
                 <Link to={`/products/${product.id}/`}>
-                  {product.instrument} - {product.make} - {product.model}
+                  {`${product.orderProduct.inventory} ${product.instrument}
+                  ${product.make} ${product.model} -
+                  $${(product.price / 100).toFixed(2)}`}
                 </Link>
                 <button
                   type="submit"
@@ -59,12 +62,12 @@ export class Cart extends React.Component {
               >
                 Clear Cart
               </button>
+              <Link to='/checkout'>Checkout</Link>
             </div>
           ))
         ) : (
           <h2>Cart Empty</h2>
         )}
-        <Link to='/checkout'>Checkout</Link>
       </div>
     );
   }
