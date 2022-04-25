@@ -41,7 +41,7 @@ export class AllProducts extends React.Component {
                           this.props.addToCart(
                             this.props.user.id,
                             product.id,
-                            product.inventory,
+                            1,
                             product.price
                           )
                         }

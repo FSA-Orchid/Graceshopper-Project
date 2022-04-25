@@ -32,7 +32,9 @@ export class Cart extends React.Component {
   }
 
   render() {
+
     const products = this.props.cart.products;
+
     console.log(this.props);
     return (
       <div className="productList">
