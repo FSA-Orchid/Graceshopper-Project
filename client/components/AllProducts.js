@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { setProductsThunk, deleteProductThunk } from "../store/allproducts";
 import FilterProduct from "./FilterProduct";
 import {
   setGuitarsThunk,
