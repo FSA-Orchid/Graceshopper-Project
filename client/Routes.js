@@ -6,8 +6,9 @@ import Home from "./components/Home";
 import { me } from "./store";
 import AllProducts from "./components/AllProducts";
 import SingleProduct from "./components/SingleProduct";
-import Cart from './components/Cart'
-import Checkout from './components/Checkout'
+import Cart from "./components/Cart";
+import Checkout from "./components/Checkout";
+import UpdateProduct from "./components/EditProduct";
 /**
  * COMPONENT
  */
@@ -26,8 +27,9 @@ class Routes extends Component {
             <Route path="/home" component={Home} />
             {/* <Redirect to="/home" /> */}
             <Route exact path="/products" component={AllProducts} />
-            <Route exact path="/products/:id" component={SingleProduct} />
-            <Route exact path='/checkout' component={Checkout} />
+            <Route path="/products/:id" component={SingleProduct} />
+            <Route path="/products/:id/admin" component={UpdateProduct} />
+            <Route exact path="/checkout" component={Checkout} />
             <Route exact path="/cart" component={Cart} />
           </Switch>
         ) : (
