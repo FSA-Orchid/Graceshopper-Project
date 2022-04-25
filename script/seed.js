@@ -379,6 +379,7 @@ const users = [
     password: "123",
     email: "murphy@coder.com",
     address: "134 Fullstack Ave",
+    isAdmin: true,
   },
 ];
 
