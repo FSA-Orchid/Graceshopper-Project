@@ -9,6 +9,7 @@ import SingleProduct from "./components/SingleProduct";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import UpdateProduct from "./components/EditProduct";
+import UserPage from "./components/UserPage";
 /**
  * COMPONENT
  */
@@ -31,6 +32,7 @@ class Routes extends Component {
             <Route path="/products/:id/admin" component={UpdateProduct} />
             <Route exact path="/checkout" component={Checkout} />
             <Route exact path="/cart" component={Cart} />
+            <Route exact path='/user' component={UserPage} />
           </Switch>
         ) : (
           <Switch>

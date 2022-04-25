@@ -11,7 +11,7 @@ const setOrders = (orders) => {
 export const setOrderThunk = (id) => {
   return async function (dispatch) {
     try {
-      let response = await axios.get(`/api/cart/${id}/`);
+      let response = await axios.get(`/api/carts/${id}/`);
       let orders = response.data;
       dispatch(setOrders(orders));
     } catch (err) {
