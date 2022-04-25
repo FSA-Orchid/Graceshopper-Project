@@ -127,7 +127,7 @@ export const setOldToNewThunk = () => {
     try {
       let response = await axios.get("/api/products");
       let products = response.data;
-      let productsYears = products.map((product) => product.year);
+      let productsYears = [...products.map((product) => product.year)];
       dispatch(setOldToNew(products, productsYears));
     } catch (err) {
       console.log(err);
@@ -140,7 +140,7 @@ export const setNewToOldThunk = () => {
     try {
       let response = await axios.get("/api/products");
       let products = response.data;
-      let productsYears = products.map((product) => product.year);
+      let productsYears = [...products.map((product) => product.year)];
       dispatch(setNewToOld(products, productsYears));
     } catch (err) {
       console.log(err);
@@ -234,7 +234,7 @@ export default function productsReducer(state = initialState, action) {
     case SetMake:
       return action.products;
     case SetOldToNew:
-      let sortedYearsOld = [...action.productsYears];
+      let sortedYearsOld = action.productsYears;
       sortedYearsOld.sort(function (a, b) {
         return a - b;
       });
@@ -249,22 +249,27 @@ export default function productsReducer(state = initialState, action) {
           }
         }
       }
+      console.log("Old to New products", sortedProductsOld);
       return sortedProductsOld;
     case SetNewToOld:
-      let sortedYearsNew = [...action.productsYears];
+      let sortedYearsNew = action.productsYears;
       sortedYearsNew.sort(function (a, b) {
         return b - a;
       });
       let sortedProductsNew = [];
       for (let i = 0; i < sortedYearsNew.length; i++) {
-        let curYear = sortedYearsNew[i];
+        let curYearNew = sortedYearsNew[i];
         for (let j = 0; j < action.products.length; j++) {
-          let curProduct = action.products[j];
-          if (curYear === curProduct.year) {
-            sortedProductsNew.push(curProduct);
+          let curProductNew = action.products[j];
+          if (curYearNew === curProductNew.year) {
+            sortedProductsNew.push(curProductNew);
           }
         }
       }
+      // sortedProductsNew = sortedProductsNew.map(
+      //   (product) => (product.id = product.id + sortedProductsNew.length)
+      // );
+      console.log("New to Old products", sortedProductsNew);
       return sortedProductsNew;
     case SetPriceMax:
       let sortedPriceMax = [...action.productsPrice];
@@ -281,6 +286,10 @@ export default function productsReducer(state = initialState, action) {
           }
         }
       }
+      maxToMinPrice = maxToMinPrice.map(
+        (product) => (product.id = product.id + maxToMinPrice.length)
+      );
+      console.log("max to min products", maxToMinPrice);
       return maxToMinPrice;
     case SetPriceMin:
       let sortedPriceMin = [...action.productsPrice];
