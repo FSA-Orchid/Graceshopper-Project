@@ -9,6 +9,7 @@ import {
   deleteProductThunk,
 } from '../store/allproducts';
 
+
 import { addToCartThunk } from '../store/cart';
 
 export class AllProducts extends React.Component {

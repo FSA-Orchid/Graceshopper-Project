@@ -133,6 +133,9 @@ router.delete('/:id/cart/clear', async (req, res, next) => {
     }
 
     await cart.destroy();
+    await ShoppingCart.create({
+      userId: req.params.id,
+    })
     res.sendStatus(200);
   } catch (err) {
     next(err);
@@ -167,7 +170,9 @@ router.put('/:id/cart/complete', async (req, res, next) => {
       await product.save();
     });
     await finalCart.save();
-
+    await ShoppingCart.create({
+      userId: req.params.id,
+    })
     //just to make sure it saves, will check if redundant
 
     res.send(finalCart);
