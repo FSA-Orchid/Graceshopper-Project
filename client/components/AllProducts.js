@@ -6,8 +6,6 @@ import FilterProduct from "./FilterProduct";
 import {
   setGuitarsThunk,
   setBassThunk,
-  setProductsThunk,
-  deleteProductThunk,
 } from "../store/allproducts";
 
 

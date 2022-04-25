@@ -50,7 +50,7 @@ router.post('/:id/cart/add', async (req, res, next) => {
     let newOrder = await OrderProducts.create({
       cartId: cart.id,
       productId: req.body.productId,
-      inventory: 1*req.body.inventory,
+      inventory: req.body.inventory,
       totalPrice: 1 * req.body.inventory * req.body.price,
     });
     console.log(newOrder)
@@ -133,6 +133,9 @@ router.delete('/:id/cart/clear', async (req, res, next) => {
     }
 
     await cart.destroy();
+    await ShoppingCart.create({
+      userId: req.params.id,
+    })
     res.sendStatus(200);
   } catch (err) {
     next(err);
@@ -167,7 +170,9 @@ router.put('/:id/cart/complete', async (req, res, next) => {
       await product.save();
     });
     await finalCart.save();
-
+    await ShoppingCart.create({
+      userId: req.params.id,
+    })
     //just to make sure it saves, will check if redundant
 
     res.send(finalCart);

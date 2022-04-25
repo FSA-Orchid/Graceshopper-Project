@@ -6,10 +6,29 @@ import { setProductsThunk } from '../store/allproducts';
 import { setCartThunk } from '../store/cart';
 
 class Navbar extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      cart: []
+    }
+  }
+
   componentDidMount() {
     this.props.fetchCart(this.props.auth.id);
+    this.setState({
+      cart: this.props.cart
+    })
     console.log(this.props, 'component updated');
   }
+  componentDidUpdate(prevProps) {
+    if (prevProps.cart !== this.props.cart) {
+      this.setState({
+        cart: this.props.cart || [],
+      });
+    }
+  }
+
+
   render() {
     return (
       <div>
