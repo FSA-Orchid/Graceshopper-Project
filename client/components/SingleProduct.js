@@ -22,26 +22,35 @@ class SingleProduct extends React.Component {
     }
   }
 
-
   handleChange(evt) {
     this.setState({ quantity: evt.target.value });
+    console.log(this.state.quantity, 'this is target  qt value');
   }
+
   handleSubmit(evt) {
     //check to see if product is in cart if so increment qty of the cart if not add item to the cart
-
-    const product = this.props.product;
     evt.preventDefault();
+    const product = this.props.product;
+    const userId = this.props.user.id;
+    console.log(
+      userId,
+      'product:',
+      product,
+      'stateqt:',
+      this.state.quantity,
+      ''
+    );
     if (
       this.props.cart.map((cart) => {
-        if (cart.id === this.props.product.id) {
+        if (cart.id === product.id) {
           return true;
         }
       })
     ) {
-      this.props.updateQuantityCartThunk(this.state.quantity);
+      this.props.updateCart(userId, product.id, this.state.quantity);
     } else {
       this.props.addToCart(
-        this.props.user,
+        userId,
         product.id,
         this.state.quantity,
         product.price
@@ -70,17 +79,7 @@ class SingleProduct extends React.Component {
             placeholder="1"
             value={this.state.quantity}
           ></input>
-          <button
-            type="submit"
-            onClick={() =>
-              this.props.addToCart(
-                this.props.user.id,
-                product.id,
-                product.inventory,
-                product.price
-              )
-            }
-          >
+          <button type="submit" onClick={(evt) => this.handleSubmit(evt)}>
             Add to Cart
           </button>
         </div>
@@ -101,7 +100,8 @@ const mapDispatchToProps = (dispatch) => ({
   getProduct: (productId) => dispatch(setProductThunk(productId)),
   addToCart: (id, productId, inventory, price) =>
     dispatch(addToCartThunk(id, productId, inventory, price)),
-  updateCart: (qty) => dispatch(updateQuantityCartThunk(qty)),
+  updateCart: (id, productId, qty) =>
+    dispatch(updateQuantityCartThunk(id, productId, qty)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct);

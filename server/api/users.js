@@ -38,6 +38,7 @@ router.post('/:id/cart/add', async (req, res, next) => {
         userId: req.params.id,
         orderFilled: false,
       },
+      include: Product,
     });
     if (!cart) {
       cart = await ShoppingCart.create({
@@ -49,10 +50,13 @@ router.post('/:id/cart/add', async (req, res, next) => {
     let newOrder = await OrderProducts.create({
       cartId: cart.id,
       productId: req.body.productId,
-      inventory: req.body.inventory,
+      inventory: 1 * req.body.inventory,
       totalPrice: 1 * req.body.inventory * req.body.price,
     });
-    res.send(newOrder);
+    console.log(newOrder);
+    console.log(cart.products);
+
+    res.send(cart.products[cart.products.length - 1]);
   } catch (err) {
     next(err);
   }
@@ -67,15 +71,16 @@ router.put('/:id/cart/update', async (req, res, next) => {
       },
       include: {
         model: Product,
-        where: {id: req.body.productId}
-      }
+        where: { id: req.body.productId },
+      },
     });
 
     //This finds us the path to the relevant product, and its order information for the cart.
     //The path to what we want to change is below
-    let order = cart.products[0].orderProduct
+    let order = cart.products[0].orderProduct;
     await order.set({
       inventory: 1 * req.body.inventory,
+      totalPrice: cart.products[0].price * req.body.inventory,
     });
     //item inventory gets updated
     res.send(cart);
@@ -128,6 +133,9 @@ router.delete('/:id/cart/clear', async (req, res, next) => {
     }
 
     await cart.destroy();
+    await ShoppingCart.create({
+      userId: req.params.id,
+    })
     res.sendStatus(200);
   } catch (err) {
     next(err);
@@ -162,7 +170,9 @@ router.put('/:id/cart/complete', async (req, res, next) => {
       await product.save();
     });
     await finalCart.save();
-
+    await ShoppingCart.create({
+      userId: req.params.id,
+    })
     //just to make sure it saves, will check if redundant
 
     res.send(finalCart);
@@ -187,11 +197,10 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-
 router.get('/:id', async (req, res, next) => {
   try {
     const users = await User.findOne({
-      where: {id: req.params.id},
+      where: { id: req.params.id },
       attributes: ['id', 'username'],
     });
     res.json(users);
@@ -203,7 +212,7 @@ router.get('/:id', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   try {
     const users = await User.findOne({
-      where: {id: req.params.id},
+      where: { id: req.params.id },
       attributes: ['id', 'username'],
     });
     res.json(users);
@@ -211,4 +220,3 @@ router.put('/:id', async (req, res, next) => {
     next(err);
   }
 });
-
