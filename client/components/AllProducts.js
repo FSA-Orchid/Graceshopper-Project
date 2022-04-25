@@ -1,12 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { setProductsThunk, deleteProductThunk } from "../store/allproducts";
+import FilterProduct from "./FilterProduct";
 import {
   setGuitarsThunk,
   setBassThunk,
   setProductsThunk,
   deleteProductThunk,
 } from "../store/allproducts";
+
 
 
 import { addToCartThunk } from '../store/cart';
@@ -22,11 +25,10 @@ export class AllProducts extends React.Component {
     } else
       return (
         <div>
-          <div className="guitarFilter">
-            <Link onClick={() => this.props.fetchGuitars()}>Guitars</Link>
-            <Link onClick={() => this.props.fetchBass()}>Bass</Link>
-            <Link onClick={() => this.props.fetchProducts()}>All Products</Link>
-          </div>
+
+          <FilterProduct />
+
+
           <div className="productContainer">
             {this.props.user.isAdmin
               ? this.props.products.map((product) => (
