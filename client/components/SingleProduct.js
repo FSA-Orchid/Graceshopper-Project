@@ -14,6 +14,10 @@ class SingleProduct extends React.Component {
     }
   }
 
+  handleSubmit () {
+
+  }
+
   render() {
     const product = this.props.product;
 

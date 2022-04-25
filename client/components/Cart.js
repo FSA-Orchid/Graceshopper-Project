@@ -61,12 +61,12 @@ export class Cart extends React.Component {
               >
                 Clear Cart
               </button>
+              <Link to='/checkout'>Checkout</Link>
             </div>
           ))
         ) : (
           <h2>Cart Empty</h2>
         )}
-        <Link to='/checkout'>Checkout</Link>
       </div>
     );
   }
