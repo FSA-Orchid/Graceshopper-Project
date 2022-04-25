@@ -1,9 +1,9 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { setProductsThunk, deleteProductThunk } from "../store/allproducts";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { setProductsThunk, deleteProductThunk } from '../store/allproducts';
 
-import { addToCartThunk } from "../store/cart";
+import { addToCartThunk } from '../store/cart';
 
 export class AllProducts extends React.Component {
   componentDidMount() {
@@ -67,7 +67,7 @@ export class AllProducts extends React.Component {
                           this.props.addToCart(
                             this.props.user.id,
                             product.id,
-                            product.inventory,
+                            1,
                             product.price
                           )
                         }
