@@ -83,8 +83,10 @@ img {
   text-align: center;
 }
 .contentUser {
-  left: 160px;
-  text-align: center;
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
 }
 
 .contentOrder {
