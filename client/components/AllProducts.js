@@ -3,6 +3,12 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { setProductsThunk, deleteProductThunk } from "../store/allproducts";
 import FilterProduct from "./FilterProduct";
+import {
+  setGuitarsThunk,
+  setBassThunk,
+  setProductsThunk,
+  deleteProductThunk,
+} from "../store/allproducts";
 
 import { addToCartThunk } from "../store/cart";
 
@@ -43,7 +49,7 @@ export class AllProducts extends React.Component {
                           this.props.addToCart(
                             this.props.user.id,
                             product.id,
-                            product.inventory,
+                            1,
                             product.price
                           )
                         }
@@ -69,7 +75,7 @@ export class AllProducts extends React.Component {
                           this.props.addToCart(
                             this.props.user.id,
                             product.id,
-                            product.inventory,
+                            1,
                             product.price
                           )
                         }
