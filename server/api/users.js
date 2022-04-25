@@ -65,30 +65,23 @@ router.post('/:id/cart/add', async (req, res, next) => {
 
 router.put('/:id/cart/update', async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.params.id, {
-      attributes: { exclude: 'password' },
-      include: {
-        model: ShoppingCart,
-        where: { orderFilled: 'false' },
-        include: [
-          {
-            model: Product,
-            where: { id: req.body.id },
-          },
-        ],
+    let cart = await ShoppingCart.findOne({
+      where: {
+        userId: req.params.id,
+        orderFilled: false,
       },
+      include: {
+        model: Product,
+        where: {id: req.body.productId}
+      }
     });
-    //This finds us the path to the relevant item
-    let cart = user.carts[0].products[0].orderProduct;
-    //item path
-
-    await cart.set({
-
+    //This finds us the path to the relevant product, and its order information for the cart.
+    //The path to what we want to change is below
+    let order = cart.products[0].orderProduct
+    await order.set({
       inventory: 1 * req.body.inventory,
     });
-
     //item inventory gets updated
-
     res.send(cart);
   } catch (err) {
     next(err);

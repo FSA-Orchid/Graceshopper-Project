@@ -40,7 +40,6 @@ if(nestState.display === 'block'){
 
 accordionToggle(key) {
   let changes = this.accordionContent[key]
-  console.log(changes)
   if(changes.style.display === 'none'){
     changes.style.display = 'block'
     return
@@ -68,23 +67,21 @@ accordionToggle(key) {
       {this.props.orders.map((order, key)=>{
       return (
       <div key = {key}>
-      <button type="button" onClick={() => this.accordionToggle(key)} className="collapsible">Ordered on {order.updatedAt}</button>
+      <button type="button" onClick={() => this.accordionToggle(key)} className="collapsible">Ordered on {(order.updatedAt).slice(0,10)} at {(order.updatedAt).slice(11,19)}</button>
       <form style={{display: 'none'}} ref={accordionContent => this.accordionContent[key] = accordionContent}>
       {order.products.map((product, key) => {
         return (<div key={key}>
             <h5>{product.name}</h5>
             <p>{product.make} {product.model} {product.year}</p>
-            <p> {(product.price)/100} x {product.orderProduct.inventory} = {(product.orderProduct.totalPrice)/100} </p>
+            <p> {product.orderProduct.inventory} for ${(product.orderProduct.totalPrice)/100} </p>
           </div>)
       })}
-      <p>Total: $</p>
+      <p>Total: ${(order.products.reduce((total, current) => {return total + (current.orderProduct.totalPrice/100)},0)*1.08).toFixed(2)}, with tax</p>
       </form>
       </div>)
     })}
 
     </div>
-
-
     </div>
   )
 }
