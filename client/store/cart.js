@@ -106,6 +106,7 @@ export const addToCartThunk = (id, productId, inventory, price) => {
   };
 };
 
+
 export const updateQuantityCartThunk = (id, product) => {
   return async function (dispatch) {
     try {

@@ -8,7 +8,8 @@ import {
   deleteProductThunk,
 } from "../store/allproducts";
 
-import { addToCartThunk } from "../store/cart";
+
+import { addToCartThunk } from '../store/cart';
 
 export class AllProducts extends React.Component {
   componentDidMount() {
@@ -77,7 +78,7 @@ export class AllProducts extends React.Component {
                           this.props.addToCart(
                             this.props.user.id,
                             product.id,
-                            product.inventory,
+                            1,
                             product.price
                           )
                         }
