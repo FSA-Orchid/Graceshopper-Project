@@ -28,10 +28,11 @@ class Navbar extends React.Component {
               >
                 All Products
               </Link>
+              <Link to="/user/">User Profile</Link>
+              <Link to="/cart/">Cart{`(${this.props.cart.length})`}</Link>
               <a className="navText" href="#" onClick={this.props.handleClick}>
                 Logout
-              </a>{' '}
-              <Link to="/cart/">Cart{`(${this.props.cart.length})`}</Link>
+              </a>
             </div>
           ) : (
             <div>

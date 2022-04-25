@@ -19,6 +19,7 @@ class Checkout extends React.Component {
       zip: '',
       one: {display: 'none'},
       two: {display: 'none'},
+      complete: false,
     }
     this.handleChange=this.handleChange.bind(this)
     this.toggler=this.toggler.bind(this)
@@ -60,7 +61,7 @@ class Checkout extends React.Component {
 
 
   render() {
-
+    if(this.state.complete === true){return (<h1>Transaction complete! Thank you for your business.</h1>)}
   let total = 0;
 
      return (
@@ -74,8 +75,8 @@ class Checkout extends React.Component {
     <p>${(item.price/100).toFixed(2)} x {item.orderProduct.inventory} = ${(item.orderProduct.totalPrice/100).toFixed(2)}</p>
     </div>)
   })}
-<h4>Sales Tax:{(total/100).toFixed(2)}</h4>
-<h3>Total Price :${(total/100).toFixed(2)}</h3>
+<h4>Sales Tax: ${((total/100)*0.08).toFixed(2)}</h4>
+<h3>Total Price :${((total/100)*1.08).toFixed(2)}</h3>
 </div>
 
 <button type="button" className="collapsible"  onClick ={() => this.toggler('one')}
@@ -114,7 +115,9 @@ onChange={this.handleChange} >
 </form>
 
 
-<button onClick = {() => this.props.closeOrder(this.props.auth.id)}>
+<button onClick = {() => {
+  this.setState({complete: true})
+  this.props.closeOrder(this.props.auth.id)}}>
   Checkout
 </button>
 </div>

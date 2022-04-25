@@ -106,12 +106,13 @@ export const addToCartThunk = (id, productId, inventory, price) => {
   };
 };
 
-export const updateQuantityCartThunk = (qty) => {
+
+export const updateQuantityCartThunk = (id, product) => {
   return async function (dispatch) {
     try {
       let response = await axios.put(
-        `api/users/${product.id}/cart/update`,
-        qty
+        `api/users/${id}/update`,
+        product
       );
       let newProduct = response.data;
       dispatch(updateCart(newProduct));

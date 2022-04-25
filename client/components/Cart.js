@@ -32,8 +32,9 @@ export class Cart extends React.Component {
   }
 
   render() {
+
     const products = this.props.cart.products;
-    console.log(this.props, 'this is pprops on cart');
+
     return (
       <div className="productList">
         {this.props.cart.length ? (
@@ -61,12 +62,12 @@ export class Cart extends React.Component {
               >
                 Clear Cart
               </button>
+              <Link to='/checkout'>Checkout</Link>
             </div>
           ))
         ) : (
           <h2>Cart Empty</h2>
         )}
-        <Link to="/checkout">Checkout</Link>
       </div>
     );
   }

@@ -51,7 +51,6 @@ img {
   margin: auto;
 }
 
-
 .productContainer {
   display: flex;
   flex-wrap: wrap;
@@ -62,12 +61,14 @@ img {
   width: 32%;
   padding-bottom: 5%; /* 32:18, i.e. 16:9 */
   margin-bottom: 2%; /* (100-32*3)/2 */
+}
 
 .collapsible {
   background-color: #eee;
   color: #444;
   cursor: pointer;
   padding: 18px;
+  left: 180 px;
   width: 100%;
   border: none;
   text-align: left;
@@ -79,5 +80,30 @@ img {
   padding: 0 18px;
   overflow: hidden;
   background-color: #f1f1f1;
+  text-align: center;
+}
+.contentUser {
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
+}
 
+.contentOrder {
+  padding: 0 18px;
+  overflow: hidden;
+  background-color: #f1f1f1;
+  text-align: center;
+}
+
+.sidenav {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 160px; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 140px; /* Stay at the top */
+  left: 0;
+  background-color: grey; /* Black */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 20px;
 }

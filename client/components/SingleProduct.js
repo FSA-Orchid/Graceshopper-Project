@@ -22,11 +22,13 @@ class SingleProduct extends React.Component {
     }
   }
 
+
   handleChange(evt) {
     this.setState({ quantity: evt.target.value });
   }
   handleSubmit(evt) {
     //check to see if product is in cart if so increment qty of the cart if not add item to the cart
+
     const product = this.props.product;
     evt.preventDefault();
     if (
