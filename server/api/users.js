@@ -38,7 +38,7 @@ router.post('/:id/cart/add', async (req, res, next) => {
         userId: req.params.id,
         orderFilled: false,
       },
-      include: Product
+      include: Product,
     });
     if (!cart) {
       cart = await ShoppingCart.create({
@@ -50,13 +50,13 @@ router.post('/:id/cart/add', async (req, res, next) => {
     let newOrder = await OrderProducts.create({
       cartId: cart.id,
       productId: req.body.productId,
-      inventory: 1*req.body.inventory,
+      inventory: 1 * req.body.inventory,
       totalPrice: 1 * req.body.inventory * req.body.price,
     });
-    console.log(newOrder)
-    console.log(cart.products)
+    console.log(newOrder);
+    console.log(cart.products);
 
-    res.send(cart.products[cart.products.length-1]);
+    res.send(cart.products[cart.products.length - 1]);
   } catch (err) {
     next(err);
   }
@@ -71,16 +71,16 @@ router.put('/:id/cart/update', async (req, res, next) => {
       },
       include: {
         model: Product,
-        where: {id: req.body.productId}
-      }
+        where: { id: req.body.productId },
+      },
     });
 
     //This finds us the path to the relevant product, and its order information for the cart.
     //The path to what we want to change is below
-    let order = cart.products[0].orderProduct
+    let order = cart.products[0].orderProduct;
     await order.set({
       inventory: 1 * req.body.inventory,
-      totalPrice: cart.products[0].price* req.body.inventory
+      totalPrice: cart.products[0].price * req.body.inventory,
     });
     //item inventory gets updated
     res.send(cart);
@@ -192,11 +192,10 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-
 router.get('/:id', async (req, res, next) => {
   try {
     const users = await User.findOne({
-      where: {id: req.params.id},
+      where: { id: req.params.id },
       attributes: ['id', 'username'],
     });
     res.json(users);
@@ -208,7 +207,7 @@ router.get('/:id', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   try {
     const users = await User.findOne({
-      where: {id: req.params.id},
+      where: { id: req.params.id },
       attributes: ['id', 'username'],
     });
     res.json(users);
@@ -216,4 +215,3 @@ router.put('/:id', async (req, res, next) => {
     next(err);
   }
 });
-
