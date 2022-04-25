@@ -1,13 +1,13 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { setProductsThunk, deleteProductThunk } from "../store/allproducts";
-import FilterProduct from "./FilterProduct";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import FilterProduct from './FilterProduct';
 import {
   setGuitarsThunk,
   setBassThunk,
-} from "../store/allproducts";
-
+  setProductsThunk,
+  deleteProductThunk,
+} from '../store/allproducts';
 
 
 import { addToCartThunk } from '../store/cart';
@@ -23,9 +23,7 @@ export class AllProducts extends React.Component {
     } else
       return (
         <div>
-
           <FilterProduct />
-
 
           <div className="productContainer">
             {this.props.user.isAdmin

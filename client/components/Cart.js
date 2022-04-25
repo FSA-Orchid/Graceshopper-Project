@@ -20,7 +20,7 @@ export class Cart extends React.Component {
     };
   }
 
-  async componentDidMount () {
+  async componentDidMount() {
     await this.props.fetchCart(this.props.auth.id);
   }
   componentDidUpdate(prevProps) {
@@ -32,39 +32,41 @@ export class Cart extends React.Component {
   }
 
   render() {
-
     const products = this.props.cart.products;
+    console.log(this.props, 'this is cart props');
 
     return (
       <div className="productList">
         {this.props.cart.length ? (
           this.props.cart.map((product) => {
-           return <div key={product.id}>
-              <img src={product.imageUrl} className="photo" />
-              <h4>
-                <Link to={`/products/${product.id}/`}>
-                  {`${product.orderProduct.inventory} ${product.instrument}
+            return (
+              <div key={product.id}>
+                <img src={product.imageUrl} className="photo" />
+                <h4>
+                  <Link to={`/products/${product.id}/`}>
+                    {`${product.orderProduct.inventory} ${product.instrument}
                   ${product.make} ${product.model} -
                   $${(product.price / 100).toFixed(2)}`}
-                </Link>
+                  </Link>
+                  <button
+                    type="submit"
+                    className="delete"
+                    onClick={() => this.props.removeProduct(product.id)}
+                  >
+                    X
+                  </button>
+                </h4>
                 <button
                   type="submit"
-                  className="delete"
-                  onClick={() => this.props.removeProduct(product.id)}
+                  className="clear"
+                  onClick={() => this.props.clearCart(this.props.auth.id)}
                 >
-                  X
+                  Clear Cart
                 </button>
-              </h4>
-              <button
-                type="submit"
-                className="clear"
-                onClick={() => this.props.clearCart(this.props.auth.id)}
-              >
-                Clear Cart
-              </button>
-              <Link to='/checkout'>Checkout</Link>
-            </div>
-  })
+                <Link to="/checkout">Checkout</Link>
+              </div>
+            );
+          })
         ) : (
           <h2>Cart Empty</h2>
         )}
