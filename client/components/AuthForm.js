@@ -77,6 +77,18 @@ const mapDispatch = (dispatch) => {
       const formName = evt.target.name;
       const username = evt.target.username.value;
       const password = evt.target.password.value;
+      dispatch(authenticate(username, password, formName));
+    },
+  };
+};
+
+const mapDispatchSign = (dispatch) => {
+  return {
+    handleSubmit(evt) {
+      evt.preventDefault();
+      const formName = evt.target.name;
+      const username = evt.target.username.value;
+      const password = evt.target.password.value;
       const email = evt.target.email.value
       const address = evt.target.address.value
       dispatch(authenticate(username, password, email, address, formName));
@@ -84,5 +96,6 @@ const mapDispatch = (dispatch) => {
   };
 };
 
+
 export const Login = connect(mapLogin, mapDispatch)(AuthForm);
-export const Signup = connect(mapSignup, mapDispatch)(AuthForm);
+export const Signup = connect(mapSignup, mapDispatchSign)(AuthForm);
