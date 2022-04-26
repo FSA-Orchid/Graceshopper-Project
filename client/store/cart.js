@@ -127,11 +127,9 @@ export default function cartReducer(state = initialState, action) {
     case SetCart:
       return action.cart;
     case UpdateQuantityCart:
-      return [
-        state.map((product) =>
+      return state.map((product) =>
           product.id === action.product.id ? action.product : product
-        ),
-      ];
+        )
     case AddToCart:
       return action.newProduct;
     case ClearCart:
