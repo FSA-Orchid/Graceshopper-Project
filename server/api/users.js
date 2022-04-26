@@ -193,7 +193,7 @@ router.get('/', async (req, res, next) => {
       // users' passwords are encrypted, it won't help if we just
 
       // send everything to anyone who asks!
-      attributes: ['id', 'username'],
+      attributes: ['id', 'username', 'email', 'address', 'isAdmin'],
     });
     res.json(users);
   } catch (err) {
@@ -205,7 +205,7 @@ router.get('/:id', async (req, res, next) => {
   try {
     const users = await User.findOne({
       where: { id: req.params.id },
-      exclude: ['password'],
+      attributes: ['id', 'username', 'email', 'address', 'isAdmin'],
     });
     res.json(users);
   } catch (err) {
@@ -217,8 +217,9 @@ router.put('/:id', async (req, res, next) => {
   try {
     const users = await User.findOne({
       where: { id: req.params.id },
-      exclude: ['password'],
     });
+    console.log(req.body, 'this is reqbody');
+    await users.update(req.body);
     res.json(users);
   } catch (err) {
     next(err);
