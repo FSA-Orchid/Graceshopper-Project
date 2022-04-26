@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { authenticate } from "../store";
+import { authenticate, authenticateSign } from "../store";
 import AllProducts from "./AllProducts";
 
 /**
@@ -91,7 +91,7 @@ const mapDispatchSign = (dispatch) => {
       const password = evt.target.password.value;
       const email = evt.target.email.value
       const address = evt.target.address.value
-      dispatch(authenticate(username, password, email, address, formName));
+      dispatch(authenticateSign(username, password, email, address, formName));
     },
   };
 };
