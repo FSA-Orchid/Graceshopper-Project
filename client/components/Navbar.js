@@ -20,6 +20,7 @@ class Navbar extends React.Component {
     })
     console.log(this.props, 'component updated');
   }
+
   componentDidUpdate(prevProps) {
     if (prevProps.cart !== this.props.cart) {
       this.setState({

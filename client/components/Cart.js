@@ -51,7 +51,7 @@ export class Cart extends React.Component {
                   <button
                     type="submit"
                     className="delete"
-                    onClick={() => this.props.removeProduct(product.id)}
+                    onClick={() => this.props.removeProduct(this.props.auth.id, product)}
                   >
                     X
                   </button>
@@ -82,7 +82,7 @@ const mapStateToProps = (reduxState) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchCart: (id) => dispatch(setCartThunk(id)),
-  removeProduct: (id) => dispatch(removeFromCartThunk(id)),
+  removeProduct: (id, product) => dispatch(removeFromCartThunk(id, product)),
   clearCart: (id) => dispatch(clearCartThunk(id)),
   changeQuantity: (id) => dispatch(updateQuantityCartThunk(id)),
 });
