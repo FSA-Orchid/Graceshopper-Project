@@ -308,11 +308,9 @@ export default function productsReducer(state = initialState, action) {
       }
       return minToMaxPrice;
     case UpdateProduct:
-      return [
-        state.map((product) =>
+      return state.map((product) =>
           product.id === action.product.id ? action.product : product
-        ),
-      ];
+        )
     case AddProduct:
       return [...state, action.product];
     case DeleteProduct:

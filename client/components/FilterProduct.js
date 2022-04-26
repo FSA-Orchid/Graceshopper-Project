@@ -79,7 +79,7 @@ export class AllProducts extends React.Component {
   render() {
     return (
       <div>
-        <div className="guitarFilter">
+        <div className="sidenav">
           <form onSubmit={this.handleInstSubmit}>
             <label>
               instrument:

@@ -67,7 +67,6 @@ router.post('/:id/cart/add', async (req, res, next) => {
 
 router.put('/:id/cart/update', async (req, res, next) => {
   try {
-    console.log(req.body, 'here my body')
     let cart = await ShoppingCart.findOne({
       where: {
         userId: req.params.id,
@@ -87,9 +86,9 @@ router.put('/:id/cart/update', async (req, res, next) => {
       totalPrice: cart.products[0].price * req.body.inventory,
     });
     console.log(order)
-    console.log(cart, 'here it')
+    console.log(cart.products[0], 'here it')
     //item inventory gets updated
-    res.send(cart);
+    res.send(cart.products[0]);
   } catch (err) {
     next(err);
   }
