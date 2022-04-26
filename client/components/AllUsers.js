@@ -1,57 +1,40 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
-import productsReducer from '../store/products'
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { fetchUsersThunk } from '../store/users';
 
 class AllUsers extends React.Component {
-  constructor(props){
-    super(props)
-    this.state ={
-      users: []
-    }
-  }
   componentDidMount() {
-    this.setState({
-      users: this.props.users
-    })
+    this.props.loadUsers();
+    console.log(this.props, 'props for allusers');
   }
 
-  componentDidUpdate(prevProps) {
-    if(prevProps.users !== this.props.users){
-      this.setState({
-        users: this.props.users || [],
-      })
+  render() {
+    if (!this.props.users) {
+      return <h1>No Users!</h1>;
     }
-  }
-
-  render(){
-    if(!this.props.users){return <h1>No Products!</h1>}
-    let users = this.state.users
+    let users = this.props.users;
     return (
-      <div className='AllUsers'>
+      <div className="AllUsers">
         {users.map((user) => {
           return (
-            <form key={user.id} className='userBox'>
-              <Link to={`/users/${user.id}`} >
-                <h2>{user.username}</h2>
-              </Link>
+            <form key={user.id} className="userBox">
+              <h2>{user.username}</h2>
             </form>
-          )
+          );
         })}
       </div>
-    )
+    );
   }
-
 }
-// const mapState = (state) => {
-//   return state.users
-// }
+const mapState = (state) => {
+  return { users: state.users };
+};
 
 const mapDispatch = (dispatch) => {
   return {
-    loadUsers: () => dispatch(/* NEED THUNK FOR USERS */)
-  }
+    loadUsers: () => dispatch(fetchUsersThunk()),
+  };
+};
 
-}
-
-export const AllUsersPaged = connect(null, mapDispatch)(AllUsers)
+export default connect(mapState, mapDispatch)(AllUsers);

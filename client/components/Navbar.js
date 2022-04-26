@@ -4,21 +4,24 @@ import { Link } from 'react-router-dom';
 import { logout } from '../store';
 import { setProductsThunk } from '../store/allproducts';
 import { setCartThunk } from '../store/cart';
+import AllUsers from './AllUsers';
+
 import { Login, Signup } from "./AuthForm";
+
 
 class Navbar extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
-      cart: []
-    }
+      cart: [],
+    };
   }
 
   componentDidMount() {
     this.props.fetchCart(this.props.auth.id);
     this.setState({
-      cart: this.props.cart
-    })
+      cart: this.props.cart,
+    });
     console.log(this.props, 'component updated');
   }
 
@@ -29,7 +32,6 @@ class Navbar extends React.Component {
       });
     }
   }
-
 
   render() {
     return (
@@ -51,7 +53,12 @@ class Navbar extends React.Component {
                 All Products
               </Link>
               <Link to="/user/">User Profile</Link>
-              <Link to="/cart/">Cart{`(${this.props.cart.length})`}</Link>
+              <Link to="/cart/">Cart{`(${this.props.cart.length})`}</Link>{' '}
+              {this.props.isLoggedIn && this.props.auth.isAdmin ? (
+                <Link to="/users/">All Users</Link>
+              ) : (
+                <div />
+              )}
               <a className="navText" href="#" onClick={this.props.handleClick}>
                 Logout
               </a>
