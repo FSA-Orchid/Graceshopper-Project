@@ -11,7 +11,6 @@ import {
 import { addToCartThunk, updateQuantityCartThunk, } from "../store/cart";
 
 
-
 export function AllProducts(props) {
   let [cart, setCart] = useState([]);
   let localCart = localStorage.getItem("cart");

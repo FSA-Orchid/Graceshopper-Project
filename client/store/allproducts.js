@@ -2,6 +2,19 @@ import axios from "axios";
 
 const initialState = [];
 
+const ghost = {
+  instrument: "",
+  make: "",
+  imageUrl: "",
+  model: "",
+  year: "",
+  color: "",
+  condition: "",
+  description: "",
+  price: 0,
+  inventory: 0,
+};
+
 //action constants
 const SetProducts = "SET_PRODUCTS";
 const SetGuitars = "SET_GUITARS";
@@ -165,7 +178,7 @@ export const setPriceMaxThunk = () => {
     try {
       let response = await axios.get("/api/products");
       let products = response.data;
-      let productsPrice = products.map((product) => product.price);
+      let productsPrice = [...products.map((product) => product.price)];
       dispatch(setPriceMax(products, productsPrice));
     } catch (err) {
       console.log(err);
@@ -178,7 +191,7 @@ export const setPriceMinThunk = () => {
     try {
       let response = await axios.get("/api/products");
       let products = response.data;
-      let productsPrice = products.map((product) => product.price);
+      let productsPrice = [...products.map((product) => product.price)];
       dispatch(setPriceMin(products, productsPrice));
     } catch (err) {
       console.log(err);
@@ -237,25 +250,24 @@ export default function productsReducer(state = initialState, action) {
       state.sort((a, b) => {
         return a.year - b.year;
       });
-      return state;
+      return [...state];
     case SetNewToOld:
       state.sort((a, b) => {
         return b.year - a.year;
       });
-      return state;
+      return [...state];
     case SetPriceMax:
-      let sortedPriceMax = state;
-      sortedPriceMax.sort(function (a, b) {
+      state.sort(function (a, b) {
         return b.price - a.price;
       });
-      console.log("max to min products", maxToMinPrice);
-      return sortedPriceMax;
+      console.log("max to min products", state);
+      return [...state];
     case SetPriceMin:
-      let sortedPriceMin = state;
-      sortedPriceMin.sort(function (a, b) {
+      state.sort(function (a, b) {
         return a.price - b.price;
       });
-      return sortedPriceMin;
+      console.log("max to min products", state);
+      return [...state];
     case UpdateProduct:
       return state.map((product) =>
         product.id === action.product.id ? action.product : product
