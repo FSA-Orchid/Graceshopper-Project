@@ -80,7 +80,7 @@ export const closeOrderThunk = (id) => {
 export const removeFromCartThunk = (id, product) => {
   return async function (dispatch) {
     try {
-      await axios.delete(`/api/users/${id}/cart/remove`, product.id);
+      await axios.delete(`/api/users/${id}/cart/${product.id}/remove`);
       dispatch(removeFromCart(product));
     } catch (err) {
       console.log(err);
@@ -92,7 +92,7 @@ export const addToCartThunk = (id, productId, inventory, price) => {
   return async function (dispatch) {
     try {
       //Or it would be an axios.post
-      console.log('I DISPATCHED ADDTOCART');
+
       let response = await axios.post(`/api/users/${id}/cart/add`, {
         productId,
         inventory,
@@ -109,11 +109,12 @@ export const addToCartThunk = (id, productId, inventory, price) => {
 export const updateQuantityCartThunk = (id, productId, inventory) => {
   return async function (dispatch) {
     try {
-      let response = await axios.put(`api/users/${id}/cart/update`, {
-        productId,
-        inventory,
+      let response = await axios.put(`/api/users/${id}/cart/update`, {
+        productId: productId,
+        inventory: inventory,
       });
       let newProduct = response.data;
+      console.log(newProduct,'got the sympathy')
       dispatch(updateCart(newProduct));
     } catch (err) {
       console.log(err);
@@ -132,7 +133,7 @@ export default function cartReducer(state = initialState, action) {
         ),
       ];
     case AddToCart:
-      return [...state, action.newProduct];
+      return action.newProduct;
     case ClearCart:
       return initialState;
     case RemoveFromCart:
