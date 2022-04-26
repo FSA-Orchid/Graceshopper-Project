@@ -234,11 +234,15 @@ export default function productsReducer(state = initialState, action) {
     case SetMake:
       return action.products;
     case SetOldToNew:
-      let sortedGuitars = state.sort((a, b) => {return a.year - b.year })
-      return sortedGuitars;
+      state.sort((a, b) => {
+        return a.year - b.year;
+      });
+      return state;
     case SetNewToOld:
-      let newsortedGuitars = state.sort((a, b) => {return b.year - a.year })
-      return newsortedGuitars;
+      state.sort((a, b) => {
+        return b.year - a.year;
+      });
+      return state;
     case SetPriceMax:
       let sortedPriceMax = state;
       sortedPriceMax.sort(function (a, b) {
@@ -247,25 +251,15 @@ export default function productsReducer(state = initialState, action) {
       console.log("max to min products", maxToMinPrice);
       return sortedPriceMax;
     case SetPriceMin:
-      let sortedPriceMin = [...action.productsPrice];
+      let sortedPriceMin = state;
       sortedPriceMin.sort(function (a, b) {
-        return a - b;
+        return a.price - b.price;
       });
-      let minToMaxPrice = [];
-      for (let i = 0; i < sortedPriceMin.length; i++) {
-        curPrice = sortedPriceMin[i];
-        for (let j = 0; j < action.products.length; j++) {
-          let curProduct = action.products[j];
-          if (curPrice === curProduct.price) {
-            minToMaxPrice.push(curProduct);
-          }
-        }
-      }
-      return minToMaxPrice;
+      return sortedPriceMin;
     case UpdateProduct:
       return state.map((product) =>
-          product.id === action.product.id ? action.product : product
-        )
+        product.id === action.product.id ? action.product : product
+      );
     case AddProduct:
       return [...state, action.product];
     case DeleteProduct:
