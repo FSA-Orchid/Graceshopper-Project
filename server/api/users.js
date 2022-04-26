@@ -38,10 +38,9 @@ router.post('/:id/cart/add', async (req, res, next) => {
       where: {
         userId: req.params.id,
         orderFilled: false,
-
       },
       include: Product,
-      separate: true
+      separate: true,
     });
     if (!cart) {
       await ShoppingCart.create({
@@ -58,7 +57,7 @@ router.post('/:id/cart/add', async (req, res, next) => {
     });
 
     //slow as shit have to make it reload
-    await cart.reload()
+    await cart.reload();
     res.send(cart.products);
   } catch (err) {
     next(err);
@@ -74,10 +73,10 @@ router.put('/:id/cart/update', async (req, res, next) => {
       },
       include: {
         model: Product,
-        where: { id: req.body.productId},
+        where: { id: req.body.productId },
       },
     });
-    console.log(cart, 'here it')
+    console.log(cart, 'here it');
     //This finds us the path to the relevant product, and its order information for the cart.
     //The path to what we want to change is below
     let order = cart.products[0].orderProduct;
@@ -85,8 +84,8 @@ router.put('/:id/cart/update', async (req, res, next) => {
       inventory: 1 * req.body.inventory,
       totalPrice: cart.products[0].price * req.body.inventory,
     });
-    console.log(order)
-    console.log(cart.products[0], 'here it')
+    console.log(order);
+    console.log(cart.products[0], 'here it');
     //item inventory gets updated
     res.send(cart.products[0]);
   } catch (err) {
@@ -97,7 +96,7 @@ router.put('/:id/cart/update', async (req, res, next) => {
 //remove item from cart
 router.delete('/:id/cart/:productId/remove', async (req, res, next) => {
   try {
-    console.log(req.params, 'all night body')
+    console.log(req.params, 'all night body');
     const user = await User.findByPk(req.params.id, {
       attributes: { exclude: ['password'] },
       include: {
@@ -141,7 +140,7 @@ router.delete('/:id/cart/clear', async (req, res, next) => {
     await cart.destroy();
     await ShoppingCart.create({
       userId: req.params.id,
-    })
+    });
     res.sendStatus(200);
   } catch (err) {
     next(err);
@@ -178,7 +177,7 @@ router.put('/:id/cart/complete', async (req, res, next) => {
     await finalCart.save();
     await ShoppingCart.create({
       userId: req.params.id,
-    })
+    });
     //just to make sure it saves, will check if redundant
 
     res.send(finalCart);
@@ -194,8 +193,7 @@ router.get('/', async (req, res, next) => {
       // users' passwords are encrypted, it won't help if we just
 
       // send everything to anyone who asks!
-
-      exclude: ['password'],
+      attributes: ['id', 'username', 'email', 'address', 'isAdmin'],
     });
     res.json(users);
   } catch (err) {
@@ -207,7 +205,7 @@ router.get('/:id', async (req, res, next) => {
   try {
     const users = await User.findOne({
       where: { id: req.params.id },
-      exclude: ['password'],
+      attributes: ['id', 'username', 'email', 'address', 'isAdmin'],
     });
     res.json(users);
   } catch (err) {
@@ -219,8 +217,9 @@ router.put('/:id', async (req, res, next) => {
   try {
     const users = await User.findOne({
       where: { id: req.params.id },
-      exclude: ['password'],
     });
+    console.log(req.body, 'this is reqbody');
+    await users.update(req.body);
     res.json(users);
   } catch (err) {
     next(err);

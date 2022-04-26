@@ -1,15 +1,18 @@
-import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
-import { withRouter, Route, Switch, Redirect } from "react-router-dom";
-import { Login, Signup } from "./components/AuthForm";
-import Home from "./components/Home";
-import { me } from "./store";
-import AllProducts from "./components/AllProducts";
-import SingleProduct from "./components/SingleProduct";
-import Cart from "./components/Cart";
-import Checkout from "./components/Checkout";
-import UpdateProduct from "./components/EditProduct";
-import UserPage from "./components/UserPage";
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { Login, Signup } from './components/AuthForm';
+import Home from './components/Home';
+import { me } from './store';
+import AllProducts from './components/AllProducts';
+import SingleProduct from './components/SingleProduct';
+import Cart from './components/Cart';
+import Checkout from './components/Checkout';
+import UpdateProduct from './components/EditProduct';
+import UserPage from './components/UserPage';
+import AllUsers from './components/AllUsers';
+import SingleUser from './components/SingleUser';
+import EditSingleUser from './components/EditSingleUser';
 /**
  * COMPONENT
  */
@@ -24,7 +27,7 @@ class Routes extends Component {
     return (
       <div>
         {isLoggedIn ? (
-          <Switch>
+          <div>
             <Route path="/home" component={Home} />
             {/* <Redirect to="/home" /> */}
             <Route exact path="/products" component={AllProducts} />
@@ -33,7 +36,11 @@ class Routes extends Component {
             <Route exact path="/checkout" component={Checkout} />
             <Route exact path="/cart" component={Cart} />
             <Route exact path="/user" component={UserPage} />
-          </Switch>
+            <Route exact path="/users" component={AllUsers} />
+            <Route path="/users/:userId" component={SingleUser} />
+            <Route path="/users/:userId" component={EditSingleUser} />
+          </div>
+
         ) : (
           <Switch>
             <Route path="/" exact component={Login} />

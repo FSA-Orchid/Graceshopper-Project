@@ -95,15 +95,34 @@ img {
   background-color: #f1f1f1;
   text-align: center;
 }
-
+.productContainer {
+  margin-left: 160px;
+  width: 100%;
+}
+.relativeCheck {
+  text-indent: 200px;
+}
+.topScreen {
+  z-index: 2;
+}
+span {
+  display: inline-block;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+ul {
+  list-style-type: none;
+}
 .sidenav {
   height: 100%; /* Full-height: remove this if you want "auto" height */
   width: 160px; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-  z-index: 1; /* Stay on top */
+  /* Stay on top */
   top: 140px; /* Stay at the top */
+  z-index: 1;
   left: 0;
-  background-color: grey; /* Black */
+  border: black;
+  background-color: rgb(114, 105, 105); /* Black */
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;
 }
