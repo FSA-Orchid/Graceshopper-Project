@@ -12,6 +12,9 @@ import UpdateProduct from './components/EditProduct';
 import UserPage from './components/UserPage';
 import AllUsers from './components/AllUsers';
 import FilterProduct from './components/FilterProduct';
+import SingleUser from './components/SingleUser';
+import EditSingleUser from './components/EditSingleUser';
+
 /**
  * COMPONENT
  */
@@ -26,7 +29,7 @@ class Routes extends Component {
     return (
       <div>
         {isLoggedIn ? (
-          <Switch>
+          <div>
             <Route path="/home" component={Home} />
             {/* <Redirect to="/home" /> */}
             <Route exact path="/products" component={FilterProduct} />
@@ -36,7 +39,10 @@ class Routes extends Component {
             <Route exact path="/cart" component={Cart} />
             <Route exact path="/user" component={UserPage} />
             <Route exact path="/users" component={AllUsers} />
-          </Switch>
+            <Route path="/users/:userId" component={SingleUser} />
+            <Route path="/users/:userId" component={EditSingleUser} />
+          </div>
+
         ) : (
           <Switch>
             <Route path="/" exact component={Login} />
@@ -44,6 +50,8 @@ class Routes extends Component {
             <Route path="/signup" component={Signup} />
             <Route exact path="/products" component={FilterProduct} />
             <Route exact path="/products/:id" component={SingleProduct} />
+            <Route exact path="/cart" component={Cart} />
+            <Route exact path="/checkout" component={Checkout} />
           </Switch>
         )}
       </div>

@@ -1,41 +1,60 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { setProductsThunk } from '../store/allproducts';
+import React, { useState, useEffect, useRef } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { setProductsThunk } from "../store/allproducts";
 import {
   clearCartThunk,
   updateQuantityCartThunk,
   removeFromCartThunk,
   setCartThunk,
-} from '../store/cart';
+} from "../store/cart";
 
 //Possible rendition of Cart, piggy-backed off of AllProducts page, have to add quantity change option.
 // NOT ADDED TO ROUTES YET
 
-export class Cart extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      cart: [],
-    };
-  }
+export function Cart(props) {
+  let [cart, setCart] = useState([]);
+  let localCart = localStorage.getItem("cart");
 
-  async componentDidMount() {
-    await this.props.fetchCart(this.props.auth.id);
-  }
-  componentDidUpdate(prevProps) {
-    if (prevProps.cart !== this.props.cart) {
-      this.setState({
-        cart: this.props.cart || [],
-      });
-    }
-  }
+  let previousState = usePrevious(cart);
 
-  render() {
-    const products = this.props.cart.products;
-    console.log(this.props, 'this is cart props');
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    }, [value]);
+    return ref.current;
+  }
+  const removeItem = (id) => {
+    console.log(id, "id");
+    let cartCopy = [...cart];
+    cartCopy = cartCopy.filter((item) => item.id !== id);
+    setCart(cartCopy);
 
-    return (
+    let cartString = JSON.stringify(cartCopy);
+    localStorage.setItem("cart", cartString);
+  };
+  useEffect(() => {
+    localCart = JSON.parse(localCart);
+    if (localCart) setCart(localCart);
+    if (!props.auth.length) {
+      let userCart = localStorage.getItem("cart");
+      userCart = JSON.parse(userCart);
+      console.log(userCart, "parsedCart");
+      if (userCart) {
+        setCart(userCart);
+        console.log(userCart, "it is working");
+      }
+    } else props.fetchCart(props.auth.id);
+  }, []);
+
+  // useEffect((previousState) => {
+  //   if (previousState !== props.cart) {
+  //     setCart(props.cart || []);
+  //   }
+  // });
+
+ return (
       <div className="productList">
         {this.props.cart.length ? (
           <div>{this.props.cart.map((product) => {

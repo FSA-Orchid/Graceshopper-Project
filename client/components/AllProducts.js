@@ -98,6 +98,7 @@ export function AllProducts(props) {
                     <button
                       type="submit"
                       onClick={() =>
+
                         checkIt(
                             product
                         )
