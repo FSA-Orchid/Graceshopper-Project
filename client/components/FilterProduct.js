@@ -20,6 +20,7 @@ export class AllProducts extends React.Component {
       sortByYear: "select",
       sortByPrice: "select",
       instrument: "select",
+      productsList: this.props.products,
     };
 
     this.handleMakeSubmit = this.handleMakeSubmit.bind(this);
@@ -35,8 +36,10 @@ export class AllProducts extends React.Component {
       this.props.fetchProducts();
     } else if (this.state.instrument === "guitar") {
       this.props.fetchGuitars();
+      this.setState({ ...this.state, productsList: this.props.products });
     } else if (this.state.instrument === "bass") {
       this.props.fetchBass();
+      this.setState({ ...this.state, productsList: this.props.products });
     }
   }
 
@@ -51,11 +54,20 @@ export class AllProducts extends React.Component {
     if (this.state.sortByYear === "select") {
       this.props.fetchProducts();
     } else if (this.state.sortByYear === "newToOld") {
+      this.setState({
+        productsList: this.props.products,
+      });
+      console.log("redux state prods new to old", this.props.products);
+      console.log(`comp state prods new to old`, this.state.productsList);
       this.props.fetchNewToOld();
     } else if (this.state.sortByYear === "oldToNew") {
+      this.setState({
+        productsList: this.props.products,
+      });
+      console.log("redux state prods old to new", this.props.products);
+      console.log(`comp state prods old to new`, this.state.productsList);
       this.props.fetchOldToNew();
     }
-    this.clear();
   }
 
   handlePriceSubmit(evt) {
@@ -64,15 +76,20 @@ export class AllProducts extends React.Component {
       this.props.fetchProducts();
     } else if (this.state.sortByPrice === "maxToMin") {
       this.props.fetchMaxToMin();
+      this.setState({
+        productsList: this.props.products,
+      });
     } else if (this.state.sortByYear === "minToMax") {
-      this.props.fetchOMinToMax();
+      this.props.fetchMinToMax();
+      this.setState({
+        productsList: this.props.products,
+      });
     }
-    this.clear();
   }
 
   handleChange(evt) {
     this.setState({ [evt.target.name]: evt.target.value });
-    this.props.fetchProducts();
+    //this.props.fetchProducts();
   }
 
   clear = () => {
@@ -157,7 +174,7 @@ export class AllProducts extends React.Component {
 
 const mapStateToProps = (reduxState) => ({
   products: reduxState.products,
-  user: reduxState.auth,
+  // user: reduxState.auth,
 });
 
 const mapDispatchToProps = (dispatch) => ({
