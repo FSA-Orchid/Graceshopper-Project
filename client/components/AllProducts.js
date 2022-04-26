@@ -8,8 +8,7 @@ import {
   setProductsThunk,
   deleteProductThunk,
 } from "../store/allproducts";
-import { addToCartThunk, updateQuantityCartThunk, } from "../store/cart";
-
+import { addToCartThunk } from "../store/cart";
 
 export function AllProducts(props) {
   let [cart, setCart] = useState([]);
@@ -19,7 +18,6 @@ export function AllProducts(props) {
       addItem(item);
     }
   };
-
   const addItem = (item) => {
     let cartCopy = [...cart];
     let { id } = item;
@@ -50,35 +48,16 @@ export function AllProducts(props) {
     localCart = JSON.parse(localCart);
     if (localCart) setCart(localCart);
   }, []);
-
-  const checkIt = (product) => {
-    const cart = props.cart;
-    const userId = props.user.id;
-    console.log(props)
-
-    let filter = cart.filter((cartProd) => cartProd.id === product.id);
-    if (filter.length) {
-      console.log(filter);
-      let quantitynew = 1 + (1 * filter[0].orderProduct.inventory);
-      props.updateCart(userId, product.id, quantitynew);
-    } else {
-      let quantitynew = 1
-      console.log(userId, product, quantitynew)
-      props.addToCart(userId, product.id,  quantitynew , product.price);
-    }
-
-  }
-
-
   if (!props.products.length) {
     return <div>No Products</div>;
   } else
     return (
       <div>
+        <FilterProduct />
         <div className="productContainer">
           {props.user.isAdmin
-            ? props.products.map((product) => {
-                return <div className="productItem" key={product.id}>
+            ? props.products.map((product) => (
+                <div className="productItem" key={product.id}>
                   <img src={product.imageUrl} className="photo" />
                   <h2>
                     <Link
@@ -94,21 +73,22 @@ export function AllProducts(props) {
                     >
                       X
                     </button>
-                    {product.inventory > 0 ?
                     <button
                       type="submit"
                       onClick={() =>
-
-                        checkIt(
-                            product
+                        props.addToCart(
+                          props.user.id,
+                          product.id,
+                          product.inventory,
+                          product.price
                         )
                       }
                     >
                       Add to Cart
-                    </button> : <p>Out of Stock</p>}
+                    </button>
                   </h2>
                 </div>
-})
+              ))
             : props.products.map((product) => (
                 <div className="productItem" key={product.id}>
                   <img src={product.imageUrl} className="photo" />
@@ -121,11 +101,15 @@ export function AllProducts(props) {
                     </Link>
                     <button
                       type="submit"
-                      onClick={() =>
-                        checkIt(
-                            product
-                        )
-                      }
+                      onClick={() => {
+                        props.addToCart(
+                          props.user.id,
+                          product.id,
+                          product.inventory,
+                          product.price
+                        );
+                        addItem(product);
+                      }}
                     >
                       Add to Cart
                     </button>
@@ -139,7 +123,6 @@ export function AllProducts(props) {
 const mapStateToProps = (reduxState) => ({
   products: reduxState.products,
   user: reduxState.auth,
-  cart: reduxState.cart
 });
 const mapDispatchToProps = (dispatch) => ({
   fetchProducts: () => dispatch(setProductsThunk()),
@@ -148,8 +131,5 @@ const mapDispatchToProps = (dispatch) => ({
   deleteProduct: (id) => dispatch(deleteProductThunk(id)),
   addToCart: (id, product, inventory, price) =>
     dispatch(addToCartThunk(id, product, inventory, price)),
-  updateCart: (id, productId, qty) =>
-    dispatch(updateQuantityCartThunk(id, productId, qty))
-
 });
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts);

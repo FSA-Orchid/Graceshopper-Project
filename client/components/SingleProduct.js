@@ -63,16 +63,22 @@ function SingleProduct(props) {
     const cart = props.cart;
     const product = props.product;
     const userId = props.user.id;
+    // console.log(
+    //   userId,
+    //   "product:",
+    //   product,
+    //   "stateqt:",
+    //   state.quantity,
+    //   "",
+    //   cart
+    // );
     let filter = cart.filter((cartProd) => cartProd.id === product.id);
     if (filter.length) {
       console.log(filter);
-      let quantitynew = 1 * quantity  + 1 * filter[0].orderProduct.inventory;
-      if(quantitynew > product.inventory){
-        quantitynew = product.inventory}
-      props.updateCart(userId, product.id, quantitynew);
-    }
-    else {
-      props.addToCart(userId, product.id,  quantity , product.price);
+      let quantity = 1 * { quantity } + 1 * filter[0].orderProduct.inventory;
+      props.updateCart(userId, product.id, quantity);
+    } else {
+      props.addToCart(userId, product.id, { quantity }, product.price);
     }
   };
   const product = props.product;
@@ -86,11 +92,8 @@ function SingleProduct(props) {
       <p>color: {product.color}</p>
       <p>condition: {product.condition}</p>
       <p>description: {product.description}</p>
-      <p>price: {product.price}</p>
       <div>
-      {product.inventory > 0 ?
-      <div>
-      <input
+        <input
           onChange={handleChange}
           type="number"
           min="1"
@@ -98,9 +101,9 @@ function SingleProduct(props) {
           placeholder="1"
           value={quantity}
         ></input>
-         <button type="submit" onClick={handleSubmit}>
+        <button type="submit" onClick={handleSubmit}>
           Add to Cart
-        </button> </div> : <h2>Out of Stock</h2>}
+        </button>
       </div>
     </div>
   );
