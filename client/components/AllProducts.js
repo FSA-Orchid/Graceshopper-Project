@@ -9,6 +9,7 @@ import {
   deleteProductThunk,
 } from "../store/allproducts";
 import { addToCartThunk } from "../store/cart";
+
 export function AllProducts(props) {
   let [cart, setCart] = useState([]);
   let localCart = localStorage.getItem("cart");
@@ -78,7 +79,7 @@ export function AllProducts(props) {
                         props.addToCart(
                           props.user.id,
                           product.id,
-                          1,
+                          product.inventory,
                           product.price
                         )
                       }
