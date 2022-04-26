@@ -1,4 +1,5 @@
 const router = require('express').Router();
+
 const { User, ShoppingCart, Product, OrderProducts } = require('../db');
 module.exports = router;
 
@@ -6,7 +7,7 @@ module.exports = router;
 router.get('/:id/cart', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
-      attributes: { exclude: 'password' },
+      exclude: ['password'],
       include: {
         model: ShoppingCart,
         where: { orderFilled: 'false' },
@@ -37,11 +38,13 @@ router.post('/:id/cart/add', async (req, res, next) => {
       where: {
         userId: req.params.id,
         orderFilled: false,
+
       },
       include: Product,
+      separate: true
     });
     if (!cart) {
-      cart = await ShoppingCart.create({
+      await ShoppingCart.create({
         userId: req.params.id,
       });
     }
@@ -49,14 +52,14 @@ router.post('/:id/cart/add', async (req, res, next) => {
 
     let newOrder = await OrderProducts.create({
       cartId: cart.id,
-      productId: req.body.productId,
+      productId: 1 * req.body.productId,
       inventory: 1 * req.body.inventory,
       totalPrice: 1 * req.body.inventory * req.body.price,
     });
-    console.log(newOrder);
-    console.log(cart.products);
 
-    res.send(cart.products[cart.products.length - 1]);
+    //slow as shit have to make it reload
+    await cart.reload()
+    res.send(cart.products);
   } catch (err) {
     next(err);
   }
@@ -64,6 +67,7 @@ router.post('/:id/cart/add', async (req, res, next) => {
 
 router.put('/:id/cart/update', async (req, res, next) => {
   try {
+    console.log(req.body, 'here my body')
     let cart = await ShoppingCart.findOne({
       where: {
         userId: req.params.id,
@@ -71,17 +75,19 @@ router.put('/:id/cart/update', async (req, res, next) => {
       },
       include: {
         model: Product,
-        where: { id: req.body.productId },
+        where: { id: req.body.productId},
       },
     });
-
+    console.log(cart, 'here it')
     //This finds us the path to the relevant product, and its order information for the cart.
     //The path to what we want to change is below
     let order = cart.products[0].orderProduct;
-    await order.set({
+    await order.update({
       inventory: 1 * req.body.inventory,
       totalPrice: cart.products[0].price * req.body.inventory,
     });
+    console.log(order)
+    console.log(cart, 'here it')
     //item inventory gets updated
     res.send(cart);
   } catch (err) {
@@ -90,17 +96,18 @@ router.put('/:id/cart/update', async (req, res, next) => {
 });
 
 //remove item from cart
-router.delete('/:id/cart/remove', async (req, res, next) => {
+router.delete('/:id/cart/:productId/remove', async (req, res, next) => {
   try {
+    console.log(req.params, 'all night body')
     const user = await User.findByPk(req.params.id, {
-      attributes: { exclude: 'password' },
+      attributes: { exclude: ['password'] },
       include: {
         model: ShoppingCart,
         where: { orderFilled: 'false' },
         include: [
           {
             model: Product,
-            where: { id: req.body.id },
+            where: { id: req.params.productId },
           },
         ],
       },
@@ -121,7 +128,7 @@ router.delete('/:id/cart/remove', async (req, res, next) => {
 router.delete('/:id/cart/clear', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
-      attributes: { exclude: 'password' },
+      attributes: { exclude: ['password'] },
       include: {
         model: ShoppingCart,
         where: { orderFilled: 'false' },
@@ -189,7 +196,7 @@ router.get('/', async (req, res, next) => {
 
       // send everything to anyone who asks!
 
-      attributes: ['id', 'username'],
+      exclude: ['password'],
     });
     res.json(users);
   } catch (err) {
@@ -201,7 +208,7 @@ router.get('/:id', async (req, res, next) => {
   try {
     const users = await User.findOne({
       where: { id: req.params.id },
-      attributes: ['id', 'username'],
+      exclude: ['password'],
     });
     res.json(users);
   } catch (err) {
@@ -213,7 +220,7 @@ router.put('/:id', async (req, res, next) => {
   try {
     const users = await User.findOne({
       where: { id: req.params.id },
-      attributes: ['id', 'username'],
+      exclude: ['password'],
     });
     res.json(users);
   } catch (err) {
