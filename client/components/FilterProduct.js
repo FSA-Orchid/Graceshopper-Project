@@ -43,6 +43,7 @@ export class AllProducts extends React.Component {
   handleMakeSubmit(evt) {
     evt.preventDefault();
     this.props.fetchMake(this.state.make);
+    this.clear();
   }
 
   handleYearSubmit(evt) {
@@ -54,6 +55,7 @@ export class AllProducts extends React.Component {
     } else if (this.state.sortByYear === "oldToNew") {
       this.props.fetchOldToNew();
     }
+    this.clear();
   }
 
   handlePriceSubmit(evt) {
@@ -65,12 +67,22 @@ export class AllProducts extends React.Component {
     } else if (this.state.sortByYear === "minToMax") {
       this.props.fetchOMinToMax();
     }
+    this.clear();
   }
 
   handleChange(evt) {
     this.setState({ [evt.target.name]: evt.target.value });
     this.props.fetchProducts();
   }
+
+  clear = () => {
+    this.setState({
+      make: "",
+      sortByYear: "select",
+      sortByPrice: "select",
+      instrument: "select",
+    });
+  };
 
   // componentDidMount() {
   //   this.props.fetchProducts();
