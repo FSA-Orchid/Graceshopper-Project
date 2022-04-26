@@ -54,74 +54,45 @@ export function Cart(props) {
   //   }
   // });
 
-  // console.log(props, "this is cart props");
-  console.log(cart);
-  if (!cart.length && !props.cart.length) {
-    return <h2>Cart Empty</h2>;
-  }
-  return (
-    <div className="productList">
-      {!props.auth.length
-        ? cart.map((product) => {
-            return (
-              <div key={product.id}>
-                <img src={product.imageUrl} className="photo" />
-                <h4>
-                  <Link to={`/products/${product.id}/`}>
-                    {`${product.inventory} ${product.instrument}
-                  ${product.make} ${product.model} -
-                 $${(product.price / 100).toFixed(2)}`}
-                  </Link>
-                  <button
-                    type="submit"
-                    className="delete"
-                    onClick={() => removeItem(product.id)}
-                  >
-                    X
-                  </button>
-                </h4>
-                <button
-                  type="submit"
-                  className="clear"
-                  onClick={() => props.clearCart(props.auth.id)}
-                >
-                  Clear Cart
-                </button>
-                <Link to="/checkout">Checkout</Link>
-              </div>
-            );
-          })
-        : props.cart.map((product) => {
+ return (
+      <div className="productList">
+        {this.props.cart.length ? (
+          <div>{this.props.cart.map((product) => {
             return (
               <div key={product.id}>
                 <img src={product.imageUrl} className="photo" />
                 <h4>
                   <Link to={`/products/${product.id}/`}>
                     {`${product.orderProduct.inventory} ${product.instrument}
-                ${product.make} ${product.model} -
-                $${(product.price / 100).toFixed(2)}`}
+                  ${product.make} ${product.model} -
+                 $${(product.price / 100).toFixed(2)}`}
                   </Link>
                   <button
                     type="submit"
                     className="delete"
-                    onClick={() => props.removeProduct(props.auth.id, product)}
+                    onClick={() => this.props.removeProduct(this.props.auth.id, product)}
                   >
                     X
                   </button>
                 </h4>
+              </div>
+            )})}
                 <button
                   type="submit"
                   className="clear"
-                  onClick={() => props.clearCart(props.auth.id)}
+                  onClick={() => this.props.clearCart(this.props.auth.id)}
                 >
                   Clear Cart
                 </button>
-                <Link to="/checkout">Checkout</Link>
-              </div>
-            );
-          })}
-    </div>
-  );
+            <Link to="/checkout">Checkout</Link>;
+            </div>
+
+        ) : (
+          <h2>Cart Empty</h2>
+        )}
+      </div>
+    );
+  }
 }
 
 const mapStateToProps = (reduxState) => ({

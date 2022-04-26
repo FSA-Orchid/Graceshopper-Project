@@ -36,17 +36,14 @@ export class FilterProduct extends React.Component {
       this.props.fetchProducts();
     } else if (this.state.instrument === "guitar") {
       this.props.fetchGuitars();
-      this.setState({ ...this.state, productsList: this.props.products });
     } else if (this.state.instrument === "bass") {
       this.props.fetchBass();
-      this.setState({ ...this.state, productsList: this.props.products });
     }
   }
 
   handleMakeSubmit(evt) {
     evt.preventDefault();
     this.props.fetchMake(this.state.make);
-    this.clear();
   }
 
   handleYearSubmit(evt) {
@@ -54,18 +51,8 @@ export class FilterProduct extends React.Component {
     if (this.state.sortByYear === "select") {
       this.props.fetchProducts();
     } else if (this.state.sortByYear === "newToOld") {
-      this.setState({
-        productsList: this.props.products,
-      });
-      console.log("redux state prods new to old", this.props.products);
-      console.log(`comp state prods new to old`, this.state.productsList);
       this.props.fetchNewToOld();
     } else if (this.state.sortByYear === "oldToNew") {
-      this.setState({
-        productsList: this.props.products,
-      });
-      console.log("redux state prods old to new", this.props.products);
-      console.log(`comp state prods old to new`, this.state.productsList);
       this.props.fetchOldToNew();
     }
   }
@@ -76,6 +63,9 @@ export class FilterProduct extends React.Component {
     if (this.state.sortByPrice === "select") {
       this.props.fetchProducts();
     } else if (this.state.sortByPrice === "maxToMin") {
+      this.props.fetchMaxToMin();
+    } else if (this.state.sortByYear === "minToMax") {
+      this.props.fetchOMinToMax();
       this.setState({
         productsList: this.props.products,
       });
@@ -85,23 +75,16 @@ export class FilterProduct extends React.Component {
         productsList: this.props.products,
       });
       this.props.fetchMinToMax();
+
     }
   }
 
   handleChange(evt) {
     this.setState({ [evt.target.name]: evt.target.value });
+    this.props.fetchProducts();
     console.log(this.state.sortByPrice);
     //this.props.fetchProducts();
   }
-
-  clear = () => {
-    this.setState({
-      make: "",
-      sortByYear: "select",
-      sortByPrice: "select",
-      instrument: "select",
-    });
-  };
 
   // componentDidMount() {
   //   this.props.fetchProducts();
@@ -112,7 +95,7 @@ export class FilterProduct extends React.Component {
     const { handlePriceSubmit } = this;
     return (
       <div>
-        <div className="sidenav">
+        <div className="guitarFilter">
           <form onSubmit={this.handleInstSubmit}>
             <label>
               instrument:
@@ -178,7 +161,7 @@ export class FilterProduct extends React.Component {
 
 const mapStateToProps = (reduxState) => ({
   products: reduxState.products,
-  // user: reduxState.auth,
+  user: reduxState.auth,
 });
 
 const mapDispatchToProps = (dispatch) => ({
