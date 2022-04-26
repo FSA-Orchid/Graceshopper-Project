@@ -1,93 +1,112 @@
-import React from 'react';
-import { setProductThunk } from '../store/singleProduct';
-import { connect } from 'react-redux';
-import Link from 'react-router-dom/Link';
-import { addToCartThunk, updateQuantityCartThunk } from '../store/cart';
+import React, { useEffect, useState } from "react";
+import { setProductThunk } from "../store/singleProduct";
+import { connect } from "react-redux";
+import Link from "react-router-dom/Link";
+import { addToCartThunk, updateQuantityCartThunk } from "../store/cart";
 
-class SingleProduct extends React.Component {
-  constructor() {
-    super();
-    this.state = { quantity: 1 };
+function SingleProduct(props) {
+  const [quantity, setQuantity] = useState(1);
+  let [cart, setCart] = useState([]);
+  let localCart = localStorage.getItem("cart");
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  componentDidMount() {
+  const storedLocal = (item) => {
+    if (!updateItem) {
+      addItem(item);
+    }
+  };
+  const addItem = (item) => {
+    let cartCopy = [...cart];
+    let { id } = item;
+    let existingItem = cartCopy.find((cartItem) => cartItem.id == id);
+    if (existingItem) {
+      existingItem.quantity += item.inventory;
+    } else {
+      cartCopy.push(item);
+    }
+    setCart(cartCopy);
+    let stringCart = JSON.stringify(cartCopy);
+    localStorage.setItem("cart", stringCart);
+  };
+  const updateItem = (itemID, amount) => {
+    let cartCopy = [...cart];
+    let existentItem = cartCopy.find((item) => item.ID == itemID);
+    if (!existentItem) return false;
+    existentItem.quantity += amount;
+    if (existentItem.quantity <= 0) {
+      cartCopy = cartCopy.filter((item) => item.ID != itemID);
+    }
+    setCart(cartCopy);
+    let cartString = JSON.stringify(cartCopy);
+    localStorage.setItem("cart", cartString);
+  };
+
+  useEffect(() => {
     try {
-      console.log(this.props, 'single product props');
-      const productId = this.props.match.params.id;
-      this.props.getProduct(productId);
+      console.log(props, "single product props");
+      const productId = props.match.params.id;
+      props.getProduct(productId);
+      localCart = JSON.parse(localCart);
+      if (localCart) setCart(localCart);
     } catch (error) {
       console.log(error);
     }
-  }
+  }, []);
 
-  handleChange(evt) {
-    this.setState({ quantity: evt.target.value });
-    console.log(this.state.quantity, 'this is target  qt value');
-  }
+  const handleChange = (evt) => {
+    setQuantity(evt.target.value);
+    console.log({ quantity }, "this is target  qt value");
+  };
 
-  handleSubmit() {
+  const handleSubmit = () => {
     //check to see if product is in cart if so increment qty of the cart if not add item to the cart
 
-    const cart = this.props.cart
-    const product = this.props.product;
-    const userId = this.props.user.id;
-    console.log(
-      userId,
-      'product:',
-      product,
-      'stateqt:',
-      this.state.quantity,
-      '',
-      cart
-    );
-      let filter = cart.filter((cartProd) => cartProd.id === product.id)
-      if(filter.length){
-        console.log(filter)
-        let quantity = 1*(this.state.quantity) + 1*(filter[0].orderProduct.inventory)
-      this.props.updateCart(
-        userId,
-        product.id,
-        quantity)}
-     else {
-      this.props.addToCart(
-        userId,
-        product.id,
-        this.state.quantity,
-        product.price
-      );
+    const cart = props.cart;
+    const product = props.product;
+    const userId = props.user.id;
+    // console.log(
+    //   userId,
+    //   "product:",
+    //   product,
+    //   "stateqt:",
+    //   state.quantity,
+    //   "",
+    //   cart
+    // );
+    let filter = cart.filter((cartProd) => cartProd.id === product.id);
+    if (filter.length) {
+      console.log(filter);
+      let quantity = 1 * { quantity } + 1 * filter[0].orderProduct.inventory;
+      props.updateCart(userId, product.id, quantity);
+    } else {
+      props.addToCart(userId, product.id, { quantity }, product.price);
     }
-  }
-
-  render() {
-    const product = this.props.product;
-    return (
+  };
+  const product = props.product;
+  return (
+    <div>
+      <img src={product.imageUrl} className="photo" />
+      <p>Instrument: {product.instrument}</p>
+      <p>make: {product.make}</p>
+      <p>model: {product.model}</p>
+      <p>year: {product.year}</p>
+      <p>color: {product.color}</p>
+      <p>condition: {product.condition}</p>
+      <p>description: {product.description}</p>
       <div>
-        <img src={product.imageUrl} className="photo" />
-        <p>Instrument: {product.instrument}</p>
-        <p>make: {product.make}</p>
-        <p>model: {product.model}</p>
-        <p>year: {product.year}</p>
-        <p>color: {product.color}</p>
-        <p>condition: {product.condition}</p>
-        <p>description: {product.description}</p>
-        <div>
-          <input
-            onChange={this.handleChange}
-            type="number"
-            min="1"
-            max={`${product.inventory}`}
-            placeholder="1"
-            value={this.state.quantity}
-          ></input>
-          <button type="submit" onClick={this.handleSubmit}>
-            Add to Cart
-          </button>
-        </div>
+        <input
+          onChange={handleChange}
+          type="number"
+          min="1"
+          max={`${product.inventory}`}
+          placeholder="1"
+          value={quantity}
+        ></input>
+        <button type="submit" onClick={handleSubmit}>
+          Add to Cart
+        </button>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 const mapStateToProps = (state) => {
