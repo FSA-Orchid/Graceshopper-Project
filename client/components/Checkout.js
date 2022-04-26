@@ -72,11 +72,11 @@ class Checkout extends React.Component {
 
     return (<div key={item.id}>
     <p>{item.make} {item.model} {item.year}</p>
-    <p>${(item.price/100).toFixed(2)} x {item.orderProduct.inventory} = ${(item.orderProduct.totalPrice/100).toFixed(2)}</p>
+    <p className='relativeCheck'>${(item.price/100).toFixed(2)} x {item.orderProduct.inventory} = ${(item.orderProduct.totalPrice/100).toFixed(2)}</p>
     </div>)
   })}
-<h4>Sales Tax: ${((total/100)*0.08).toFixed(2)}</h4>
-<h3>Total Price :${((total/100)*1.08).toFixed(2)}</h3>
+<h4 className='relativeCheck'>Sales Tax: ${((total/100)*0.08).toFixed(2)}</h4>
+<h3 className='relativeCheck'>Total Price :${((total/100)*1.08).toFixed(2)}</h3>
 </div>
 
 <button type="button" className="collapsible"  onClick ={() => this.toggler('one')}
@@ -88,11 +88,12 @@ class Checkout extends React.Component {
 <span><h3>Last Name:</h3></span>
 <span> <input type="text" name="lastName"  />
 </span><br />
+
 <span><h3>Email:</h3></span>
 <span><input type="text" name="email"  /></span>
-
 <span><h3>Address:</h3></span>
 <span><input type="text" name="address" /></span><br />
+
 <span><h3>Zipcode:</h3></span>
 <span><input type="text" name="zip" /></span><br />
 </form>
@@ -105,7 +106,7 @@ onChange={this.handleChange} >
   <span><h3>Credit Cart:</h3></span>
 <span> <input type="text" name="numberCard"  /> </span>
 <span><h3>Name on Card:</h3></span>
-<span> <input type="text" name="nameCard"  /> </span>
+<span> <input type="text" name="nameCard"  /> </span> <br />
 <span><h3>Expiration Date:</h3></span>
 <span> <input type="text" name="dateCard"  /> </span>
 <span><h3>Security Code:</h3></span>
