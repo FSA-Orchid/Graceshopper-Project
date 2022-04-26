@@ -28,9 +28,19 @@ export const me = () => async dispatch => {
   }
 }
 
-export const authenticate = (username, password, email, address, method) => async dispatch => {
+export const authenticateSign = (username, password, email, address, method) => async dispatch => {
   try {
     const res = await axios.post(`/auth/${method}`, {username, password, email, address})
+    window.localStorage.setItem(TOKEN, res.data.token)
+    dispatch(me())
+  } catch (authError) {
+    return dispatch(setAuth({error: authError}))
+  }
+}
+
+export const authenticate = (username, password, method) => async dispatch => {
+  try {
+    const res = await axios.post(`/auth/${method}`, {username, password})
     window.localStorage.setItem(TOKEN, res.data.token)
     dispatch(me())
   } catch (authError) {
