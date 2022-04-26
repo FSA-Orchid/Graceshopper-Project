@@ -16,6 +16,57 @@ export class AllProducts extends React.Component {
   componentDidMount() {
     this.props.fetchProducts();
   }
+
+  handleSubmit() {
+    //check to see if product is in cart if so increment qty of the cart if not add item to the cart
+
+    const cart = this.props.cart
+    const product = this.props.product;
+    const userId = this.props.user.id;
+    console.log(
+      userId,
+      'product:',
+      product,
+      'stateqt:',
+      1,
+      '',
+      cart
+    );
+      let filter = cart.filter((cartProd) => cartProd.id === product.id)
+      if(filter.length){
+        console.log(filter)
+        let quantity = 1*(1) + 1*(filter[0].orderProduct.inventory)
+      this.props.updateCart(
+        userId,
+        product.id,
+        quantity)}
+     else {
+      this.props.addToCart(
+        userId,
+        product.id,
+        1,
+        product.price
+      );
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   render() {
     console.log(this.props);
     if (!this.props.products.length) {

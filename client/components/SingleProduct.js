@@ -30,7 +30,7 @@ class SingleProduct extends React.Component {
   handleSubmit() {
     //check to see if product is in cart if so increment qty of the cart if not add item to the cart
 
-
+    const cart = this.props.cart
     const product = this.props.product;
     const userId = this.props.user.id;
     console.log(
@@ -39,17 +39,18 @@ class SingleProduct extends React.Component {
       product,
       'stateqt:',
       this.state.quantity,
-      ''
+      '',
+      cart
     );
-    if (
-      this.props.cart.map((cartProd) => {
-        if (cartProd.id === product.id) {
-          return true;
-        }
-      })
-    ) {
-      this.props.updateCart(userId, product.id, this.state.quantity);
-    } else {
+      let filter = cart.filter((cartProd) => cartProd.id === product.id)
+      if(filter.length){
+        console.log(filter)
+        let quantity = 1*(this.state.quantity) + 1*(filter[0].orderProduct.inventory)
+      this.props.updateCart(
+        userId,
+        product.id,
+        quantity)}
+     else {
       this.props.addToCart(
         userId,
         product.id,
