@@ -133,7 +133,7 @@ export default function cartReducer(state = initialState, action) {
         ),
       ];
     case AddToCart:
-      return [...state, action.newProduct];
+      return action.newProduct;
     case ClearCart:
       return initialState;
     case RemoveFromCart:

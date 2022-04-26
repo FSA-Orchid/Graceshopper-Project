@@ -1,4 +1,5 @@
 const router = require('express').Router();
+
 const { User, ShoppingCart, Product, OrderProducts } = require('../db');
 module.exports = router;
 
@@ -37,26 +38,28 @@ router.post('/:id/cart/add', async (req, res, next) => {
       where: {
         userId: req.params.id,
         orderFilled: false,
+
       },
       include: Product,
+      separate: true
     });
     if (!cart) {
-      cart = await ShoppingCart.create({
+      await ShoppingCart.create({
         userId: req.params.id,
       });
     }
     //This finds and gives a cart with only the value pending
-console.log(cart)
+
     let newOrder = await OrderProducts.create({
       cartId: cart.id,
-      productId: 1*req.body.productId,
+      productId: 1 * req.body.productId,
       inventory: 1 * req.body.inventory,
       totalPrice: 1 * req.body.inventory * req.body.price,
     });
-    console.log(newOrder);
-    console.log(cart.products);
 
-    res.send(cart.products[cart.products.length - 1]);
+    //slow as shit have to make it reload
+    await cart.reload()
+    res.send(cart.products);
   } catch (err) {
     next(err);
   }
