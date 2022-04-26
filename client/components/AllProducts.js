@@ -9,6 +9,7 @@ import {
   deleteProductThunk,
 } from "../store/allproducts";
 import { addToCartThunk } from "../store/cart";
+
 export function AllProducts(props) {
   let [cart, setCart] = useState([]);
   let localCart = localStorage.getItem("cart");
