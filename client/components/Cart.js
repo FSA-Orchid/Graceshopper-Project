@@ -46,7 +46,7 @@ export class Cart extends React.Component {
                   <Link to={`/products/${product.id}/`}>
                     {`${product.orderProduct.inventory} ${product.instrument}
                   ${product.make} ${product.model} -
-                  $${(product.price / 100).toFixed(2)}`}
+                 $${(product.price / 100).toFixed(2)}`}
                   </Link>
                   <button
                     type="submit"
