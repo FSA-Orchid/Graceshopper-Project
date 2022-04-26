@@ -79,7 +79,7 @@ export function AllProducts(props) {
                         props.addToCart(
                           props.user.id,
                           product.id,
-                          1,
+                          product.inventory,
                           product.price
                         )
                       }
