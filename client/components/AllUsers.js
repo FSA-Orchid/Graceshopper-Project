@@ -18,9 +18,13 @@ class AllUsers extends React.Component {
       <div className="AllUsers">
         {users.map((user) => {
           return (
-            <form key={user.id} className="userBox">
-              <h2>{user.username}</h2>
-            </form>
+            <Link to={`/users/${user.id}`}>
+              <div>
+                <form key={user.id} className="userBox">
+                  <h2>{user.username}</h2>
+                </form>
+              </div>
+            </Link>
           );
         })}
       </div>
