@@ -6,6 +6,9 @@ import { setProductsThunk } from '../store/allproducts';
 import { setCartThunk } from '../store/cart';
 import AllUsers from './AllUsers';
 
+import { Login, Signup } from "./AuthForm";
+
+
 class Navbar extends React.Component {
   constructor() {
     super();
@@ -32,7 +35,8 @@ class Navbar extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='topScreen'>
+        <div>
         <h1 className="storeTitle">Some Guitar Store</h1>
         <nav>
           {this.props.isLoggedIn ? (
@@ -62,16 +66,17 @@ class Navbar extends React.Component {
           ) : (
             <div>
               {/* The navbar will show these links before you log in */}
-              <Link to="/login">Login</Link>
               <Link to="/signup">Sign Up</Link>
-
+              <Link to="/login">Log In</Link>
               <Link to="/cart/">Cart{`(${this.props.cart.length})`}</Link>
+
 
               {/* <Link to="/products">All Products</Link> */}
             </div>
           )}
         </nav>
         <hr />
+        </div>
       </div>
     );
   }

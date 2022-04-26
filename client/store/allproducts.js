@@ -234,83 +234,32 @@ export default function productsReducer(state = initialState, action) {
     case SetMake:
       return action.products;
     case SetOldToNew:
-      let sortedYearsOld = action.productsYears;
-      sortedYearsOld.sort(function (a, b) {
-        return a - b;
+      state.sort((a, b) => {
+        return a.year - b.year;
       });
-      console.log("old to new years", sortedYearsOld);
-      let sortedProductsOld = [];
-      for (let i = 0; i < sortedYearsOld.length; i++) {
-        let curYear = sortedYearsOld[i];
-        for (let j = 0; j < action.products.length; j++) {
-          let curProduct = action.products[j];
-          if (curYear === curProduct.year) {
-            sortedProductsOld.push(curProduct);
-          }
-        }
-      }
-      console.log("Old to New products", sortedProductsOld);
-      return sortedProductsOld;
+      return state;
     case SetNewToOld:
-      let sortedYearsNew = action.productsYears;
-      sortedYearsNew.sort(function (a, b) {
-        return b - a;
+      state.sort((a, b) => {
+        return b.year - a.year;
       });
-      let sortedProductsNew = [];
-      for (let i = 0; i < sortedYearsNew.length; i++) {
-        let curYearNew = sortedYearsNew[i];
-        for (let j = 0; j < action.products.length; j++) {
-          let curProductNew = action.products[j];
-          if (curYearNew === curProductNew.year) {
-            sortedProductsNew.push(curProductNew);
-          }
-        }
-      }
-      // sortedProductsNew = sortedProductsNew.map(
-      //   (product) => (product.id = product.id + sortedProductsNew.length)
-      // );
-      console.log("New to Old products", sortedProductsNew);
-      return sortedProductsNew;
+      return state;
     case SetPriceMax:
-      let sortedPriceMax = [...action.productsPrice];
+      let sortedPriceMax = state;
       sortedPriceMax.sort(function (a, b) {
-        return b - a;
+        return b.price - a.price;
       });
-      let maxToMinPrice = [];
-      for (let i = 0; i < sortedPriceMax.length; i++) {
-        curPrice = sortedPriceMax[i];
-        for (let j = 0; j < action.products.length; j++) {
-          let curProduct = action.products[j];
-          if (curPrice === curProduct.price) {
-            maxToMinPrice.push(curProduct);
-          }
-        }
-      }
-      maxToMinPrice = maxToMinPrice.map(
-        (product) => (product.id = product.id + maxToMinPrice.length)
-      );
       console.log("max to min products", maxToMinPrice);
-      return maxToMinPrice;
+      return sortedPriceMax;
     case SetPriceMin:
-      let sortedPriceMin = [...action.productsPrice];
+      let sortedPriceMin = state;
       sortedPriceMin.sort(function (a, b) {
-        return a - b;
+        return a.price - b.price;
       });
-      let minToMaxPrice = [];
-      for (let i = 0; i < sortedPriceMin.length; i++) {
-        curPrice = sortedPriceMin[i];
-        for (let j = 0; j < action.products.length; j++) {
-          let curProduct = action.products[j];
-          if (curPrice === curProduct.price) {
-            minToMaxPrice.push(curProduct);
-          }
-        }
-      }
-      return minToMaxPrice;
+      return sortedPriceMin;
     case UpdateProduct:
       return state.map((product) =>
-          product.id === action.product.id ? action.product : product
-        )
+        product.id === action.product.id ? action.product : product
+      );
     case AddProduct:
       return [...state, action.product];
     case DeleteProduct:
