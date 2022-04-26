@@ -12,7 +12,7 @@ import {
   setPriceMinThunk,
 } from "../store/allproducts";
 
-export class AllProducts extends React.Component {
+export class FilterProduct extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -20,7 +20,7 @@ export class AllProducts extends React.Component {
       sortByYear: "select",
       sortByPrice: "select",
       instrument: "select",
-      productsList: this.props.products,
+      productsList: [],
     };
 
     this.handleMakeSubmit = this.handleMakeSubmit.bind(this);
@@ -72,23 +72,25 @@ export class AllProducts extends React.Component {
 
   handlePriceSubmit(evt) {
     evt.preventDefault();
+    //console.log(this.state.sortByPrice);
     if (this.state.sortByPrice === "select") {
       this.props.fetchProducts();
     } else if (this.state.sortByPrice === "maxToMin") {
+      this.setState({
+        productsList: this.props.products,
+      });
       this.props.fetchMaxToMin();
+    } else if (this.state.sortByPrice === "minToMax") {
       this.setState({
         productsList: this.props.products,
       });
-    } else if (this.state.sortByYear === "minToMax") {
       this.props.fetchMinToMax();
-      this.setState({
-        productsList: this.props.products,
-      });
     }
   }
 
   handleChange(evt) {
     this.setState({ [evt.target.name]: evt.target.value });
+    console.log(this.state.sortByPrice);
     //this.props.fetchProducts();
   }
 
@@ -106,6 +108,8 @@ export class AllProducts extends React.Component {
   // }
 
   render() {
+    const { sortByPrice } = this.state;
+    const { handlePriceSubmit } = this;
     return (
       <div>
         <div className="sidenav">
@@ -151,13 +155,13 @@ export class AllProducts extends React.Component {
             </label>
             <button type="submit">Submit</button>
           </form>
-          <form>
-            <label onSubmit={this.handlePriceSubmit}>
+          <form onSubmit={handlePriceSubmit}>
+            <label>
               Price:
               <select
                 name="sortByPrice"
                 onChange={this.handleChange}
-                value={this.state.sortByPrice}
+                value={sortByPrice}
               >
                 <option value="select">select</option>
                 <option value="maxToMin">Highest To Lowest</option>
@@ -188,4 +192,4 @@ const mapDispatchToProps = (dispatch) => ({
   fetchMinToMax: () => dispatch(setPriceMinThunk()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllProducts);
+export default connect(mapStateToProps, mapDispatchToProps)(FilterProduct);
