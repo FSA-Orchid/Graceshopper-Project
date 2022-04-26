@@ -38,7 +38,7 @@ export class Cart extends React.Component {
     return (
       <div className="productList">
         {this.props.cart.length ? (
-          this.props.cart.map((product) => {
+          <div>{this.props.cart.map((product) => {
             return (
               <div key={product.id}>
                 <img src={product.imageUrl} className="photo" />
@@ -56,6 +56,8 @@ export class Cart extends React.Component {
                     X
                   </button>
                 </h4>
+              </div>
+            )})}
                 <button
                   type="submit"
                   className="clear"
@@ -63,10 +65,9 @@ export class Cart extends React.Component {
                 >
                   Clear Cart
                 </button>
-                <Link to="/checkout">Checkout</Link>
-              </div>
-            );
-          })
+            <Link to="/checkout">Checkout</Link>;
+            </div>
+
         ) : (
           <h2>Cart Empty</h2>
         )}

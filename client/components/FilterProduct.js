@@ -29,6 +29,9 @@ export class AllProducts extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+
+
+
   handleInstSubmit(evt) {
     evt.preventDefault();
     if (this.state.instrument === "select") {
@@ -75,14 +78,14 @@ export class AllProducts extends React.Component {
     this.props.fetchProducts();
   }
 
-  clear = () => {
+  clear () {
     this.setState({
       make: "",
       sortByYear: "select",
       sortByPrice: "select",
       instrument: "select",
     });
-  };
+  }
 
   // componentDidMount() {
   //   this.props.fetchProducts();
