@@ -8,12 +8,9 @@ import {
   setProductsThunk,
   deleteProductThunk,
 } from "../store/allproducts";
-
 import { addToCartThunk } from "../store/cart";
-
 export function AllProducts(props) {
   let [cart, setCart] = useState([]);
-
   let localCart = localStorage.getItem("cart");
   const storedLocal = (item) => {
     if (!updateItem) {
@@ -23,7 +20,6 @@ export function AllProducts(props) {
   const addItem = (item) => {
     let cartCopy = [...cart];
     let { id } = item;
-
     let existingItem = cartCopy.find((cartItem) => cartItem.id == id);
     if (existingItem) {
       existingItem.quantity += item.inventory;
@@ -43,7 +39,6 @@ export function AllProducts(props) {
       cartCopy = cartCopy.filter((item) => item.ID != itemID);
     }
     setCart(cartCopy);
-
     let cartString = JSON.stringify(cartCopy);
     localStorage.setItem("cart", cartString);
   };
@@ -58,7 +53,6 @@ export function AllProducts(props) {
     return (
       <div>
         <FilterProduct />
-
         <div className="productContainer">
           {props.user.isAdmin
             ? props.products.map((product) => (
@@ -125,12 +119,10 @@ export function AllProducts(props) {
       </div>
     );
 }
-
 const mapStateToProps = (reduxState) => ({
   products: reduxState.products,
   user: reduxState.auth,
 });
-
 const mapDispatchToProps = (dispatch) => ({
   fetchProducts: () => dispatch(setProductsThunk()),
   fetchGuitars: () => dispatch(setGuitarsThunk()),
@@ -139,5 +131,4 @@ const mapDispatchToProps = (dispatch) => ({
   addToCart: (id, product, inventory, price) =>
     dispatch(addToCartThunk(id, product, inventory, price)),
 });
-
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts);
