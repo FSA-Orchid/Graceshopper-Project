@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import FilterProduct from "./FilterProduct";
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import FilterProduct from './FilterProduct';
 import {
   setGuitarsThunk,
   setBassThunk,
   setProductsThunk,
   deleteProductThunk,
-} from "../store/allproducts";
-import { addToCartThunk, updateQuantityCartThunk, } from "../store/cart";
+} from '../store/allproducts';
+import { addToCartThunk, updateQuantityCartThunk } from '../store/cart';
 
 export function AllProducts(props) {
   let [cart, setCart] = useState([]);
-  let localCart = localStorage.getItem("cart");
+  let localCart = localStorage.getItem('cart');
 
   const storedLocal = (item, num) => {
     if (!updateItem(item, num)) {
@@ -20,12 +20,11 @@ export function AllProducts(props) {
     }
   };
 
-
   const addItem = (item) => {
     let cartCopy = [...cart];
     let { id } = item;
     let copy = item;
-    copy.orderProduct = {inventory: 1}
+    copy.orderProduct = { inventory: 1 };
     let existingItem = cartCopy.find((cartItem) => cartItem.id == id);
     if (existingItem) {
       existingItem.orderProduct.inventory += 1;
@@ -34,10 +33,8 @@ export function AllProducts(props) {
     }
     setCart(cartCopy);
     let stringCart = JSON.stringify(cartCopy);
-    localStorage.setItem("cart", stringCart);
+    localStorage.setItem('cart', stringCart);
   };
-
-
 
   const updateItem = (itemID, amount) => {
     let cartCopy = [...cart];
@@ -49,15 +46,14 @@ export function AllProducts(props) {
     }
     setCart(cartCopy);
     let cartString = JSON.stringify(cartCopy);
-    localStorage.setItem("cart", cartString);
+    localStorage.setItem('cart', cartString);
   };
-
 
   useEffect(() => {
     props.fetchProducts();
     localCart = JSON.parse(localCart);
     if (localCart) setCart(localCart);
-    if(props.user.id) setCart(props.cart)
+    if (props.user.id) setCart(props.cart);
   }, []);
 
   const checkIt = (product) => {
@@ -66,24 +62,19 @@ export function AllProducts(props) {
 
     let filter = cart.filter((cartProd) => cartProd.id === product.id);
     if (filter.length) {
-      let quantitynew = 1 + (1 * filter[0].orderProduct.inventory);
-      console.log(quantitynew)
-      if(quantitynew > product.inventory) {quantitynew = product.inventory}
-      console.log(quantitynew)
-      console.log('this is going in I guess')
+      let quantitynew = 1 + 1 * filter[0].orderProduct.inventory;
+      console.log(quantitynew);
+      if (quantitynew > product.inventory) {
+        quantitynew = product.inventory;
+      }
+      console.log(quantitynew);
+      console.log('this is going in I guess');
       props.updateCart(userId, product.id, quantitynew);
     } else {
-      let quantitynew = 1
-      props.addToCart(userId, product.id,  quantitynew , product.price);
+      let quantitynew = 1;
+      props.addToCart(userId, product.id, quantitynew, product.price);
     }
-
-  }
-
-
-
-
-
-
+  };
 
   if (!props.products.length) {
     return <div>No Products</div>;
@@ -103,7 +94,9 @@ export function AllProducts(props) {
                     >
                       {product.year} {product.make} - {product.model}
                     </Link>
-                    {product.price/100}
+                    <div className="price">{`$${(product.price / 100).toFixed(
+                      2
+                    )}`}</div>
                     <button
                       type="submit"
                       className="delete"
@@ -111,17 +104,18 @@ export function AllProducts(props) {
                     >
                       X
                     </button>
-                    {product.inventory > 0 ?
-                    <button
-                      type="submit"
-                      onClick={() => {
-                        checkIt(
-                          product)
-                        }
-                      }
-                    >
-                      Add to Cart
-                    </button> : <p>Out of Stock</p>}
+                    {product.inventory > 0 ? (
+                      <button
+                        type="submit"
+                        onClick={() => {
+                          checkIt(product);
+                        }}
+                      >
+                        Add to Cart
+                      </button>
+                    ) : (
+                      <p>Out of Stock</p>
+                    )}
                   </h2>
                 </div>
               ))
@@ -134,19 +128,24 @@ export function AllProducts(props) {
                       to={`/products/${product.id}/`}
                     >
                       {product.year} {product.make} - {product.model}
-                    </Link> <br />
-                    ${product.price/100}
-                    {product.inventory > 0 ?
-                    <button
-                      type="submit"
-                      onClick={() => {
-                        checkIt(
-                          product)
-                        storedLocal(product, 1);
-                      }}
-                    >
-                      Add to Cart
-                    </button>: <p>Out of Stock</p>}
+                    </Link>{' '}
+                    <br />
+                    <div className="price">{`$${(product.price / 100).toFixed(
+                      2
+                    )}`}</div>
+                    {product.inventory > 0 ? (
+                      <button
+                        type="submit"
+                        onClick={() => {
+                          checkIt(product);
+                          storedLocal(product, 1);
+                        }}
+                      >
+                        Add to Cart
+                      </button>
+                    ) : (
+                      <p>Out of Stock</p>
+                    )}
                   </h2>
                 </div>
               ))}
@@ -157,7 +156,7 @@ export function AllProducts(props) {
 const mapStateToProps = (reduxState) => ({
   products: reduxState.products,
   user: reduxState.auth,
-  cart: reduxState.cart
+  cart: reduxState.cart,
 });
 const mapDispatchToProps = (dispatch) => ({
   fetchProducts: () => dispatch(setProductsThunk()),
@@ -166,8 +165,7 @@ const mapDispatchToProps = (dispatch) => ({
   deleteProduct: (id) => dispatch(deleteProductThunk(id)),
   addToCart: (id, product, inventory, price) =>
     dispatch(addToCartThunk(id, product, inventory, price)),
-    updateCart: (id, productId, qty) =>
-    dispatch(updateQuantityCartThunk(id, productId, qty))
-
+  updateCart: (id, productId, qty) =>
+    dispatch(updateQuantityCartThunk(id, productId, qty)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts);
