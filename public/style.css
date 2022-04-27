@@ -28,7 +28,7 @@ img {
 }
 
 .listingInfo {
-  color: blue;
+  color: black;
   font-size: smaller;
 }
 
@@ -125,4 +125,8 @@ ul {
   background-color: rgb(114, 105, 105); /* Black */
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;
+}
+
+.price {
+  color: red;
 }
