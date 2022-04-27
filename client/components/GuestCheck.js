@@ -8,9 +8,9 @@ import {
 } from '../store/cart';
 import { guestCheckThunk } from '../store/allproducts';
 
-class Checkout extends React.Component {
-  constructor(){
-    super()
+class GuestCheckout extends React.Component {
+  constructor(props){
+    super(props)
     this.state = {
       firstName: '',
       lastName: '',
@@ -28,9 +28,6 @@ class Checkout extends React.Component {
   }
 
   componentDidMount() {
-    if(this.props.auth){
-    this.props.fetchCart(this.props.auth.id);
-    }
 
     let localCart = localStorage.getItem("cart")
     localCart = JSON.parse(localCart)
@@ -39,29 +36,24 @@ class Checkout extends React.Component {
         cart: localCart
       })
     }
-    else {
-    this.setState({
-      cart: this.props.cart
-    })
-  }}
+  }
 
 
 
 
 guest(){
-  if(!this.props.auth.id){
-  this.state.cart.map((item) => {
+  console.log('hellllo?')
+  this.props.cart.map((item) => {
     this.props.guestCheck(item.id, item.orderProduct.inventory)
   })
-  }
 }
 
 
 
 
   componentDidUpdate(prevProps) {
-    localStorage.setItem("cart", JSON.stringify(this.state.cart))
-console.log(prevProps)
+ localStorage.setItem("cart", JSON.stringify(this.state.cart))
+
 let localCart = localStorage.getItem("cart")
     localCart = JSON.parse(localCart)
     if (prevProps !== this.props) {
@@ -103,18 +95,17 @@ let localCart = localStorage.getItem("cart")
 
   render() {
     if(!this.props.cart.length) {return <h1>No Items to Checkout</h1>}
-    console.log(this.state.cart)
     if(this.state.complete === true){return (<h1>Transaction complete! Thank you for your business.</h1>)}
   let total = 0;
      return (
   <div className="entryForm">
 <div>
   {this.props.cart.map((item)=> {
-    total = total + (item.orderProduct.totalPrice)
+    total = total + (item.price*item.orderProduct.inventory)
 
     return (<div key={item.id}>
     <p>{item.make} {item.model} {item.year}</p>
-    <p className='relativeCheck'>${(item.price/100).toFixed(2)} x {item.orderProduct.inventory} = ${(item.orderProduct.totalPrice/100).toFixed(2)}</p>
+    <p className='relativeCheck'>${(item.price/100).toFixed(2)} x {item.orderProduct.inventory} = ${((item.price*item.orderProduct.inventory)/100).toFixed(2)}</p>
     </div>)
   })}
 <h4 className='relativeCheck'>Sales Tax: ${((total/100)*0.08).toFixed(2)}</h4>
@@ -160,10 +151,10 @@ onChange={this.handleChange} >
 
 <button onClick = {() => {
   this.setState({complete: true})
-  this.props.closeOrder(this.props.auth.id)
-  this.guest
+  this.guest()
   let cartString = JSON.stringify([])
     localStorage.setItem("cart", cartString)
+
   }}>
   Checkout
 </button>
@@ -172,17 +163,12 @@ onChange={this.handleChange} >
   }
 }
 
-const mapState = (state) => ({
-  cart: state.cart,
-  auth: state.auth,
-})
+
 
 const mapDispatch = (dispatch) => ({
-  fetchCart: (id) => dispatch(setCartThunk(id)),
   // upDatePay: (id) => dispatch(id),
   // upDateAddress:(id) => dispatch(id),
-  closeOrder: (id) => dispatch(closeOrderThunk(id)),
   guestCheck: (id, inventory) => dispatch(guestCheckThunk(id, inventory))
 })
-export const Guest = connect(null, mapDispatch)(Checkout)
-export default connect(mapState, mapDispatch)(Checkout)
+export default  connect(null, mapDispatch)(GuestCheckout)
+

@@ -49,6 +49,7 @@ export const authenticate = (username, password, method) => async dispatch => {
 }
 
 export const logout = () => {
+  console.log(window.localStorage)
   window.localStorage.removeItem(TOKEN)
   history.push('/login')
   return {

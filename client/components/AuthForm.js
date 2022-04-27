@@ -42,7 +42,6 @@ const AuthForm = (props) => {
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-      <AllProducts />
     </div>
   );
 };
