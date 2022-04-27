@@ -4,10 +4,8 @@ import { Link } from 'react-router-dom';
 import { logout } from '../store';
 import { setProductsThunk } from '../store/allproducts';
 import { setCartThunk } from '../store/cart';
-import AllUsers from './AllUsers';
 
-import { Login, Signup } from "./AuthForm";
-
+import { Login, Signup } from './AuthForm';
 
 class Navbar extends React.Component {
   constructor() {
@@ -35,47 +33,53 @@ class Navbar extends React.Component {
 
   render() {
     return (
-      <div className='topScreen'>
+      <div className="topScreen">
         <div>
-        <h1 className="storeTitle">Some Guitar Store</h1>
-        <nav>
-          {this.props.isLoggedIn ? (
-            <div className="navBar">
-              {/* The navbar will show these links after you log in */}
-              <Link className="navText" to="/home">
-                Home
-              </Link>
-              <Link
-                className="navText"
-                to="/products"
-                onClick={() => this.props.fetchAllProducts()}
-              >
-                All Products
-              </Link>
-              <Link to="/user/">User Profile</Link>
-              <Link to="/cart/">Cart{`(${this.props.cart.length})`}</Link>{' '}
-              {this.props.isLoggedIn && this.props.auth.isAdmin ? (
-                <Link to="/users/">All Users</Link>
-              ) : (
-                <div />
-              )}
-              <a className="navText" href="#" onClick={this.props.handleClick}>
-                Logout
-              </a>
-            </div>
-          ) : (
-            <div>
-              {/* The navbar will show these links before you log in */}
-              <Link to="/signup">Sign Up</Link>
-              <Link to="/login">Log In</Link>
-              <Link to="/cart/">Cart{`(${this.props.cart.length})`}</Link>
+          <h1 className="storeTitle">Some Guitar Store</h1>
+          <nav>
+            {this.props.isLoggedIn ? (
+              <div className="navBar">
+                {/* The navbar will show these links after you log in */}
+                <Link className="navText" to="/home">
+                  Home
+                </Link>
+                <Link
+                  className="navText"
+                  to="/products"
+                  onClick={() => this.props.fetchAllProducts()}
+                >
+                  All Products
+                </Link>
+                <Link to="/user/">User Profile</Link>
+                <Link to="/cart/">Cart{`(${this.props.cart.length})`}</Link>
+                {this.props.isLoggedIn && this.props.auth.isAdmin ? (
+                  <Link to="/users/">All Users</Link>
+                ) : (
+                  <div />
+                )}
+                <a
+                  className="navText"
+                  href="#"
+                  onClick={this.props.handleClick}
+                >
+                  Logout
+                </a>
+              </div>
+            ) : (
+              <div className="navBar">
+                {/* The navbar will show these links before you log in */}
 
-
-              {/* <Link to="/products">All Products</Link> */}
-            </div>
-          )}
-        </nav>
-        <hr />
+                <Link to="/signup">Sign Up</Link>
+                <Link to="/login">Log In</Link>
+                <Link to="/cart/">Cart{`(${this.props.cart.length})`}</Link>
+                <div>
+                  <Login className="logIn" />
+                </div>
+                {/* <Link to="/products">All Products</Link> */}
+              </div>
+            )}
+          </nav>
+          <hr />
         </div>
       </div>
     );
