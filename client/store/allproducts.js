@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import axios from 'axios';
 
 const initialState = [];
@@ -7,12 +8,99 @@ const SetProducts = 'SET_PRODUCTS';
 const DeleteProduct = 'DELETE_PRODUCT';
 const AddProduct = 'ADD_PRODUCT';
 const UpdateProduct = 'UPDATE_PRODUCT';
+=======
+import axios from "axios";
+
+const initialState = [];
+
+const ghost = {
+  instrument: "",
+  make: "",
+  imageUrl: "",
+  model: "",
+  year: "",
+  color: "",
+  condition: "",
+  description: "",
+  price: 0,
+  inventory: 0,
+};
+
+//action constants
+const SetProducts = "SET_PRODUCTS";
+const SetGuitars = "SET_GUITARS";
+const SetBass = "SET_BASS";
+const SetOldToNew = "SET_OLD_TO_NEW";
+const SetNewToOld = "SET_NEW_TO_OLD";
+const SetMake = "SET_MAKE";
+const SetPriceMax = "SET_PRICE_MAX";
+const SetPriceMin = "SET_PRICE_MIX";
+const DeleteProduct = "DELETE_PRODUCT";
+const AddProduct = "ADD_PRODUCT";
+const UpdateProduct = "UPDATE_PRODUCT";
+>>>>>>> b73e3b0bd6afc8c749fdfcade8832976ad64c679
 
 //action creators
 export const setProducts = (products) => {
   return { type: SetProducts, products };
 };
 
+<<<<<<< HEAD
+=======
+export const setGuitars = (products) => {
+  return {
+    type: SetGuitars,
+    products,
+  };
+};
+
+export const setBass = (products) => {
+  return {
+    type: SetBass,
+    products,
+  };
+};
+
+export const setOldToNew = (products, productsYears) => {
+  return {
+    type: SetOldToNew,
+    products,
+    productsYears,
+  };
+};
+
+export const setNewToOld = (products, productsYears) => {
+  return {
+    type: SetNewToOld,
+    products,
+    productsYears,
+  };
+};
+
+export const setMake = (products) => {
+  return {
+    type: SetMake,
+    products,
+  };
+};
+
+export const setPriceMax = (products, productsPrice) => {
+  return {
+    type: SetPriceMax,
+    products,
+    productsPrice,
+  };
+};
+
+export const setPriceMin = (products, productsPrice) => {
+  return {
+    type: SetPriceMin,
+    products,
+    productsPrice,
+  };
+};
+
+>>>>>>> b73e3b0bd6afc8c749fdfcade8832976ad64c679
 export const deleteProduct = (id) => {
   return { type: DeleteProduct, id: id };
 };
@@ -29,7 +117,11 @@ export const updateProduct = (product) => {
 export const setProductsThunk = () => {
   return async function (dispatch) {
     try {
+<<<<<<< HEAD
       let response = await axios.get('/api/products');
+=======
+      let response = await axios.get("/api/products");
+>>>>>>> b73e3b0bd6afc8c749fdfcade8832976ad64c679
       let products = response.data;
       dispatch(setProducts(products));
     } catch (err) {
@@ -38,6 +130,97 @@ export const setProductsThunk = () => {
   };
 };
 
+<<<<<<< HEAD
+=======
+export const setGuitarsThunk = () => {
+  return async function (dispatch) {
+    try {
+      let response = await axios.get("/api/products");
+      let products = response.data;
+      dispatch(setGuitars(products));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const setBassThunk = () => {
+  return async function (dispatch) {
+    try {
+      let response = await axios.get("/api/products");
+      let products = response.data;
+      dispatch(setBass(products));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const setOldToNewThunk = () => {
+  return async function (dispatch) {
+    try {
+      let response = await axios.get("/api/products");
+      let products = response.data;
+      let productsYears = [...products.map((product) => product.year)];
+      dispatch(setOldToNew(products, productsYears));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const setNewToOldThunk = () => {
+  return async function (dispatch) {
+    try {
+      let response = await axios.get("/api/products");
+      let products = response.data;
+      let productsYears = [...products.map((product) => product.year)];
+      dispatch(setNewToOld(products, productsYears));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const setMakeThunk = (make) => {
+  return async function (dispatch) {
+    try {
+      let response = await axios.get("/api/products");
+      let products = response.data.filter((product) => product.make === make);
+      dispatch(setMake(products));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const setPriceMaxThunk = () => {
+  return async function (dispatch) {
+    try {
+      let response = await axios.get("/api/products");
+      let products = response.data;
+      let productsPrice = [...products.map((product) => product.price)];
+      dispatch(setPriceMax(products, productsPrice));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const setPriceMinThunk = () => {
+  return async function (dispatch) {
+    try {
+      let response = await axios.get("/api/products");
+      let products = response.data;
+      let productsPrice = [...products.map((product) => product.price)];
+      dispatch(setPriceMin(products, productsPrice));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+>>>>>>> b73e3b0bd6afc8c749fdfcade8832976ad64c679
 export const deleteProductThunk = (id) => {
   return async function (dispatch) {
     try {
@@ -52,7 +235,11 @@ export const deleteProductThunk = (id) => {
 export const addProductThunk = (product) => {
   return async function (dispatch) {
     try {
+<<<<<<< HEAD
       let response = await axios.post('/api/products/add', product);
+=======
+      let response = await axios.post("/api/products/add", product);
+>>>>>>> b73e3b0bd6afc8c749fdfcade8832976ad64c679
       let newProduct = response.data;
       dispatch(addProduct(newProduct));
     } catch (err) {
@@ -64,7 +251,11 @@ export const addProductThunk = (product) => {
 export const editProductThunk = (product) => {
   return async function (dispatch) {
     try {
+<<<<<<< HEAD
       let response = await axios.put(`/api/products/${id}`, product);
+=======
+      let response = await axios.put(`/api/products/${product.id}`, product);
+>>>>>>> b73e3b0bd6afc8c749fdfcade8832976ad64c679
       let updatedProduct = response.data;
       dispatch(updateProduct(updatedProduct));
     } catch (err) {
@@ -76,6 +267,7 @@ export const editProductThunk = (product) => {
 export default function productsReducer(state = initialState, action) {
   switch (action.type) {
     case SetProducts:
+<<<<<<< HEAD
       return [...state, action.products];
     case UpdateProduct:
       return [
@@ -83,6 +275,43 @@ export default function productsReducer(state = initialState, action) {
           product.id === action.product.id ? action.product : product
         ),
       ];
+=======
+      return action.products;
+    case SetGuitars:
+      return action.products.filter(
+        (product) => product.instrument === "Guitar"
+      );
+    case SetBass:
+      return action.products.filter((product) => product.instrument === "Bass");
+    case SetMake:
+      return action.products;
+    case SetOldToNew:
+      state.sort((a, b) => {
+        return a.year - b.year;
+      });
+      return [...state];
+    case SetNewToOld:
+      state.sort((a, b) => {
+        return b.year - a.year;
+      });
+      return [...state];
+    case SetPriceMax:
+      state.sort(function (a, b) {
+        return b.price - a.price;
+      });
+      console.log("max to min products", state);
+      return [...state];
+    case SetPriceMin:
+      state.sort(function (a, b) {
+        return a.price - b.price;
+      });
+      console.log("max to min products", state);
+      return [...state];
+    case UpdateProduct:
+      return state.map((product) =>
+        product.id === action.product.id ? action.product : product
+      );
+>>>>>>> b73e3b0bd6afc8c749fdfcade8832976ad64c679
     case AddProduct:
       return [...state, action.product];
     case DeleteProduct:
