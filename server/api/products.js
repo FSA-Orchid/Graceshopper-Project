@@ -13,6 +13,24 @@ router.get("/", async (req, res, next) => {
 });
 
 //GET /api/products/:productId
+router.put("/:productId/amount", async (req, res, next) => {
+  try {
+    console.log('YOU FOUND ME')
+    const product = await Product.findOne({
+      where: {id: req.params.productId}
+    });
+    await product.set({
+      inventory: product.inventory - req.body.inventory
+        })
+    res.send(product)
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+
+
 
 router.get("/:productId", async (req, res, next) => {
   try {
@@ -39,6 +57,7 @@ router.delete("/:productId", async (req, res, next) => {
 });
 
 // PUT /api/products/:productId
+
 
 router.put("/:productId", async (req, res, next) => {
   try {

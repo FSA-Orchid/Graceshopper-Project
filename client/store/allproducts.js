@@ -234,6 +234,23 @@ export const editProductThunk = (product) => {
   };
 };
 
+
+export const guestCheckThunk = (id, inventory) => {
+  return async function (dispatch) {
+    try {
+      let response = await axios.put(`/api/products/${id}/amount"`, { inventory: inventory
+      });
+      let updatedProduct = response.data;
+      dispatch(updateProduct(updatedProduct));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+
+
+
 export default function productsReducer(state = initialState, action) {
   switch (action.type) {
     case SetProducts:

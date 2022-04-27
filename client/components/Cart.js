@@ -8,6 +8,8 @@ import {
   removeFromCartThunk,
   setCartThunk,
 } from "../store/cart";
+import Checkout from "./Checkout";
+import GuestCheck from "./GuestCheck";
 
 //Possible rendition of Cart, piggy-backed off of AllProducts page, have to add quantity change option.
 // NOT ADDED TO ROUTES YET
@@ -55,17 +57,15 @@ export function Cart(props) {
   };
   const addItem = (item) => {
     let cartCopy = [...cart];
+    console.log('this one')
     let { id } = item;
     let copy = item
     let existingItem = cartCopy.find((cartItem) => cartItem.id == id);
     if (existingItem) {
-      existingItem.orderProduct.inventory += (1*quantity);
+      existingItem.orderProduct.inventory = (1*quantity);
       if(existingItem.orderProduct.inventory > item.inventory){
         existingItem.orderProduct.inventory = 1*(item.inventory)
       }
-    } else {
-      copy.orderProduct = {inventory: 1}
-      cartCopy.push(copy);
     }
     setCart(cartCopy);
     let stringCart = JSON.stringify(cartCopy);
@@ -75,7 +75,7 @@ export function Cart(props) {
     let cartCopy = [...cart];
     let existentItem = cartCopy.find((item) => item.ID == itemID);
     if (!existentItem) return false;
-    existentItem.orderProduct.inventory += (1*amount);
+    existentItem.orderProduct.inventory = (1*amount);
     if (existentItem.inventory <= 0) {
       cartCopy = cartCopy.filter((item) => item.ID != itemID);
     }
@@ -85,28 +85,25 @@ export function Cart(props) {
   };
 
 
-  const handleSubmit = () => {
+  const handleSubmit = (product) => {
     //check to see if product is in cart if so increment qty of the cart if not add item to the cart
 
     const cart = props.cart;
-    const product = props.product;
-    const userId = props.user.id;
+    const userId = props.auth.id;
     let filter = cart.filter((cartProd) => cartProd.id === product.id);
     if (filter.length) {
       console.log(filter);
-      let newquantity = (1 *  quantity)  + (1 * filter[0].orderProduct.inventory);
+      let newquantity = (1 *  quantity);
       if(newquantity > product.inventory){
         newquantity = product.inventory
       }
       props.updateCart(userId, product.id, newquantity);
-    } else {
-      let newquantity = quantity
-      if(newquantity > product.inventory){
-        newquantity = product.inventory
-      }
-      props.addToCart(userId, product.id,  newquantity , product.price);
     }
-  };
+    }
+
+
+
+
 
 
 
@@ -170,7 +167,7 @@ export function Cart(props) {
         ></input>
          <button type="submit" onClick={ () =>{
            storedLocal(product)
-           handleSubmit()}}>
+           handleSubmit(product)}}>
           Change Amount
         </button>
                   <button
@@ -204,7 +201,7 @@ export function Cart(props) {
         ></input>
          <button type="submit" onClick={ () =>{
            storedLocal(product)
-           handleSubmit()}}>
+           handleSubmit(product)}}>
           Change Amount
         </button>
                   <button
@@ -227,7 +224,9 @@ export function Cart(props) {
                 >
                   Clear Cart
                 </button>
-          <Link to="/checkout" cart={localCart} >Checkout</Link>
+            {props.auth.id ?
+          <Link to="/checkout" >Checkout</Link> :
+          <GuestCheck cart={cart} />}
     </div>
   );
 }
@@ -242,6 +241,8 @@ const mapDispatchToProps = (dispatch) => ({
   removeProduct: (id, product) => dispatch(removeFromCartThunk(id, product)),
   clearCart: (id) => dispatch(clearCartThunk(id)),
   changeQuantity: (id) => dispatch(updateQuantityCartThunk(id)),
+  updateCart: (id, productId, qty) =>
+    dispatch(updateQuantityCartThunk(id, productId, qty))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

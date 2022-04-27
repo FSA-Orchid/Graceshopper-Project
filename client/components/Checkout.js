@@ -6,7 +6,7 @@ import {
   closeOrderThunk,
   setCartThunk,
 } from '../store/cart';
-
+import { guestCheckThunk } from '../store/allproducts';
 
 class Checkout extends React.Component {
   constructor(){
@@ -24,10 +24,14 @@ class Checkout extends React.Component {
     }
     this.handleChange=this.handleChange.bind(this)
     this.toggler=this.toggler.bind(this)
+    this.guest=this.guest.bind(this)
   }
 
   componentDidMount() {
+    if(this.props.auth){
     this.props.fetchCart(this.props.auth.id);
+    }
+
     let localCart = localStorage.getItem("cart")
     localCart = JSON.parse(localCart)
     if(!this.props.cart.length){
@@ -44,7 +48,13 @@ class Checkout extends React.Component {
 
 
 
-
+guest(){
+  if(!this.props.auth.id){
+  this.state.cart.map((item) => {
+    this.props.guestCheck(item.id, item.orderProduct.inventory)
+  })
+  }
+}
 
 
 
@@ -92,6 +102,7 @@ let localCart = localStorage.getItem("cart")
 
 
   render() {
+    if(!this.props.cart.length) {return <h1>No Items to Checkout</h1>}
     console.log(this.state.cart)
     if(this.state.complete === true){return (<h1>Transaction complete! Thank you for your business.</h1>)}
   let total = 0;
@@ -150,6 +161,7 @@ onChange={this.handleChange} >
 <button onClick = {() => {
   this.setState({complete: true})
   this.props.closeOrder(this.props.auth.id)
+  this.guest
   let cartString = JSON.stringify([])
     localStorage.setItem("cart", cartString)
   }}>
@@ -169,7 +181,8 @@ const mapDispatch = (dispatch) => ({
   fetchCart: (id) => dispatch(setCartThunk(id)),
   // upDatePay: (id) => dispatch(id),
   // upDateAddress:(id) => dispatch(id),
-  closeOrder: (id) => dispatch(closeOrderThunk(id))
+  closeOrder: (id) => dispatch(closeOrderThunk(id)),
+  guestCheck: (id, inventory) => dispatch(guestCheckThunk(id, inventory))
 })
-
+export const Guest = connect(null, mapDispatch)(Checkout)
 export default connect(mapState, mapDispatch)(Checkout)
