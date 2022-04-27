@@ -13,9 +13,10 @@ import {
 // NOT ADDED TO ROUTES YET
 
 export function Cart(props) {
+  const [quantity, setQuantity] = useState([])
   let [cart, setCart] = useState([]);
   let localCart = localStorage.getItem("cart");
-
+  let quantityArr = []
   let previousState = usePrevious(cart);
 
   function usePrevious(value) {
@@ -24,6 +25,11 @@ export function Cart(props) {
       ref.current = value;
     }, [value]);
     return ref.current;
+  }
+  const clearCart = () => {
+    let cartString = JSON.stringify([])
+    localStorage.setItem("cart", cartString)
+    setCart([])
   }
   const removeItem = (id) => {
     console.log(id, "id");
@@ -34,7 +40,87 @@ export function Cart(props) {
     let cartString = JSON.stringify(cartCopy);
     localStorage.setItem("cart", cartString);
   };
+
+  const handleChange = (evt) => {
+    console.log(quantityArr)
+    setQuantity([evt.target.value]);
+    quantityArr[evt.target.name]=evt.target.value
+    console.log({ quantity }, "this is target  qt value");
+  };
+
+  const storedLocal = (item) => {
+    if (!updateItem(item.id, quantity)) {
+      addItem(item);
+    }
+  };
+  const addItem = (item) => {
+    let cartCopy = [...cart];
+    let { id } = item;
+    let copy = item
+    let existingItem = cartCopy.find((cartItem) => cartItem.id == id);
+    if (existingItem) {
+      existingItem.orderProduct.inventory += (1*quantity);
+      if(existingItem.orderProduct.inventory > item.inventory){
+        existingItem.orderProduct.inventory = 1*(item.inventory)
+      }
+    } else {
+      copy.orderProduct = {inventory: 1}
+      cartCopy.push(copy);
+    }
+    setCart(cartCopy);
+    let stringCart = JSON.stringify(cartCopy);
+    localStorage.setItem("cart", stringCart);
+  };
+  const updateItem = (itemID, amount) => {
+    let cartCopy = [...cart];
+    let existentItem = cartCopy.find((item) => item.ID == itemID);
+    if (!existentItem) return false;
+    existentItem.orderProduct.inventory += (1*amount);
+    if (existentItem.inventory <= 0) {
+      cartCopy = cartCopy.filter((item) => item.ID != itemID);
+    }
+    setCart(cartCopy);
+    let cartString = JSON.stringify(cartCopy);
+    localStorage.setItem("cart", cartString);
+  };
+
+
+  const handleSubmit = () => {
+    //check to see if product is in cart if so increment qty of the cart if not add item to the cart
+
+    const cart = props.cart;
+    const product = props.product;
+    const userId = props.user.id;
+    let filter = cart.filter((cartProd) => cartProd.id === product.id);
+    if (filter.length) {
+      console.log(filter);
+      let newquantity = (1 *  quantity)  + (1 * filter[0].orderProduct.inventory);
+      if(newquantity > product.inventory){
+        newquantity = product.inventory
+      }
+      props.updateCart(userId, product.id, newquantity);
+    } else {
+      let newquantity = quantity
+      if(newquantity > product.inventory){
+        newquantity = product.inventory
+      }
+      props.addToCart(userId, product.id,  newquantity , product.price);
+    }
+  };
+
+
+
+
+
+
+
+
+
   useEffect(() => {
+    props.fetchCart(props.auth.id)
+    if(props.auth.id){
+      setCart(props.cart)
+    return}
     localCart = JSON.parse(localCart);
     if (localCart) setCart(localCart);
     if (!props.auth.length) {
@@ -45,7 +131,7 @@ export function Cart(props) {
         setCart(userCart);
         console.log(userCart, "it is working");
       }
-    } else props.fetchCart(props.auth.id);
+    }
   }, []);
 
   // useEffect((previousState) => {
@@ -65,13 +151,28 @@ export function Cart(props) {
         ? cart.map((product) => {
             return (
               <div key={product.id}>
+                {quantityArr[product.id]=product.orderProduct.inventory}
                 <img src={product.imageUrl} className="photo" />
                 <h4>
                   <Link to={`/products/${product.id}/`}>
-                    {`${product.inventory} ${product.instrument}
+                    {`${product.orderProduct.inventory} ${product.instrument}
                   ${product.make} ${product.model} -
                  $${(product.price / 100).toFixed(2)}`}
                   </Link>
+                  <input
+          onChange={handleChange}
+          type="number"
+          name={product.id}
+          min="1"
+          max={`${product.inventory}`}
+          placeholder="1"
+          value={quantity}
+        ></input>
+         <button type="submit" onClick={ () =>{
+           storedLocal(product)
+           handleSubmit()}}>
+          Change Amount
+        </button>
                   <button
                     type="submit"
                     className="delete"
@@ -80,14 +181,6 @@ export function Cart(props) {
                     X
                   </button>
                 </h4>
-                <button
-                  type="submit"
-                  className="clear"
-                  onClick={() => props.clearCart(props.auth.id)}
-                >
-                  Clear Cart
-                </button>
-                <Link to="/checkout">Checkout</Link>
               </div>
             );
           })
@@ -97,10 +190,23 @@ export function Cart(props) {
                 <img src={product.imageUrl} className="photo" />
                 <h4>
                   <Link to={`/products/${product.id}/`}>
-                    {`${product.orderProduct.inventory} ${product.instrument}
+                    {`${product.inventory} ${product.instrument}
                 ${product.make} ${product.model} -
                 $${(product.price / 100).toFixed(2)}`}
                   </Link>
+                  <input
+          onChange={handleChange}
+          type="number"
+          min="1"
+          max={`${product.inventory}`}
+          placeholder="1"
+          value={quantityArr[product.id]=product.orderProduct.inventory}
+        ></input>
+         <button type="submit" onClick={ () =>{
+           storedLocal(product)
+           handleSubmit()}}>
+          Change Amount
+        </button>
                   <button
                     type="submit"
                     className="delete"
@@ -109,17 +215,19 @@ export function Cart(props) {
                     X
                   </button>
                 </h4>
-                <button
-                  type="submit"
-                  className="clear"
-                  onClick={() => props.clearCart(props.auth.id)}
-                >
-                  Clear Cart
-                </button>
-                <Link to="/checkout">Checkout</Link>
               </div>
             );
           })}
+           <button
+                  type="submit"
+                  className="clear"
+                  onClick={() =>{
+                    clearCart()
+                    props.clearCart(props.auth.id)}}
+                >
+                  Clear Cart
+                </button>
+          <Link to="/checkout" cart={localCart} >Checkout</Link>
     </div>
   );
 }

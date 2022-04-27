@@ -10,18 +10,23 @@ function SingleProduct(props) {
   let localCart = localStorage.getItem("cart");
 
   const storedLocal = (item) => {
-    if (!updateItem) {
+    if (!updateItem(product.id, quantity)) {
       addItem(item);
     }
   };
   const addItem = (item) => {
     let cartCopy = [...cart];
     let { id } = item;
+    let copy = item
     let existingItem = cartCopy.find((cartItem) => cartItem.id == id);
     if (existingItem) {
-      existingItem.quantity += item.inventory;
+      existingItem.orderProduct.inventory += (1*quantity);
+      if(existingItem.orderProduct.inventory > item.inventory){
+        existingItem.orderProduct.inventory = 1*(item.inventory)
+      }
     } else {
-      cartCopy.push(item);
+      copy.orderProduct = {inventory: 1}
+      cartCopy.push(copy);
     }
     setCart(cartCopy);
     let stringCart = JSON.stringify(cartCopy);
@@ -31,8 +36,8 @@ function SingleProduct(props) {
     let cartCopy = [...cart];
     let existentItem = cartCopy.find((item) => item.ID == itemID);
     if (!existentItem) return false;
-    existentItem.quantity += amount;
-    if (existentItem.quantity <= 0) {
+    existentItem.orderProduct.inventory += (1*amount);
+    if (existentItem.inventory <= 0) {
       cartCopy = cartCopy.filter((item) => item.ID != itemID);
     }
     setCart(cartCopy);
@@ -63,37 +68,39 @@ function SingleProduct(props) {
     const cart = props.cart;
     const product = props.product;
     const userId = props.user.id;
-    // console.log(
-    //   userId,
-    //   "product:",
-    //   product,
-    //   "stateqt:",
-    //   state.quantity,
-    //   "",
-    //   cart
-    // );
     let filter = cart.filter((cartProd) => cartProd.id === product.id);
     if (filter.length) {
       console.log(filter);
-      let quantity = 1 * { quantity } + 1 * filter[0].orderProduct.inventory;
-      props.updateCart(userId, product.id, quantity);
+      let newquantity = (1 *  quantity)  + (1 * filter[0].orderProduct.inventory);
+      if(newquantity > product.inventory){
+        newquantity = product.inventory
+      }
+      props.updateCart(userId, product.id, newquantity);
     } else {
-      props.addToCart(userId, product.id, { quantity }, product.price);
+      let newquantity = quantity
+      if(newquantity > product.inventory){
+        newquantity = product.inventory
+      }
+      props.addToCart(userId, product.id,  newquantity , product.price);
     }
   };
+
   const product = props.product;
   return (
     <div>
       <img src={product.imageUrl} className="photo" />
       <p>Instrument: {product.instrument}</p>
-      <p>make: {product.make}</p>
-      <p>model: {product.model}</p>
-      <p>year: {product.year}</p>
-      <p>color: {product.color}</p>
-      <p>condition: {product.condition}</p>
-      <p>description: {product.description}</p>
+      <p>Make: {product.make}</p>
+      <p>Model: {product.model}</p>
+      <p>Year: {product.year}</p>
+      <p>Color: {product.color}</p>
+      <p>Condition: {product.condition}</p>
+      <p>Description: {product.description}</p>
+      <p>Price: {product.price/100}</p>
       <div>
-        <input
+        {product.inventory > 0 ?
+      <div>
+      <input
           onChange={handleChange}
           type="number"
           min="1"
@@ -101,9 +108,11 @@ function SingleProduct(props) {
           placeholder="1"
           value={quantity}
         ></input>
-        <button type="submit" onClick={handleSubmit}>
+         <button type="submit" onClick={ () =>{
+           storedLocal(product)
+           handleSubmit()}}>
           Add to Cart
-        </button>
+        </button> </div> : <h2>Out of Stock</h2>}
       </div>
     </div>
   );

@@ -20,6 +20,7 @@ class Checkout extends React.Component {
       one: {display: 'none'},
       two: {display: 'none'},
       complete: false,
+      cart: [],
     }
     this.handleChange=this.handleChange.bind(this)
     this.toggler=this.toggler.bind(this)
@@ -27,12 +28,42 @@ class Checkout extends React.Component {
 
   componentDidMount() {
     this.props.fetchCart(this.props.auth.id);
-  }
+    let localCart = localStorage.getItem("cart")
+    localCart = JSON.parse(localCart)
+    if(!this.props.cart.length){
+      this.setState({
+        cart: localCart
+      })
+    }
+    else {
+    this.setState({
+      cart: this.props.cart
+    })
+  }}
+
+
+
+
+
+
+
+
+
   componentDidUpdate(prevProps) {
-    if (prevProps.cart !== this.props.cart) {
+    localStorage.setItem("cart", JSON.stringify(this.state.cart))
+console.log(prevProps)
+let localCart = localStorage.getItem("cart")
+    localCart = JSON.parse(localCart)
+    if (prevProps !== this.props) {
+      if(!this.props.cart.length){
+        this.setState({
+          cart: localCart
+        })
+      }
+      else {
       this.setState({
         cart: this.props.cart || [],
-      });
+      });}
     }
   }
   //toggler is used to make a form appear/disappear when it is clicked on. It changes its display style
@@ -61,9 +92,9 @@ class Checkout extends React.Component {
 
 
   render() {
+    console.log(this.state.cart)
     if(this.state.complete === true){return (<h1>Transaction complete! Thank you for your business.</h1>)}
   let total = 0;
-
      return (
   <div className="entryForm">
 <div>
@@ -118,7 +149,10 @@ onChange={this.handleChange} >
 
 <button onClick = {() => {
   this.setState({complete: true})
-  this.props.closeOrder(this.props.auth.id)}}>
+  this.props.closeOrder(this.props.auth.id)
+  let cartString = JSON.stringify([])
+    localStorage.setItem("cart", cartString)
+  }}>
   Checkout
 </button>
 </div>
