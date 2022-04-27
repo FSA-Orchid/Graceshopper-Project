@@ -102,7 +102,6 @@ let localCart = localStorage.getItem("cart")
 
 
   render() {
-    if(!this.props.cart.length) {return <h1>No Items to Checkout</h1>}
     console.log(this.state.cart)
     if(this.state.complete === true){return (<h1>Transaction complete! Thank you for your business.</h1>)}
   let total = 0;
