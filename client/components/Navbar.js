@@ -8,7 +8,6 @@ import AllUsers from './AllUsers';
 
 import { Login, Signup } from "./AuthForm";
 
-
 class Navbar extends React.Component {
   constructor() {
     super();
@@ -34,6 +33,8 @@ class Navbar extends React.Component {
   }
 
   render() {
+
+
     return (
       <div className='topScreen'>
         <div>
@@ -53,7 +54,7 @@ class Navbar extends React.Component {
                 All Products
               </Link>
               <Link to="/user/">User Profile</Link>
-              <Link to="/cart/">Cart{`(${this.props.cart.length})`}</Link>{' '}
+              <Link to="/cart/">Cart{`(${this.state.cart.length})`}</Link>{' '}
               {this.props.isLoggedIn && this.props.auth.isAdmin ? (
                 <Link to="/users/">All Users</Link>
               ) : (
@@ -68,8 +69,14 @@ class Navbar extends React.Component {
               {/* The navbar will show these links before you log in */}
               <Link to="/signup">Sign Up</Link>
               <Link to="/login">Log In</Link>
-              <Link to="/cart/">Cart{`(${this.props.cart.length})`}</Link>
-
+              <Link to="/cart/">Cart{``}</Link>
+              <Link
+                className="navText"
+                to="/products"
+                onClick={() => this.props.fetchAllProducts()}
+              >
+                All Products
+              </Link>
 
               {/* <Link to="/products">All Products</Link> */}
             </div>
