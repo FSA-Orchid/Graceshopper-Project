@@ -29,13 +29,6 @@ class GuestCheckout extends React.Component {
 
   componentDidMount() {
 
-    let localCart = localStorage.getItem("cart")
-    localCart = JSON.parse(localCart)
-    if(!this.props.cart.length){
-      this.setState({
-        cart: localCart
-      })
-    }
   }
 
 

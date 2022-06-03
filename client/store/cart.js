@@ -120,6 +120,7 @@ export const closeOrderThunk = (id) => {
   return async function (dispatch) {
     try {
       await axios.put(`/api/users/${id}/cart/complete`);
+      localStorage.setItem("cart", '')
       dispatch(clearCart());
     } catch (err) {
       console.log(err);
@@ -168,7 +169,10 @@ export const addToCartThunk = (id, product, inventory) => {
         if(cartWindow) {
           cart = JSON.parse(cartWindow)
         }
-        product.orderProduct = {inventory: inventory}
+        product.orderProduct = {
+          inventory: inventory,
+          totalPrice: inventory*product.price
+        }
         console.log(product)
         if(!cart){
           cart = []
@@ -198,7 +202,10 @@ export const updateQuantityCartThunk = (id, productId, inventory) => {
         let cart = JSON.parse(localStorage.getItem("cart"))
         let productChange = cart.find((cartItem) => cartItem.id == productId)
         console.log(productChange)
-        productChange.orderProduct = {inventory: inventory}
+        productChange.orderProduct = {
+          inventory: inventory,
+          totalPrice: inventory*productChange.price
+        }
         let stringCart = JSON.stringify(cart)
         localStorage.setItem("cart", stringCart)
       }

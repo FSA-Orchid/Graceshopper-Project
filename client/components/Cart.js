@@ -101,11 +101,9 @@ export function Cart(props) {
       >
         Clear Cart
       </button>
-      {props.auth.id ? (
+
         <Link to="/checkout">Checkout</Link>
-      ) : (
-        <GuestCheck cart={cart} />
-      )}
+
     </div>
   );
 }

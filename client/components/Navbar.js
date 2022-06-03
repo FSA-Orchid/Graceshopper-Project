@@ -12,23 +12,28 @@ class Navbar extends React.Component {
   constructor() {
     super();
     this.state = {
-      cart: [],
+      count: 0
     };
   }
 
   componentDidMount() {
     this.props.fetchCart(this.props.auth.id);
+    let total = this.props.cart.reduce((total, item) => total + 1*(item.orderProduct.inventory), 0)
     this.setState({
-      cart: this.props.cart,
+      count: total
     });
+
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.cart !== this.props.cart) {
+    if (prevProps.cart !== this.props.cart && this.props.cart) {
+
+      let total = this.props.cart.reduce((total, item) => total + 1*(item.orderProduct.inventory), 0)
       this.setState({
-        cart: this.props.cart || [],
+        count: total
       });
     }
+
   }
 
   render() {
@@ -53,7 +58,7 @@ class Navbar extends React.Component {
                 All Products
               </Link>
               <Link to="/user/">User Profile</Link>
-              <Link to="/cart/">Cart{`(${this.state.cart.length})`}</Link>{' '}
+              <Link to="/cart/">Cart{`(${this.state.count})`}</Link>{' '}
               {this.props.isLoggedIn && this.props.auth.isAdmin ? (
                 <Link to="/users/">All Users</Link>
               ) : (
@@ -68,7 +73,7 @@ class Navbar extends React.Component {
               {/* The navbar will show these links before you log in */}
               <Link to="/signup">Sign Up</Link>
               <Link to="/login">Log In</Link>
-              <Link to="/cart/">Cart{``}</Link>
+              <Link to="/cart/">Cart{`${this.state.count}`}</Link>
               <Link
                 className="navText"
                 to="/products"
@@ -110,43 +115,3 @@ const mapDispatch = (dispatch) => {
 
 export default connect(mapState, mapDispatch)(Navbar);
 
-// **** FUNCTION COMPONENT *****
-// const Navbar = ({ handleClick, isLoggedIn, fetchAllProducts, cart }) => {
-//   return (
-//     <div>
-//       <h1 className="storeTitle">Some Guitar Store</h1>
-//       <nav>
-//         {isLoggedIn ? (
-//           <div className="navBar">
-//             {/* The navbar will show these links after you log in */}
-//             <Link className="navText" to="/home">
-//               Home
-//             </Link>
-//             <Link
-//               className="navText"
-//               to="/products"
-//               onClick={() => fetchAllProducts()}
-//             >
-//               All Products
-//             </Link>
-//             <a className="navText" href="#" onClick={handleClick}>
-//               Logout
-//             </a>{' '}
-//             <Link to="/cart/">Cart{`(${cart.length})`}</Link>
-//           </div>
-//         ) : (
-//           <div>
-//             {/* The navbar will show these links before you log in */}
-//             <Link to="/login">Login</Link>
-//             <Link to="/signup">Sign Up</Link>
-
-//             <Link to="/cart/">Cart{`(${cart.length})`}</Link>
-
-//             {/* <Link to="/products">All Products</Link> */}
-//           </div>
-//         )}
-//       </nav>
-//       <hr />
-//     </div>
-//   );
-// };
