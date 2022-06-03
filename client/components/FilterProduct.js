@@ -57,15 +57,13 @@ export class FilterProduct extends React.Component {
       this.setState({
         productsList: this.props.products,
       });
-      console.log("redux state prods new to old", this.props.products);
-      console.log(`comp state prods new to old`, this.state.productsList);
+
       this.props.fetchNewToOld();
     } else if (this.state.sortByYear === "oldToNew") {
       this.setState({
         productsList: this.props.products,
       });
-      console.log("redux state prods old to new", this.props.products);
-      console.log(`comp state prods old to new`, this.state.productsList);
+
       this.props.fetchOldToNew();
     }
   }
@@ -90,7 +88,6 @@ export class FilterProduct extends React.Component {
 
   handleChange(evt) {
     this.setState({ [evt.target.name]: evt.target.value });
-    console.log(this.state.sortByPrice);
     //this.props.fetchProducts();
   }
 

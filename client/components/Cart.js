@@ -15,195 +15,72 @@ import GuestCheck from "./GuestCheck";
 // NOT ADDED TO ROUTES YET
 
 export function Cart(props) {
-  const [quantity, setQuantity] = useState([])
+  const [quantity, setQuantity] = useState([]);
   let [cart, setCart] = useState([]);
-  let localCart = localStorage.getItem("cart");
-  let quantityArr = []
-  let previousState = usePrevious(cart);
 
-  function usePrevious(value) {
-    const ref = useRef();
-    useEffect(() => {
-      ref.current = value;
-    }, [value]);
-    return ref.current;
-  }
-  const clearCart = () => {
-    let cartString = JSON.stringify([])
-    localStorage.setItem("cart", cartString)
-    setCart([])
-  }
-  const removeItem = (id) => {
-    console.log(id, "id");
-    let cartCopy = [...cart];
-    cartCopy = cartCopy.filter((item) => item.id !== id);
-    setCart(cartCopy);
+  let quantityArr = [];
 
-    let cartString = JSON.stringify(cartCopy);
-    localStorage.setItem("cart", cartString);
-  };
 
   const handleChange = (evt) => {
-    console.log(quantityArr)
     setQuantity([evt.target.value]);
-    quantityArr[evt.target.name]=evt.target.value
-    console.log({ quantity }, "this is target  qt value");
+    quantityArr[evt.target.name] = evt.target.value;
   };
 
-  const storedLocal = (item) => {
-    if (!updateItem(item.id, quantity)) {
-      addItem(item);
-    }
-  };
-  const addItem = (item) => {
-    let cartCopy = [...cart];
-    console.log('this one')
-    let { id } = item;
-    let copy = item
-    let existingItem = cartCopy.find((cartItem) => cartItem.id == id);
-    if (existingItem) {
-      existingItem.orderProduct.inventory = (1*quantity);
-      if(existingItem.orderProduct.inventory > item.inventory){
-        existingItem.orderProduct.inventory = 1*(item.inventory)
-      }
-    }
-    setCart(cartCopy);
-    let stringCart = JSON.stringify(cartCopy);
-    localStorage.setItem("cart", stringCart);
-  };
-  const updateItem = (itemID, amount) => {
-    let cartCopy = [...cart];
-    let existentItem = cartCopy.find((item) => item.ID == itemID);
-    if (!existentItem) return false;
-    existentItem.orderProduct.inventory = (1*amount);
-    if (existentItem.inventory <= 0) {
-      cartCopy = cartCopy.filter((item) => item.ID != itemID);
-    }
-    setCart(cartCopy);
-    let cartString = JSON.stringify(cartCopy);
-    localStorage.setItem("cart", cartString);
-  };
+
 
 
   const handleSubmit = (product) => {
     //check to see if product is in cart if so increment qty of the cart if not add item to the cart
-
     const cart = props.cart;
     const userId = props.auth.id;
     let filter = cart.filter((cartProd) => cartProd.id === product.id);
     if (filter.length) {
-      console.log(filter);
-      let newquantity = (1 *  quantity);
-      if(newquantity > product.inventory){
-        newquantity = product.inventory
+      let newquantity = 1 * quantity;
+      if (newquantity > product.inventory) {
+        newquantity = product.inventory;
       }
       props.updateCart(userId, product.id, newquantity);
     }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
+  };
 
   useEffect(() => {
-    props.fetchCart(props.auth.id)
-    if(props.auth.id){
-      setCart(props.cart)
-    return}
-    localCart = JSON.parse(localCart);
-    if (localCart) setCart(localCart);
-    if (!props.auth.length) {
-      let userCart = localStorage.getItem("cart");
-      userCart = JSON.parse(userCart);
-      console.log(userCart, "parsedCart");
-      if (userCart) {
-        setCart(userCart);
-        console.log(userCart, "it is working");
-      }
-    }
+    props.fetchCart(props.auth.id);
+    setCart(props.cart);
   }, []);
 
-  // useEffect((previousState) => {
-  //   if (previousState !== props.cart) {
-  //     setCart(props.cart || []);
-  //   }
-  // });
-
-  // console.log(props, "this is cart props");
-  console.log(cart);
   if (!cart.length && !props.cart.length) {
     return <h2>Cart Empty</h2>;
   }
   return (
     <div className="productList">
-      {!props.auth.length
-        ? cart.map((product) => {
-            return (
-              <div key={product.id}>
-                {quantityArr[product.id]=product.orderProduct.inventory}
-                <img src={product.imageUrl} className="photo" />
-                <h4>
-                  <Link to={`/products/${product.id}/`}>
-                    {`${product.orderProduct.inventory} ${product.instrument}
-                  ${product.make} ${product.model} -
-                 $${(product.price / 100).toFixed(2)}`}
-                  </Link>
-                  <input
-          onChange={handleChange}
-          type="number"
-          name={product.id}
-          min="1"
-          max={`${product.inventory}`}
-          placeholder="1"
-          value={quantity}
-        ></input>
-         <button type="submit" onClick={ () =>{
-           storedLocal(product)
-           handleSubmit(product)}}>
-          Change Amount
-        </button>
-                  <button
-                    type="submit"
-                    className="delete"
-                    onClick={() => removeItem(product.id)}
-                  >
-                    X
-                  </button>
-                </h4>
-              </div>
-            );
-          })
-        : props.cart.map((product) => {
+      {props.cart.map((product) => {
             return (
               <div key={product.id}>
                 <img src={product.imageUrl} className="photo" />
                 <h4>
                   <Link to={`/products/${product.id}/`}>
-                    {`${product.inventory} ${product.instrument}
+                    {` ${product.instrument}
                 ${product.make} ${product.model} -
                 $${(product.price / 100).toFixed(2)}`}
                   </Link>
                   <input
-          onChange={handleChange}
-          type="number"
-          min="1"
-          max={`${product.inventory}`}
-          placeholder="1"
-          value={quantityArr[product.id]=product.orderProduct.inventory}
-        ></input>
-         <button type="submit" onClick={ () =>{
-           storedLocal(product)
-           handleSubmit(product)}}>
-          Change Amount
-        </button>
+                    onChange={handleChange}
+                    type="number"
+                    min="1"
+                    max={`${product.inventory}`}
+                    placeholder="1"
+                    value={
+                      (quantityArr[product.id] = product.orderProduct.inventory)
+                    }
+                  ></input>
+                  <button
+                    type="submit"
+                    onClick={() => {
+                      handleSubmit(product);
+                    }}
+                  >
+                    Change Amount
+                  </button>
                   <button
                     type="submit"
                     className="delete"
@@ -215,18 +92,20 @@ export function Cart(props) {
               </div>
             );
           })}
-           <button
-                  type="submit"
-                  className="clear"
-                  onClick={() =>{
-                    clearCart()
-                    props.clearCart(props.auth.id)}}
-                >
-                  Clear Cart
-                </button>
-            {props.auth.id ?
-          <Link to="/checkout" >Checkout</Link> :
-          <GuestCheck cart={cart} />}
+      <button
+        type="submit"
+        className="clear"
+        onClick={() => {
+          props.clearCart(props.auth.id);
+        }}
+      >
+        Clear Cart
+      </button>
+      {props.auth.id ? (
+        <Link to="/checkout">Checkout</Link>
+      ) : (
+        <GuestCheck cart={cart} />
+      )}
     </div>
   );
 }
@@ -242,7 +121,7 @@ const mapDispatchToProps = (dispatch) => ({
   clearCart: (id) => dispatch(clearCartThunk(id)),
   changeQuantity: (id) => dispatch(updateQuantityCartThunk(id)),
   updateCart: (id, productId, qty) =>
-    dispatch(updateQuantityCartThunk(id, productId, qty))
+    dispatch(updateQuantityCartThunk(id, productId, qty)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

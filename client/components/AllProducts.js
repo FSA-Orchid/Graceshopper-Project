@@ -11,73 +11,38 @@ import {
 import { addToCartThunk, updateQuantityCartThunk } from '../store/cart';
 
 export function AllProducts(props) {
-  let [cart, setCart] = useState([]);
-  let localCart = localStorage.getItem('cart');
 
-  const storedLocal = (item, num) => {
-    if (!updateItem(item, num)) {
-      addItem(item);
-    }
-  };
-
-  const addItem = (item) => {
-    let cartCopy = [...cart];
-    let { id } = item;
-    let copy = item;
-    copy.orderProduct = { inventory: 1 };
-    let existingItem = cartCopy.find((cartItem) => cartItem.id == id);
-    if (existingItem) {
-      existingItem.orderProduct.inventory += 1;
-    } else {
-      cartCopy.push(copy);
-    }
-    setCart(cartCopy);
-    let stringCart = JSON.stringify(cartCopy);
-    localStorage.setItem('cart', stringCart);
-  };
-
-  const updateItem = (itemID, amount) => {
-    let cartCopy = [...cart];
-    let existentItem = cartCopy.find((item) => item.ID == itemID);
-    if (!existentItem) return false;
-    existentItem.orderProduct.inventory += amount;
-    if (existentItem.orderProduct.inventory <= 0) {
-      cartCopy = cartCopy.filter((item) => item.ID != itemID);
-    }
-    setCart(cartCopy);
-    let cartString = JSON.stringify(cartCopy);
-    localStorage.setItem('cart', cartString);
-  };
 
   useEffect(() => {
     props.fetchProducts();
-    localCart = JSON.parse(localCart);
-    if (localCart) setCart(localCart);
-    if (props.user.id) setCart(props.cart);
   }, []);
 
   const checkIt = (product) => {
     const cart = props.cart;
     const userId = props.user.id;
-
+    console.log(cart)
     let filter = cart.filter((cartProd) => cartProd.id === product.id);
     if (filter.length) {
       let quantitynew = 1 + 1 * filter[0].orderProduct.inventory;
-      console.log(quantitynew);
+
       if (quantitynew > product.inventory) {
         quantitynew = product.inventory;
       }
-      console.log(quantitynew);
-      console.log('this is going in I guess');
       props.updateCart(userId, product.id, quantitynew);
     } else {
       let quantitynew = 1;
-      props.addToCart(userId, product.id, quantitynew, product.price);
+      props.addToCart(userId, product, quantitynew);
     }
   };
 
   if (!props.products.length) {
-    return <div>No Products</div>;
+    return(
+      <div>
+      <FilterProduct />
+      <div className='productContainer'>
+    <h1>No Products</h1>
+    </div>
+    </div>);
   } else
     return (
       <div>
@@ -138,7 +103,7 @@ export function AllProducts(props) {
                         type="submit"
                         onClick={() => {
                           checkIt(product);
-                          storedLocal(product, 1);
+
                         }}
                       >
                         Add to Cart

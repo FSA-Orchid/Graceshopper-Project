@@ -7,51 +7,12 @@ import { addToCartThunk, updateQuantityCartThunk } from "../store/cart";
 function SingleProduct(props) {
   const [quantity, setQuantity] = useState(1);
   let [cart, setCart] = useState([]);
-  let localCart = localStorage.getItem("cart");
-
-  const storedLocal = (item) => {
-    if (!updateItem(product.id, quantity)) {
-      addItem(item);
-    }
-  };
-  const addItem = (item) => {
-    let cartCopy = [...cart];
-    let { id } = item;
-    let copy = item
-    let existingItem = cartCopy.find((cartItem) => cartItem.id == id);
-    if (existingItem) {
-      existingItem.orderProduct.inventory += (1*quantity);
-      if(existingItem.orderProduct.inventory > item.inventory){
-        existingItem.orderProduct.inventory = 1*(item.inventory)
-      }
-    } else {
-      copy.orderProduct = {inventory: 1}
-      cartCopy.push(copy);
-    }
-    setCart(cartCopy);
-    let stringCart = JSON.stringify(cartCopy);
-    localStorage.setItem("cart", stringCart);
-  };
-  const updateItem = (itemID, amount) => {
-    let cartCopy = [...cart];
-    let existentItem = cartCopy.find((item) => item.ID == itemID);
-    if (!existentItem) return false;
-    existentItem.orderProduct.inventory += (1*amount);
-    if (existentItem.inventory <= 0) {
-      cartCopy = cartCopy.filter((item) => item.ID != itemID);
-    }
-    setCart(cartCopy);
-    let cartString = JSON.stringify(cartCopy);
-    localStorage.setItem("cart", cartString);
-  };
 
   useEffect(() => {
     try {
-      console.log(props, "single product props");
       const productId = props.match.params.id;
       props.getProduct(productId);
-      localCart = JSON.parse(localCart);
-      if (localCart) setCart(localCart);
+
     } catch (error) {
       console.log(error);
     }
@@ -59,18 +20,15 @@ function SingleProduct(props) {
 
   const handleChange = (evt) => {
     setQuantity(evt.target.value);
-    console.log({ quantity }, "this is target  qt value");
   };
 
   const handleSubmit = () => {
     //check to see if product is in cart if so increment qty of the cart if not add item to the cart
-
     const cart = props.cart;
     const product = props.product;
     const userId = props.user.id;
     let filter = cart.filter((cartProd) => cartProd.id === product.id);
     if (filter.length) {
-      console.log(filter);
       let newquantity = (1 *  quantity)  + (1 * filter[0].orderProduct.inventory);
       if(newquantity > product.inventory){
         newquantity = product.inventory
@@ -81,7 +39,7 @@ function SingleProduct(props) {
       if(newquantity > product.inventory){
         newquantity = product.inventory
       }
-      props.addToCart(userId, product.id,  newquantity , product.price);
+      props.addToCart(userId, product,  newquantity,);
     }
   };
 
@@ -109,7 +67,6 @@ function SingleProduct(props) {
           value={quantity}
         ></input>
          <button type="submit" onClick={ () =>{
-           storedLocal(product)
            handleSubmit()}}>
           Add to Cart
         </button> </div> : <h2>Out of Stock</h2>}

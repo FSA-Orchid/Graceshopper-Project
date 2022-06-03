@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+
 const initialState = [];
 
 const ghost = {
@@ -274,13 +275,13 @@ export default function productsReducer(state = initialState, action) {
       state.sort(function (a, b) {
         return b.price - a.price;
       });
-      console.log('max to min products', state);
+
       return [...state];
     case SetPriceMin:
       state.sort(function (a, b) {
         return a.price - b.price;
       });
-      console.log('max to min products', state);
+
       return [...state];
     case UpdateProduct:
       return state.map((product) =>

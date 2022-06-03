@@ -6,7 +6,6 @@ import { fetchUsersThunk } from '../store/users';
 class AllUsers extends React.Component {
   componentDidMount() {
     this.props.loadUsers();
-    console.log(this.props, 'props for allusers');
   }
 
   render() {
