@@ -55,6 +55,7 @@ img {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  left: 160px;
 }
 
 .productItem {
@@ -123,10 +124,10 @@ ul {
   left: 0;
   border: black;
   background-color: rgb(114, 105, 105); /* Black */
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 20px;
 }
-
+.sideSearch {
+  width: 120px;
+}
 .price {
   color: red;
 }

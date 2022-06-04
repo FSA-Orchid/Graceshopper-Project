@@ -44,9 +44,14 @@ export function Cart(props) {
       toast.error('Okay, smartass. Use the remove button instead')
       return
     }
+    let message = `Quantity Changed`
+    let status = 'success'
       if (newquantity> product.inventory) {
         newquantity = product.inventory;
+        message = `There is a max of ${product.inventory} in stock for ${product.year} ${product.make} ${product.model}`
+        status='error'
       }
+      toast[status](message)
       props.updateCart(userId, product.id, newquantity);
   };
 
@@ -54,7 +59,7 @@ export function Cart(props) {
     props.fetchCart(props.auth.id);
     setCart(props.cart);
   }, []);
-  console.log()
+
   if (!cart.length && !props.cart.length && !cart[1]) {
     return <h2>Cart Empty</h2>;
   }
@@ -93,7 +98,9 @@ export function Cart(props) {
                   <button
                     type="submit"
                     className="delete"
-                    onClick={() => props.removeProduct(props.auth.id, product)}
+                    onClick={() =>
+                      {toast.success("Product Removed From Cart")
+                      props.removeProduct(props.auth.id, product)}}
                   >
                     X
                   </button>
@@ -105,6 +112,7 @@ export function Cart(props) {
         type="submit"
         className="clear"
         onClick={() => {
+          toast.success("Cart Cleared")
           props.clearCart(props.auth.id)
           setCart([])
         }}

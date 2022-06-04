@@ -9,29 +9,36 @@ import {
   deleteProductThunk,
 } from '../store/allproducts';
 import { addToCartThunk, updateQuantityCartThunk } from '../store/cart';
-
+import { toast } from 'react-toastify';
+import { injectStyle } from 'react-toastify/dist/inject-style';
 export function AllProducts(props) {
 
 
   useEffect(() => {
     props.fetchProducts();
   }, []);
+  injectStyle();
 
   const checkIt = (product) => {
     const cart = props.cart;
     const userId = props.user.id;
-    console.log(cart)
+
     let filter = cart.filter((cartProd) => cartProd.id === product.id);
     if (filter.length) {
       let quantitynew = 1 + 1 * filter[0].orderProduct.inventory;
-      console.log(quantitynew)
+      let message = 'More Of The Same Added To Cart.'
+      let status = 'success'
       if (quantitynew > product.inventory) {
         quantitynew = product.inventory;
+        message = "Max Quantity Already In Cart!"
+        status = 'error'
       }
       props.updateCart(userId, product.id, quantitynew);
+      toast[status](message)
     } else {
       let quantitynew = 1;
       props.addToCart(userId, product, quantitynew);
+      toast.success('Item Added To Cart Successfully!')
     }
   };
 

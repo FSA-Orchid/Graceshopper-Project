@@ -112,7 +112,7 @@ export class FilterProduct extends React.Component {
         <div className="sidenav">
           <form onSubmit={this.handleInstSubmit}>
             <label>
-              instrument:
+              Instrument:
               <select
                 name="instrument"
                 onChange={this.handleChange}
@@ -129,6 +129,7 @@ export class FilterProduct extends React.Component {
             <label>
               Make:
               <input
+                className="sideSearch"
                 value={this.state.make}
                 name="make"
                 placeholder="type here"

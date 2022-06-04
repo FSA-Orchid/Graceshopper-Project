@@ -7,7 +7,8 @@ import {
   setCartThunk,
 } from '../store/cart';
 import { guestCheckThunk } from '../store/allproducts';
-
+import { toast } from 'react-toastify';
+import { injectStyle } from 'react-toastify/dist/inject-style';
 class Checkout extends React.Component {
   constructor(){
     super()
