@@ -26,8 +26,7 @@ class Navbar extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.cart !== this.props.cart && this.props.cart) {
-
+    if (prevProps.cart !== this.props.cart) {
       let total = this.props.cart.reduce((total, item) => total + 1*(item.orderProduct.inventory), 0)
       this.setState({
         count: total
@@ -58,7 +57,7 @@ class Navbar extends React.Component {
                 All Products
               </Link>
               <Link to="/user/">User Profile</Link>
-              <Link to="/cart/">Cart{`(${this.state.count})`}</Link>{' '}
+              <Link to="/cart/">Cart{` (${this.state.count})`}</Link>{' '}
               {this.props.isLoggedIn && this.props.auth.isAdmin ? (
                 <Link to="/users/">All Users</Link>
               ) : (
@@ -73,7 +72,7 @@ class Navbar extends React.Component {
               {/* The navbar will show these links before you log in */}
               <Link to="/signup">Sign Up</Link>
               <Link to="/login">Log In</Link>
-              <Link to="/cart/">Cart{`${this.state.count}`}</Link>
+              <Link to="/cart/">Cart{` (${this.state.count})`}</Link>
               <Link
                 className="navText"
                 to="/products"

@@ -10,4 +10,9 @@ module.exports = db.define("cart", {
       notEmpty: true,
     },
   },
+  userEmail: {
+    type: Sequelize.STRING,
+    defaultValue: false,
+    allowNull: true,
+  }
 });

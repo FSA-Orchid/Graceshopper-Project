@@ -24,7 +24,7 @@ export function AllProducts(props) {
     let filter = cart.filter((cartProd) => cartProd.id === product.id);
     if (filter.length) {
       let quantitynew = 1 + 1 * filter[0].orderProduct.inventory;
-
+      console.log(quantitynew)
       if (quantitynew > product.inventory) {
         quantitynew = product.inventory;
       }
