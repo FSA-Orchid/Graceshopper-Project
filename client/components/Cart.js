@@ -36,10 +36,11 @@ export function Cart(props) {
 
   const handleSubmit = (index) => {
     //check to see if product is in cart if so increment qty of the cart if not add item to the cart
-    const cart = props.cart;
+
     const userId = props.auth.id;
     let product = cart[index]
     let newquantity = product.orderProduct.inventory
+
     if(newquantity === 0) {
       toast.error('Okay, smartass. Use the remove button instead')
       return

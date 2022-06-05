@@ -29,6 +29,7 @@ class Checkout extends React.Component {
   }
 
   componentDidMount() {
+    injectStyle()
 
     this.props.fetchCart(this.props.auth.id);
     this.setState({
@@ -140,8 +141,11 @@ onChange={this.handleChange} >
 
 
 <button onClick = {() => {
+  toast.info('Transaction is processing')
   this.setState({complete: true})
   this.props.closeOrder(this.props.auth.id)
+  toast.success('Transaction complete!', {delay:4000})
+  history.push('/home')
   }}>
   Checkout
 </button>

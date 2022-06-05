@@ -134,9 +134,12 @@ export const clearCartThunk = (id) => {
 export const closeOrderThunk = (id) => {
   return async function (dispatch) {
     try {
+      if(id){
       await axios.put(`/api/users/${id}/cart/complete`);
-      localStorage.setItem("cart", "");
-      dispatch(clearCart());
+      dispatch(clearCart())
+    }
+      localStorage.removeItem("cart")
+      dispatch(clearCart())
     } catch (err) {
       console.log(err);
     }

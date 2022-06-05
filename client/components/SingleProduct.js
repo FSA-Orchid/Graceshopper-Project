@@ -57,6 +57,7 @@ function SingleProduct(props) {
   };
 
   const product = props.product;
+  if(!product){return <h1>Product Not Found</h1>}
   return (
     <div>
       <img src={product.imageUrl} className="photo" />
