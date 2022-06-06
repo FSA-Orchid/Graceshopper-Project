@@ -381,6 +381,13 @@ const users = [
     address: "134 Fullstack Ave",
     isAdmin: true,
   },
+  {
+    username: "demo",
+    password: "demo",
+    email: "demoaccount@demo.com",
+    address: "Demoland",
+    isAdmin: false,
+  },
 ];
 
 async function seed() {
