@@ -24,7 +24,7 @@ export const me = () => async (dispatch) => {
         authorization: token,
       },
     });
-    console.log(res.data)
+
     dispatch(setCartFromLoginThunk(res.data.id))
 
     return dispatch(setAuth(res.data));

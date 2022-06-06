@@ -14,7 +14,7 @@ router.get("/:id", async (req, res, next) => {
         include:
           Product
     });
-    console.log(order)
+
     if(!order){
      res.status(404).send('No Order History Found')
     }

@@ -21,7 +21,7 @@ class EditSingleUser extends React.Component {
   }
   componentDidMount() {
     this.props.loadUser(this.props.match.params.userId);
-    // console.log(this.props, 'did mount');
+
   }
 
   componentDidUpdate(prevProps) {
@@ -41,7 +41,7 @@ class EditSingleUser extends React.Component {
       [evt.target.name]: evt.target.value,
     });
 
-    // console.log(this.state);
+
   }
 
   handleSubmit(evt) {
@@ -55,7 +55,7 @@ class EditSingleUser extends React.Component {
   render() {
     return (
       <form>
-        {/* {console.log(this.props, 'form props')} */}
+
         <h2>Edit User Info:</h2>
         <label>Username:</label>
         <input

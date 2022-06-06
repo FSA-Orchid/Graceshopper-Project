@@ -70,7 +70,7 @@ export class FilterProduct extends React.Component {
 
   handlePriceSubmit(evt) {
     evt.preventDefault();
-    //console.log(this.state.sortByPrice);
+
     if (this.state.sortByPrice === "select") {
       this.props.fetchProducts();
     } else if (this.state.sortByPrice === "maxToMin") {

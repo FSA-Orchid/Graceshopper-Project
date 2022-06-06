@@ -7,7 +7,7 @@ import AllProducts from "./AllProducts";
  * COMPONENT
  */
 const AuthForm = (props) => {
-  const { name, displayName, handleSubmit, handleDemoSubmit, error } = props;
+  const { name, displayName, handleSubmit, handleDemoAdminSubmit, handleDemoSubmit, error } = props;
 
   return (
     <div>
@@ -41,6 +41,7 @@ const AuthForm = (props) => {
           <button type="submit">{displayName}</button>
         </div>
         <button type='button' onClick={handleDemoSubmit}>Sign In With Demo Account</button>
+        <button type='button' onClick={handleDemoAdminSubmit}>Sign In With Demo Admin Account</button>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
     </div>
@@ -84,7 +85,13 @@ const mapDispatch = (dispatch) => {
       const username = 'demo'
       const password = 'demo'
       dispatch(authenticate(username, password, 'login'))
-    }
+    },
+    handleDemoAdminSubmit(evt) {
+      evt.preventDefault()
+      const username = 'demoAdmin'
+      const password = 'demo'
+      dispatch(authenticate(username, password, 'login'))
+    },
   };
 };
 
@@ -104,8 +111,13 @@ const mapDispatchSign = (dispatch) => {
       const username = 'demo'
       const password = 'demo'
       dispatch(authenticate(username, password, 'login'))
-    }
-
+    },
+    handleDemoAdminSubmit(evt) {
+      evt.preventDefault()
+      const username = 'demoAdmin'
+      const password = 'demo'
+      dispatch(authenticate(username, password, 'login'))
+    },
   };
 };
 

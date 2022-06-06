@@ -60,16 +60,15 @@ const updateCart = (product) => {
 export const setCartFromLoginThunk = (id) => {
   return async function (dispatch) {
     try {
-      console.log('???')
+
       let res = await axios.get(`/api/users/${id}/cart`);
       let cart = res.data;
-      console.log(cart, 'you logged in');
+
       if (cart) {
         let cartParse = localStorage.getItem("cart");
         let localCart = JSON.parse(cartParse);
         let [toUpdate, toAdd] = split(localCart, cart);
-        console.log(toUpdate)
-        console.log(toAdd)
+
 
         toAdd.map((item) => dispatch(addToCartThunk(id, item, item.orderProduct.inventory)));
         toUpdate.map((item) =>
@@ -168,7 +167,7 @@ export const removeFromCartThunk = (id, product) => {
 export const addToCartThunk = (id, product, inventory) => {
   return async function (dispatch) {
     try {
-      console.log('accessed')
+
       //Or it would be an axios.post
       if (id) {
         const price = product.price;

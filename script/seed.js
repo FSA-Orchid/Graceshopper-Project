@@ -388,6 +388,14 @@ const users = [
     address: "Demoland",
     isAdmin: false,
   },
+  {
+    username: "demoAdmin",
+    password: "demo",
+    email: "demoadmin@demo.com",
+    address: "Demoland",
+    isAdmin: true,
+  },
+
 ];
 
 async function seed() {

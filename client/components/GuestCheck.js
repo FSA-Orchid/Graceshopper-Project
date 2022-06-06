@@ -35,7 +35,7 @@ class GuestCheckout extends React.Component {
 
 
 guest(){
-  console.log('hellllo?')
+
   this.props.cart.map((item) => {
     this.props.guestCheck(item.id, item.orderProduct.inventory)
   })

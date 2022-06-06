@@ -33,7 +33,7 @@ router.get('/:id/cart', async (req, res, next) => {
 
 router.post('/:id/cart/add', async (req, res, next) => {
   try {
-    console.log(req.body, 'this is reqbody');
+
     let cart = await ShoppingCart.findOne({
       where: {
         userId: req.params.id,
