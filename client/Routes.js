@@ -13,6 +13,7 @@ import UserPage from './components/UserPage';
 import AllUsers from './components/AllUsers';
 import SingleUser from './components/SingleUser';
 import EditSingleUser from './components/EditSingleUser';
+import Page404 from './components/Page404';
 /**
  * COMPONENT
  */
@@ -28,29 +29,33 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <div>
-            <Route path="/home" component={Home} />
+            <Switch>
+            <Route exact path="/home" component={Home} />
             {/* <Redirect to="/home" /> */}
             <Route exact path="/products" component={AllProducts} />
-            <Route path="/products/:id" component={SingleProduct} />
-            <Route path="/products/:id/admin" component={UpdateProduct} />
+            <Route  path="/products/:id" component={SingleProduct} />
+            <Route  path="/products/:id/admin" component={UpdateProduct} />
             <Route exact path="/checkout" component={Checkout} />
             <Route exact path="/cart" component={Cart} />
             <Route exact path="/user" component={UserPage} />
             <Route exact path="/users" component={AllUsers} />
-            <Route path="/users/:userId" component={SingleUser} />
-            <Route path="/users/:userId" component={EditSingleUser} />
+            <Route  path="/users/:userId" component={SingleUser} />
+            <Route  path="/users/:userId" component={EditSingleUser} />
+            <Route  component={Page404} />
+            </Switch>
           </div>
 
         ) : (
           <Switch>
             <Route path="/" exact component={Login} />
 
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
             <Route exact path="/products" component={AllProducts} />
             <Route exact path="/products/:id" component={SingleProduct} />
             <Route exact path="/cart" component={Cart} />
             <Route exact path="/checkout" component={Checkout} />
+            <Route  component={Page404} />
           </Switch>
         )}
       </div>

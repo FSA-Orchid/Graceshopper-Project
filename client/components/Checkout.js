@@ -7,7 +7,8 @@ import {
   setCartThunk,
 } from '../store/cart';
 import { guestCheckThunk } from '../store/allproducts';
-
+import { toast } from 'react-toastify';
+import { injectStyle } from 'react-toastify/dist/inject-style';
 class Checkout extends React.Component {
   constructor(){
     super()
@@ -28,22 +29,13 @@ class Checkout extends React.Component {
   }
 
   componentDidMount() {
-    if(this.props.auth){
-    this.props.fetchCart(this.props.auth.id);
-    }
+    injectStyle()
 
-    let localCart = localStorage.getItem("cart")
-    localCart = JSON.parse(localCart)
-    if(!this.props.cart.length){
-      this.setState({
-        cart: localCart
-      })
-    }
-    else {
+    this.props.fetchCart(this.props.auth.id);
     this.setState({
       cart: this.props.cart
     })
-  }}
+  }
 
 
 
@@ -60,20 +52,11 @@ guest(){
 
 
   componentDidUpdate(prevProps) {
-    localStorage.setItem("cart", JSON.stringify(this.state.cart))
-console.log(prevProps)
-let localCart = localStorage.getItem("cart")
-    localCart = JSON.parse(localCart)
+
     if (prevProps !== this.props) {
-      if(!this.props.cart.length){
-        this.setState({
-          cart: localCart
-        })
-      }
-      else {
       this.setState({
         cart: this.props.cart || [],
-      });}
+      });
     }
   }
   //toggler is used to make a form appear/disappear when it is clicked on. It changes its display style
@@ -102,7 +85,7 @@ let localCart = localStorage.getItem("cart")
 
 
   render() {
-    console.log(this.state.cart)
+
     if(this.state.complete === true){return (<h1>Transaction complete! Thank you for your business.</h1>)}
   let total = 0;
      return (
@@ -158,11 +141,11 @@ onChange={this.handleChange} >
 
 
 <button onClick = {() => {
+  toast.info('Transaction is processing')
   this.setState({complete: true})
   this.props.closeOrder(this.props.auth.id)
-  this.guest
-  let cartString = JSON.stringify([])
-    localStorage.setItem("cart", cartString)
+  toast.success('Transaction complete!', {delay:4000})
+  history.push('/home')
   }}>
   Checkout
 </button>

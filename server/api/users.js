@@ -7,7 +7,7 @@ module.exports = router;
 router.get('/:id/cart', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
-      exclude: ['password'],
+      attributes: {exclude: ['password', 'address']},
       include: {
         model: ShoppingCart,
         where: { orderFilled: 'false' },
@@ -33,7 +33,7 @@ router.get('/:id/cart', async (req, res, next) => {
 
 router.post('/:id/cart/add', async (req, res, next) => {
   try {
-    console.log(req.body, 'this is reqbody');
+
     let cart = await ShoppingCart.findOne({
       where: {
         userId: req.params.id,
@@ -76,7 +76,7 @@ router.put('/:id/cart/update', async (req, res, next) => {
         where: { id: req.body.productId },
       },
     });
-    console.log(cart, 'here it');
+
     //This finds us the path to the relevant product, and its order information for the cart.
     //The path to what we want to change is below
     let order = cart.products[0].orderProduct;
@@ -84,8 +84,7 @@ router.put('/:id/cart/update', async (req, res, next) => {
       inventory: 1 * req.body.inventory,
       totalPrice: cart.products[0].price * req.body.inventory,
     });
-    console.log(order);
-    console.log(cart.products[0], 'here it');
+
     //item inventory gets updated
     res.send(cart.products[0]);
   } catch (err) {
@@ -96,7 +95,7 @@ router.put('/:id/cart/update', async (req, res, next) => {
 //remove item from cart
 router.delete('/:id/cart/:productId/remove', async (req, res, next) => {
   try {
-    console.log(req.params, 'all night body');
+
     const user = await User.findByPk(req.params.id, {
       attributes: { exclude: ['password'] },
       include: {
@@ -218,7 +217,7 @@ router.put('/:id', async (req, res, next) => {
     const users = await User.findOne({
       where: { id: req.params.id },
     });
-    console.log(req.body, 'this is reqbody');
+
     await users.update(req.body);
     res.json(users);
   } catch (err) {

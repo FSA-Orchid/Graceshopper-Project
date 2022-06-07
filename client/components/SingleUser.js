@@ -6,7 +6,7 @@ import { fetchUserThunk } from '../store/singleUser';
 class SingleUser extends React.Component {
   componentDidMount() {
     this.props.loadSingleUser(this.props.match.params.userId);
-    console.log(this.props, 'props for singleUser');
+
   }
 
   render() {

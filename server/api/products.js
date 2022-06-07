@@ -15,7 +15,7 @@ router.get("/", async (req, res, next) => {
 //GET /api/products/:productId
 router.put("/:productId/amount", async (req, res, next) => {
   try {
-    console.log('YOU FOUND ME')
+
     const product = await Product.findOne({
       where: {id: req.params.productId}
     });

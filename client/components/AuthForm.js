@@ -7,7 +7,7 @@ import AllProducts from "./AllProducts";
  * COMPONENT
  */
 const AuthForm = (props) => {
-  const { name, displayName, handleSubmit, error } = props;
+  const { name, displayName, handleSubmit, handleDemoAdminSubmit, handleDemoSubmit, error } = props;
 
   return (
     <div>
@@ -40,6 +40,8 @@ const AuthForm = (props) => {
         <div>
           <button type="submit">{displayName}</button>
         </div>
+        <button type='button' onClick={handleDemoSubmit}>Sign In With Demo Account</button>
+        <button type='button' onClick={handleDemoAdminSubmit}>Sign In With Demo Admin Account</button>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
     </div>
@@ -78,6 +80,18 @@ const mapDispatch = (dispatch) => {
       const password = evt.target.password.value;
       dispatch(authenticate(username, password, formName));
     },
+    handleDemoSubmit(evt) {
+      evt.preventDefault()
+      const username = 'demo'
+      const password = 'demo'
+      dispatch(authenticate(username, password, 'login'))
+    },
+    handleDemoAdminSubmit(evt) {
+      evt.preventDefault()
+      const username = 'demoAdmin'
+      const password = 'demo'
+      dispatch(authenticate(username, password, 'login'))
+    },
   };
 };
 
@@ -91,6 +105,18 @@ const mapDispatchSign = (dispatch) => {
       const email = evt.target.email.value
       const address = evt.target.address.value
       dispatch(authenticateSign(username, password, email, address, formName));
+    },
+    handleDemoSubmit(evt) {
+      evt.preventDefault()
+      const username = 'demo'
+      const password = 'demo'
+      dispatch(authenticate(username, password, 'login'))
+    },
+    handleDemoAdminSubmit(evt) {
+      evt.preventDefault()
+      const username = 'demoAdmin'
+      const password = 'demo'
+      dispatch(authenticate(username, password, 'login'))
     },
   };
 };

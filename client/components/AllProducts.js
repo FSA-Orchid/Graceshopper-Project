@@ -9,52 +9,15 @@ import {
   deleteProductThunk,
 } from '../store/allproducts';
 import { addToCartThunk, updateQuantityCartThunk } from '../store/cart';
-
+import { toast } from 'react-toastify';
+import { injectStyle } from 'react-toastify/dist/inject-style';
 export function AllProducts(props) {
-  let [cart, setCart] = useState([]);
-  let localCart = localStorage.getItem('cart');
 
-  const storedLocal = (item, num) => {
-    if (!updateItem(item, num)) {
-      addItem(item);
-    }
-  };
-
-  const addItem = (item) => {
-    let cartCopy = [...cart];
-    let { id } = item;
-    let copy = item;
-    copy.orderProduct = { inventory: 1 };
-    let existingItem = cartCopy.find((cartItem) => cartItem.id == id);
-    if (existingItem) {
-      existingItem.orderProduct.inventory += 1;
-    } else {
-      cartCopy.push(copy);
-    }
-    setCart(cartCopy);
-    let stringCart = JSON.stringify(cartCopy);
-    localStorage.setItem('cart', stringCart);
-  };
-
-  const updateItem = (itemID, amount) => {
-    let cartCopy = [...cart];
-    let existentItem = cartCopy.find((item) => item.ID == itemID);
-    if (!existentItem) return false;
-    existentItem.orderProduct.inventory += amount;
-    if (existentItem.orderProduct.inventory <= 0) {
-      cartCopy = cartCopy.filter((item) => item.ID != itemID);
-    }
-    setCart(cartCopy);
-    let cartString = JSON.stringify(cartCopy);
-    localStorage.setItem('cart', cartString);
-  };
 
   useEffect(() => {
     props.fetchProducts();
-    localCart = JSON.parse(localCart);
-    if (localCart) setCart(localCart);
-    if (props.user.id) setCart(props.cart);
   }, []);
+  injectStyle();
 
   const checkIt = (product) => {
     const cart = props.cart;
@@ -63,21 +26,30 @@ export function AllProducts(props) {
     let filter = cart.filter((cartProd) => cartProd.id === product.id);
     if (filter.length) {
       let quantitynew = 1 + 1 * filter[0].orderProduct.inventory;
-      console.log(quantitynew);
+      let message = 'More Of The Same Added To Cart.'
+      let status = 'success'
       if (quantitynew > product.inventory) {
         quantitynew = product.inventory;
+        message = "Max Quantity Already In Cart!"
+        status = 'error'
       }
-      console.log(quantitynew);
-      console.log('this is going in I guess');
       props.updateCart(userId, product.id, quantitynew);
+      toast[status](message)
     } else {
       let quantitynew = 1;
-      props.addToCart(userId, product.id, quantitynew, product.price);
+      props.addToCart(userId, product, quantitynew);
+      toast.success('Item Added To Cart Successfully!')
     }
   };
 
   if (!props.products.length) {
-    return <div>No Products</div>;
+    return(
+      <div>
+      <FilterProduct />
+      <div className='productContainer'>
+    <h1>No Products</h1>
+    </div>
+    </div>);
   } else
     return (
       <div>
@@ -138,7 +110,7 @@ export function AllProducts(props) {
                         type="submit"
                         onClick={() => {
                           checkIt(product);
-                          storedLocal(product, 1);
+
                         }}
                       >
                         Add to Cart

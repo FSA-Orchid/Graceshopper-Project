@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { setProductsThunk } from "../store/allproducts";
 import {
   clearCartThunk,
@@ -10,204 +11,97 @@ import {
 } from "../store/cart";
 import Checkout from "./Checkout";
 import GuestCheck from "./GuestCheck";
-
+import { injectStyle } from 'react-toastify/dist/inject-style';
 //Possible rendition of Cart, piggy-backed off of AllProducts page, have to add quantity change option.
 // NOT ADDED TO ROUTES YET
 
 export function Cart(props) {
-  const [quantity, setQuantity] = useState([])
-  let [cart, setCart] = useState([]);
-  let localCart = localStorage.getItem("cart");
-  let quantityArr = []
-  let previousState = usePrevious(cart);
+  injectStyle();
+  const [cart, setCart] = useState([]);
 
-  function usePrevious(value) {
-    const ref = useRef();
-    useEffect(() => {
-      ref.current = value;
-    }, [value]);
-    return ref.current;
-  }
-  const clearCart = () => {
-    let cartString = JSON.stringify([])
-    localStorage.setItem("cart", cartString)
-    setCart([])
-  }
-  const removeItem = (id) => {
-    console.log(id, "id");
-    let cartCopy = [...cart];
-    cartCopy = cartCopy.filter((item) => item.id !== id);
-    setCart(cartCopy);
 
-    let cartString = JSON.stringify(cartCopy);
-    localStorage.setItem("cart", cartString);
-  };
+
 
   const handleChange = (evt) => {
-    console.log(quantityArr)
-    setQuantity([evt.target.value]);
-    quantityArr[evt.target.name]=evt.target.value
-    console.log({ quantity }, "this is target  qt value");
+    const value = evt.target.value * 1
+    let copy = cart
+    copy[evt.target.name].orderProduct.inventory = value
+    setCart(copy)
   };
-
-  const storedLocal = (item) => {
-    if (!updateItem(item.id, quantity)) {
-      addItem(item);
-    }
-  };
-  const addItem = (item) => {
-    let cartCopy = [...cart];
-    console.log('this one')
-    let { id } = item;
-    let copy = item
-    let existingItem = cartCopy.find((cartItem) => cartItem.id == id);
-    if (existingItem) {
-      existingItem.orderProduct.inventory = (1*quantity);
-      if(existingItem.orderProduct.inventory > item.inventory){
-        existingItem.orderProduct.inventory = 1*(item.inventory)
-      }
-    }
-    setCart(cartCopy);
-    let stringCart = JSON.stringify(cartCopy);
-    localStorage.setItem("cart", stringCart);
-  };
-  const updateItem = (itemID, amount) => {
-    let cartCopy = [...cart];
-    let existentItem = cartCopy.find((item) => item.ID == itemID);
-    if (!existentItem) return false;
-    existentItem.orderProduct.inventory = (1*amount);
-    if (existentItem.inventory <= 0) {
-      cartCopy = cartCopy.filter((item) => item.ID != itemID);
-    }
-    setCart(cartCopy);
-    let cartString = JSON.stringify(cartCopy);
-    localStorage.setItem("cart", cartString);
-  };
-
-
-  const handleSubmit = (product) => {
-    //check to see if product is in cart if so increment qty of the cart if not add item to the cart
-
-    const cart = props.cart;
-    const userId = props.auth.id;
-    let filter = cart.filter((cartProd) => cartProd.id === product.id);
-    if (filter.length) {
-      console.log(filter);
-      let newquantity = (1 *  quantity);
-      if(newquantity > product.inventory){
-        newquantity = product.inventory
-      }
-      props.updateCart(userId, product.id, newquantity);
-    }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
 
   useEffect(() => {
-    props.fetchCart(props.auth.id)
-    if(props.auth.id){
-      setCart(props.cart)
-    return}
-    localCart = JSON.parse(localCart);
-    if (localCart) setCart(localCart);
-    if (!props.auth.length) {
-      let userCart = localStorage.getItem("cart");
-      userCart = JSON.parse(userCart);
-      console.log(userCart, "parsedCart");
-      if (userCart) {
-        setCart(userCart);
-        console.log(userCart, "it is working");
-      }
+    setCart(props.cart)
+  }, [props.cart]);
+
+
+  const handleSubmit = (index) => {
+    //check to see if product is in cart if so increment qty of the cart if not add item to the cart
+
+    const userId = props.auth.id;
+    let product = cart[index]
+    let newquantity = product.orderProduct.inventory
+
+    if(newquantity === 0) {
+      toast.error('Okay, smartass. Use the remove button instead')
+      return
     }
+    let message = `Quantity Changed`
+    let status = 'success'
+      if (newquantity> product.inventory) {
+        newquantity = product.inventory;
+        message = `There is a max of ${product.inventory} in stock for ${product.year} ${product.make} ${product.model}`
+        status='error'
+      }
+      toast[status](message)
+      props.updateCart(userId, product.id, newquantity);
+  };
+
+  useEffect(() => {
+    props.fetchCart(props.auth.id);
+    setCart(props.cart);
   }, []);
 
-  // useEffect((previousState) => {
-  //   if (previousState !== props.cart) {
-  //     setCart(props.cart || []);
-  //   }
-  // });
-
-  // console.log(props, "this is cart props");
-  console.log(cart);
-  if (!cart.length && !props.cart.length) {
+  if (!cart.length && !props.cart.length && !cart[1]) {
     return <h2>Cart Empty</h2>;
   }
+
   return (
     <div className="productList">
-      {!props.auth.length
-        ? cart.map((product) => {
-            return (
-              <div key={product.id}>
-                {quantityArr[product.id]=product.orderProduct.inventory}
-                <img src={product.imageUrl} className="photo" />
-                <h4>
-                  <Link to={`/products/${product.id}/`}>
-                    {`${product.orderProduct.inventory} ${product.instrument}
-                  ${product.make} ${product.model} -
-                 $${(product.price / 100).toFixed(2)}`}
-                  </Link>
-                  <input
-          onChange={handleChange}
-          type="number"
-          name={product.id}
-          min="1"
-          max={`${product.inventory}`}
-          placeholder="1"
-          value={quantity}
-        ></input>
-         <button type="submit" onClick={ () =>{
-           storedLocal(product)
-           handleSubmit(product)}}>
-          Change Amount
-        </button>
-                  <button
-                    type="submit"
-                    className="delete"
-                    onClick={() => removeItem(product.id)}
-                  >
-                    X
-                  </button>
-                </h4>
-              </div>
-            );
-          })
-        : props.cart.map((product) => {
+      {props.cart.map((product, index) => {
             return (
               <div key={product.id}>
                 <img src={product.imageUrl} className="photo" />
                 <h4>
                   <Link to={`/products/${product.id}/`}>
-                    {`${product.inventory} ${product.instrument}
+                    {` ${product.instrument}
                 ${product.make} ${product.model} -
                 $${(product.price / 100).toFixed(2)}`}
                   </Link>
                   <input
-          onChange={handleChange}
-          type="number"
-          min="1"
-          max={`${product.inventory}`}
-          placeholder="1"
-          value={quantityArr[product.id]=product.orderProduct.inventory}
-        ></input>
-         <button type="submit" onClick={ () =>{
-           storedLocal(product)
-           handleSubmit(product)}}>
-          Change Amount
-        </button>
+                    onChange={(evt) =>handleChange(evt)}
+                    type="number"
+                    name={index}
+                    min="1"
+                    max={`${product.inventory}`}
+                    placeholder={`${props.cart[index].orderProduct.inventory}`}
+                    // value={
+                    //   (product.orderProduct.inventory)
+                    // }
+                  ></input>
+                  <button
+                    type="submit"
+                    onClick={() => {
+                      handleSubmit(index);
+                    }}
+                  >
+                    Change Amount
+                  </button>
                   <button
                     type="submit"
                     className="delete"
-                    onClick={() => props.removeProduct(props.auth.id, product)}
+                    onClick={() =>
+                      {toast.success("Product Removed From Cart")
+                      props.removeProduct(props.auth.id, product)}}
                   >
                     X
                   </button>
@@ -215,18 +109,20 @@ export function Cart(props) {
               </div>
             );
           })}
-           <button
-                  type="submit"
-                  className="clear"
-                  onClick={() =>{
-                    clearCart()
-                    props.clearCart(props.auth.id)}}
-                >
-                  Clear Cart
-                </button>
-            {props.auth.id ?
-          <Link to="/checkout" >Checkout</Link> :
-          <GuestCheck cart={cart} />}
+      <button
+        type="submit"
+        className="clear"
+        onClick={() => {
+          toast.success("Cart Cleared")
+          props.clearCart(props.auth.id)
+          setCart([])
+        }}
+      >
+        Clear Cart
+      </button>
+
+        <Link to="/checkout">Checkout</Link>
+
     </div>
   );
 }
@@ -242,7 +138,7 @@ const mapDispatchToProps = (dispatch) => ({
   clearCart: (id) => dispatch(clearCartThunk(id)),
   changeQuantity: (id) => dispatch(updateQuantityCartThunk(id)),
   updateCart: (id, productId, qty) =>
-    dispatch(updateQuantityCartThunk(id, productId, qty))
+    dispatch(updateQuantityCartThunk(id, productId, qty)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);
