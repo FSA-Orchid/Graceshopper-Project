@@ -11,6 +11,8 @@ import {
 import { addToCartThunk, updateQuantityCartThunk } from '../store/cart';
 import { toast } from 'react-toastify';
 
+
+
 export function AllProducts(props) {
 
 

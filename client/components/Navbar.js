@@ -18,6 +18,7 @@ class Navbar extends React.Component {
 
   componentDidMount() {
     this.props.fetchCart(this.props.auth.id);
+
     let total = this.props.cart.reduce((total, item) => total + 1*(item.orderProduct.inventory), 0)
     this.setState({
       count: total

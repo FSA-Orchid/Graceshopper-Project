@@ -4,12 +4,12 @@ import { connect } from "react-redux";
 import Link from "react-router-dom/Link";
 import { addToCartThunk, updateQuantityCartThunk } from "../store/cart";
 import { toast } from "react-toastify";
-import { injectStyle } from "react-toastify/dist/inject-style";
+
 
 function SingleProduct(props) {
   const [quantity, setQuantity] = useState(1);
   let [cart, setCart] = useState([]);
-  injectStyle();
+
   useEffect(() => {
     try {
       const productId = props.match.params.id;
