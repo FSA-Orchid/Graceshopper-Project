@@ -10,14 +10,14 @@ import {
 } from '../store/allproducts';
 import { addToCartThunk, updateQuantityCartThunk } from '../store/cart';
 import { toast } from 'react-toastify';
-import { injectStyle } from 'react-toastify/dist/inject-style';
+
 export function AllProducts(props) {
 
 
   useEffect(() => {
     props.fetchProducts();
   }, []);
-  injectStyle();
+
 
   const checkIt = (product) => {
     const cart = props.cart;

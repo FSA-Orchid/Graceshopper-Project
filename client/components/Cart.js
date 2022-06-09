@@ -11,12 +11,12 @@ import {
 } from "../store/cart";
 import Checkout from "./Checkout";
 import GuestCheck from "./GuestCheck";
-import { injectStyle } from 'react-toastify/dist/inject-style';
+
 //Possible rendition of Cart, piggy-backed off of AllProducts page, have to add quantity change option.
 // NOT ADDED TO ROUTES YET
 
 export function Cart(props) {
-  injectStyle();
+
   const [cart, setCart] = useState([]);
 
 

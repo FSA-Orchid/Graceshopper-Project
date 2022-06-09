@@ -8,7 +8,7 @@ import {
 } from '../store/cart';
 import { guestCheckThunk } from '../store/allproducts';
 import { toast } from 'react-toastify';
-import { injectStyle } from 'react-toastify/dist/inject-style';
+
 class Checkout extends React.Component {
   constructor(){
     super()
@@ -29,7 +29,7 @@ class Checkout extends React.Component {
   }
 
   componentDidMount() {
-    injectStyle()
+
 
     this.props.fetchCart(this.props.auth.id);
     this.setState({
