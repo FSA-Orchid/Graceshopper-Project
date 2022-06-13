@@ -145,6 +145,16 @@ export const closeOrderThunk = (id) => {
   };
 };
 
+// export const closeOrderNotLoggedThunk = (email) => {
+//   return async function (dispatch) {
+//     try {
+//       if(email){
+//         await axios.g
+//       }
+//     }
+//   }
+// }
+
 export const removeFromCartThunk = (id, product) => {
   return async function (dispatch) {
     try {
