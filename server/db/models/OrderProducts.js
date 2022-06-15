@@ -17,6 +17,13 @@ const orderProduct = db.define('orderProduct', {
       notEmpty: true,
     },
   },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
+  }
 });
 
 module.exports = orderProduct;

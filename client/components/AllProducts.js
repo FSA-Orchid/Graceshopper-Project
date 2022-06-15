@@ -14,12 +14,23 @@ import { toast } from 'react-toastify';
 
 
 export function AllProducts(props) {
-
+  const [productPage, setPage] = useState(0)
+  const [productsToRender, setProductsRender] = useState([])
+  const [productsPartition, setPartition] = useState([])
 
   useEffect(() => {
     props.fetchProducts();
   }, []);
 
+  useEffect(() => {
+    let pages = Math.ceil(props.products.length/10)
+    let array = []
+    for(let i = 0; i < pages; i++){
+      array.push(props.products.slice(i*10, (i*10)+10))
+    }
+    setPartition(array)
+
+  }, [props.products])
 
   const checkIt = (product) => {
     const cart = props.cart;
