@@ -54,6 +54,7 @@ router.post('/:id/cart/add', async (req, res, next) => {
       productId: 1 * req.body.productId,
       inventory: 1 * req.body.inventory,
       totalPrice: 1 * req.body.inventory * req.body.price,
+
     });
 
     //slow as shit have to make it reload

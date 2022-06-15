@@ -19,10 +19,6 @@ const orderProduct = db.define('orderProduct', {
   },
   email: {
     type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-    },
   }
 });
 
