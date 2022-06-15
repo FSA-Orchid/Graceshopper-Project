@@ -17,9 +17,7 @@ const orderProduct = db.define('orderProduct', {
       notEmpty: true,
     },
   },
-  email: {
-    type: Sequelize.STRING,
-  }
+
 });
 
 module.exports = orderProduct;

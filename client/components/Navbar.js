@@ -42,7 +42,7 @@ class Navbar extends React.Component {
     return (
       <div className='topScreen'>
         <div>
-        <h1 className="storeTitle">Some Guitar Store</h1>
+        <h1 className="storeTitle">Guitar Store</h1>
         <nav>
           {this.props.isLoggedIn ? (
             <div className="navBar">

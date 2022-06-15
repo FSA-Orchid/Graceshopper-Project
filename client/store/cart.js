@@ -11,7 +11,7 @@ const RemoveFromCart = "REMOVE_FROM_CART";
 const AddToCart = "ADD_TO_CART";
 const UpdateQuantityCart = "UPDATE_QUANTITY_CART";
 
-//this function will split an array in two depending
+//this function will split an array in two depending if they include part of the array or not
 function split(array, cart) {
   return array.reduce(
     ([toUpdate, toAdd], item) => {
@@ -130,15 +130,28 @@ export const clearCartThunk = (id) => {
 };
 
 //this will complete the order and clear the state for this cart
-export const closeOrderThunk = (id) => {
+export const closeOrderThunk = (id, email) => {
   return async function (dispatch) {
     try {
       if(id){
       await axios.put(`/api/users/${id}/cart/complete`);
       dispatch(clearCart())
     }
+    else{
+      let cartParse = localStorage.getItem("cart");
+      let localCart = JSON.parse(cartParse)
+
+      let cart = await axios.put(`/api/users/notLogged`, {
+        email
+      })
+      let cartData = cart.data
+      console.log(cartData)
+      await axios.post(`/api/users/notLogged/cartFill`, {
+        cartId : cartData.id
+      })
       localStorage.removeItem("cart")
       dispatch(clearCart())
+    }
     } catch (err) {
       console.log(err);
     }

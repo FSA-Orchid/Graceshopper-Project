@@ -54,7 +54,6 @@ router.post('/:id/cart/add', async (req, res, next) => {
       productId: 1 * req.body.productId,
       inventory: 1 * req.body.inventory,
       totalPrice: 1 * req.body.inventory * req.body.price,
-
     });
 
     //slow as shit have to make it reload
@@ -64,6 +63,29 @@ router.post('/:id/cart/add', async (req, res, next) => {
     next(err);
   }
 });
+
+router.put('/notLogged', async (req, res, next) => {
+  try {
+    console.log(req.body, 'BODY HERE')
+    let exists = await User.findOne({
+      where: {email: req.body.email}
+    })
+    console.log(exists)
+    if (exists){
+      res.status(401).send('Email is already registered to an account, please login to continue checkout')
+      return
+    }
+    else {
+      let newCart = await ShoppingCart.create({
+        userEmail: req.body.email,
+        orderFilled: true
+      });
+      res.send(newCart)
+    }
+  }
+  catch(err) {next(err)}
+})
+
 
 router.put('/:id/cart/update', async (req, res, next) => {
   try {

@@ -27,4 +27,14 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+router.post("/notLogged/:cartid", async (req,res,next) => {
+  try{
+    OrderProducts.create({
+
+    })
+  }
+  catch(err) {
+    next(err)
+  }
+})
 module.exports = router;

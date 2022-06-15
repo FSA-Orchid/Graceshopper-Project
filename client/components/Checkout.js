@@ -17,6 +17,8 @@ class Checkout extends React.Component {
       lastName: '',
       email: '',
       address: '',
+      state: '',
+      apartmentNumber: '',
       zip: '',
       one: {display: 'none'},
       two: {display: 'none'},
@@ -81,7 +83,18 @@ guest(){
     vars,
     })
   }
-
+  handleCheckout () {
+    try{
+    toast.info('Transaction is processing')
+    this.props.closeOrder(this.props.auth.id, this.state.email)
+    this.setState({complete: true})
+    history.push('/home')
+    toast.success('Transaction complete!', {delay:4000})
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
 
 
   render() {
@@ -143,7 +156,7 @@ onChange={this.handleChange} >
 <button onClick = {() => {
   toast.info('Transaction is processing')
   this.setState({complete: true})
-  this.props.closeOrder(this.props.auth.id)
+  this.props.closeOrder(this.props.auth.id, this.state.email)
   toast.success('Transaction complete!', {delay:4000})
   history.push('/home')
   }}>
@@ -163,7 +176,7 @@ const mapDispatch = (dispatch) => ({
   fetchCart: (id) => dispatch(setCartThunk(id)),
   // upDatePay: (id) => dispatch(id),
   // upDateAddress:(id) => dispatch(id),
-  closeOrder: (id) => dispatch(closeOrderThunk(id)),
+  closeOrder: (id, email) => dispatch(closeOrderThunk(id, email)),
   guestCheck: (id, inventory) => dispatch(guestCheckThunk(id, inventory))
 })
 export const Guest = connect(null, mapDispatch)(Checkout)

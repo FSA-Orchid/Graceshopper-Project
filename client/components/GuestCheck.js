@@ -106,7 +106,7 @@ let localCart = localStorage.getItem("cart")
 </div>
 
 <button type="button" className="collapsible"  onClick ={() => this.toggler('one')}
-  >Shipping {'&'} Contact Information </button>
+  >Guest Shipping {'&'} Contact Information </button>
 <form className = 'content' style ={{display: this.state.one.display}} onChange={this.handleChange}>
 <span><h3>First Name:</h3></span>
 <span><input type="text" name="firstName"  /></span>
@@ -125,7 +125,7 @@ let localCart = localStorage.getItem("cart")
 </form>
 
 <button type="button" className="collapsible"  onClick ={() => this.toggler('two')}
-  >Payment Information </button>
+  >Guest Payment Information </button>
 
 <form className = 'content' style = {{display: this.state.two.display}}
 onChange={this.handleChange} >
