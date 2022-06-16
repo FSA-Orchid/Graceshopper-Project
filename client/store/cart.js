@@ -145,10 +145,14 @@ export const closeOrderThunk = (id, email) => {
         email
       })
       let cartData = cart.data
-      console.log(cartData)
-      await axios.post(`/api/users/notLogged/cartFill`, {
-        cartId : cartData.id
+
+      localCart.map(async (item) => await axios.post(`/api/carts/notLogged/${cartData.id}`, {
+        productId: item.id,
+        inventory: item.orderProduct.inventory,
+        price: item.price
       })
+      )
+
       localStorage.removeItem("cart")
       dispatch(clearCart())
     }

@@ -12,7 +12,7 @@ const ShippingAddress = require("./models/Shipping")
 Product.belongsToMany(ShoppingCart, { through: OrderProducts });
 ShoppingCart.belongsToMany(Product, { through: OrderProducts });
 
-OrderProducts.hasMany(ShippingAddress)
+ShoppingCart.hasMany(ShippingAddress)
 User.hasMany(ShippingAddress)
 User.hasMany(ShoppingCart);
 ShoppingCart.belongsTo(User);

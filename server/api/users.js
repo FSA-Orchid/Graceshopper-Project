@@ -70,7 +70,7 @@ router.put('/notLogged', async (req, res, next) => {
     let exists = await User.findOne({
       where: {email: req.body.email}
     })
-    console.log(exists)
+
     if (exists){
       res.status(401).send('Email is already registered to an account, please login to continue checkout')
       return

@@ -20,8 +20,8 @@ class Checkout extends React.Component {
       state: '',
       apartmentNumber: '',
       zip: '',
-      one: {display: 'none'},
-      two: {display: 'none'},
+      one: {display: 'block'},
+      two: {display: 'block'},
       complete: false,
       cart: [],
     }
@@ -85,10 +85,22 @@ guest(){
   }
   handleCheckout () {
     try{
+      const {firstName, lastName, email, address, state, apartmentNumber, zip} =  this.state
+
+      if(firstName == '' || lastName == '' || email == '' || address == '' || state == '' || zip  == ''){
+
+        toast.error('All fields need to be entered to process the order')
+        return
+      }
+
+
     toast.info('Transaction is processing')
     this.props.closeOrder(this.props.auth.id, this.state.email)
+
+
+
     this.setState({complete: true})
-    history.push('/home')
+
     toast.success('Transaction complete!', {delay:4000})
     }
     catch(err){
@@ -133,6 +145,11 @@ guest(){
 
 <span><h3>Zipcode:</h3></span>
 <span><input type="text" name="zip" /></span><br />
+
+
+<span><h3>State:</h3></span>
+<span><input type="text" name="state" /></span><br />
+<span>Shipping is limited to to the continental United States</span>
 </form>
 
 <button type="button" className="collapsible"  onClick ={() => this.toggler('two')}
@@ -154,11 +171,7 @@ onChange={this.handleChange} >
 
 
 <button onClick = {() => {
-  toast.info('Transaction is processing')
-  this.setState({complete: true})
-  this.props.closeOrder(this.props.auth.id, this.state.email)
-  toast.success('Transaction complete!', {delay:4000})
-  history.push('/home')
+  this.handleCheckout()
   }}>
   Checkout
 </button>

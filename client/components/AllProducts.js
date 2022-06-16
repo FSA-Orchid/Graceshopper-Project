@@ -20,6 +20,7 @@ export function AllProducts(props) {
     props.fetchProducts();
   }, []);
 
+  //This useEffect will carve up all products into separate arrays in one array, each array is a different page, and when the user picks another page, the next set of products will render
   useEffect(() => {
     let pages = Math.ceil(props.products.length / 9);
     let array = [];
@@ -30,6 +31,7 @@ export function AllProducts(props) {
     setPage(0);
   }, [props.products]);
 
+  //When productPage number changes, the products will re-render
   useEffect(() => {
     setProductsRender(productsPartition[productPage]);
   }, [productsPartition, productPage]);
@@ -155,7 +157,7 @@ export function AllProducts(props) {
           Previous Page
         </button>
         {productsPartition.map((notUsed, idx) => (
-          idx > productPage +3 || idx < productPage-3 ?
+          idx > productPage +2 && idx !== productsPartition.length-1 || idx < productPage-2 && idx !== 0 ?
            <></>
           :
           <button
