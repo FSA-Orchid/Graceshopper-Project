@@ -166,7 +166,7 @@ onChange={this.handleChange} >
 <span><h3>Security Code:</h3></span>
 <span> <input type="text" name="securityCard"  /> </span><br />
 <input type="checkbox" className="sameAddress" value="sameAddress"/>
-<label> Use same addresss as shipping</label>
+<label> Use same address as shipping</label>
 </form>
 
 
