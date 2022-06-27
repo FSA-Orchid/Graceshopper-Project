@@ -12,8 +12,6 @@ import { addToCartThunk, updateQuantityCartThunk } from '../store/cart';
 import { toast } from 'react-toastify';
 import { injectStyle } from 'react-toastify/dist/inject-style';
 export function AllProducts(props) {
-
-
   useEffect(() => {
     props.fetchProducts();
   }, []);
@@ -26,30 +24,31 @@ export function AllProducts(props) {
     let filter = cart.filter((cartProd) => cartProd.id === product.id);
     if (filter.length) {
       let quantitynew = 1 + 1 * filter[0].orderProduct.inventory;
-      let message = 'More Of The Same Added To Cart.'
-      let status = 'success'
+      let message = 'More Of The Same Added To Cart.';
+      let status = 'success';
       if (quantitynew > product.inventory) {
         quantitynew = product.inventory;
-        message = "Max Quantity Already In Cart!"
-        status = 'error'
+        message = 'Max Quantity Already In Cart!';
+        status = 'error';
       }
       props.updateCart(userId, product.id, quantitynew);
-      toast[status](message)
+      toast[status](message);
     } else {
       let quantitynew = 1;
       props.addToCart(userId, product, quantitynew);
-      toast.success('Item Added To Cart Successfully!')
+      toast.success('Item Added To Cart Successfully!');
     }
   };
 
   if (!props.products.length) {
-    return(
+    return (
       <div>
-      <FilterProduct />
-      <div className='productContainer'>
-    <h1>No Products</h1>
-    </div>
-    </div>);
+        <FilterProduct />
+        <div className="productContainer">
+          <h1>No Products</h1>
+        </div>
+      </div>
+    );
   } else
     return (
       <div>
@@ -78,7 +77,8 @@ export function AllProducts(props) {
                     </button>
                     {product.inventory > 0 ? (
                       <button
-                        type="submit"
+                        type="button"
+                        className="btn btn-danger"
                         onClick={() => {
                           checkIt(product);
                         }}
@@ -107,10 +107,10 @@ export function AllProducts(props) {
                     )}`}</div>
                     {product.inventory > 0 ? (
                       <button
-                        type="submit"
+                        type="button"
+                        className="btn btn-danger"
                         onClick={() => {
                           checkIt(product);
-
                         }}
                       >
                         Add to Cart
