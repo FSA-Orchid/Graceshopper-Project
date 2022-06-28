@@ -1,6 +1,6 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   setProductsThunk,
   setBassThunk,
@@ -10,16 +10,16 @@ import {
   setMakeThunk,
   setPriceMaxThunk,
   setPriceMinThunk,
-} from "../store/allproducts";
+} from '../store/allproducts';
 
 export class FilterProduct extends React.Component {
   constructor() {
     super();
     this.state = {
-      make: "",
-      sortByYear: "select",
-      sortByPrice: "select",
-      instrument: "select",
+      make: '',
+      sortByYear: 'select',
+      sortByPrice: 'select',
+      instrument: 'select',
       productsList: [],
     };
 
@@ -32,12 +32,12 @@ export class FilterProduct extends React.Component {
 
   handleInstSubmit(evt) {
     evt.preventDefault();
-    if (this.state.instrument === "select") {
+    if (this.state.instrument === 'select') {
       this.props.fetchProducts();
-    } else if (this.state.instrument === "guitar") {
+    } else if (this.state.instrument === 'guitar') {
       this.props.fetchGuitars();
       this.setState({ ...this.state, productsList: this.props.products });
-    } else if (this.state.instrument === "bass") {
+    } else if (this.state.instrument === 'bass') {
       this.props.fetchBass();
       this.setState({ ...this.state, productsList: this.props.products });
     }
@@ -51,15 +51,15 @@ export class FilterProduct extends React.Component {
 
   handleYearSubmit(evt) {
     evt.preventDefault();
-    if (this.state.sortByYear === "select") {
+    if (this.state.sortByYear === 'select') {
       this.props.fetchProducts();
-    } else if (this.state.sortByYear === "newToOld") {
+    } else if (this.state.sortByYear === 'newToOld') {
       this.setState({
         productsList: this.props.products,
       });
 
       this.props.fetchNewToOld();
-    } else if (this.state.sortByYear === "oldToNew") {
+    } else if (this.state.sortByYear === 'oldToNew') {
       this.setState({
         productsList: this.props.products,
       });
@@ -71,14 +71,14 @@ export class FilterProduct extends React.Component {
   handlePriceSubmit(evt) {
     evt.preventDefault();
 
-    if (this.state.sortByPrice === "select") {
+    if (this.state.sortByPrice === 'select') {
       this.props.fetchProducts();
-    } else if (this.state.sortByPrice === "maxToMin") {
+    } else if (this.state.sortByPrice === 'maxToMin') {
       this.setState({
         productsList: this.props.products,
       });
       this.props.fetchMaxToMin();
-    } else if (this.state.sortByPrice === "minToMax") {
+    } else if (this.state.sortByPrice === 'minToMax') {
       this.setState({
         productsList: this.props.products,
       });
@@ -93,10 +93,10 @@ export class FilterProduct extends React.Component {
 
   clear = () => {
     this.setState({
-      make: "",
-      sortByYear: "select",
-      sortByPrice: "select",
-      instrument: "select",
+      make: '',
+      sortByYear: 'select',
+      sortByPrice: 'select',
+      instrument: 'select',
     });
   };
 
@@ -109,66 +109,76 @@ export class FilterProduct extends React.Component {
     const { handlePriceSubmit } = this;
     return (
       <div>
-        <div className="sidenav">
-          <form onSubmit={this.handleInstSubmit}>
-            <label>
-              Instrument:
-              <select
-                name="instrument"
-                onChange={this.handleChange}
-                value={this.state.instrument}
-              >
-                <option value="select">select</option>
-                <option value="guitar">guitar</option>
-                <option value="bass">bass</option>
-              </select>
-            </label>
-            <button type="submit">Submit</button>
+        <nav className="navbar navbar-expand-lg bg-light">
+          <form className="d-flex mx-2" onSubmit={this.handleInstSubmit}>
+            <select
+              name="instrument"
+              onChange={this.handleChange}
+              value={this.state.instrument}
+              className="btn btn-secondary dropdown-toggle"
+            >
+              <option value="select">Select Instrument</option>
+              <option value="guitar">Guitar</option>
+              <option value="bass">Bass</option>
+            </select>
+
+            <button className="btn btn-outline-success mx-2" type="submit">
+              Submit
+            </button>
           </form>
-          <form onSubmit={this.handleMakeSubmit}>
-            <label>
-              Make:
-              <input
-                className="sideSearch"
-                value={this.state.make}
-                name="make"
-                placeholder="type here"
-                onChange={this.handleChange}
-              />
-            </label>
-            <button type="submit">Submit</button>
+
+          <form className="d-flex" onSubmit={this.handleYearSubmit}>
+            <select
+              name="sortByYear"
+              onChange={this.handleChange}
+              value={this.state.sortByYear}
+              className="btn btn-secondary dropdown-toggle"
+            >
+              <option value="select">Select Year Filter</option>
+              <option value="newToOld">Newest to Oldest</option>
+              <option value="oldToNew">Oldest to Newest</option>
+            </select>
+
+            <button className="btn btn-outline-success mx-2" type="submit">
+              Submit
+            </button>
           </form>
-          <form onSubmit={this.handleYearSubmit}>
-            <label>
-              Production Year:
-              <select
-                name="sortByYear"
-                onChange={this.handleChange}
-                value={this.state.sortByYear}
-              >
-                <option value="select">select</option>
-                <option value="newToOld">Newest to Oldest</option>
-                <option value="oldToNew">Oldest to Newest</option>
-              </select>
-            </label>
-            <button type="submit">Submit</button>
+          <form className="d-flex" onSubmit={handlePriceSubmit}>
+            <select
+              name="sortByPrice"
+              onChange={this.handleChange}
+              value={sortByPrice}
+              className="btn btn-secondary dropdown-toggle"
+            >
+              <option value="select">Select Price Filter</option>
+              <option value="maxToMin">Highest To Lowest</option>
+              <option value="minToMax">Lowest to Highest</option>
+            </select>
+
+            <button className="btn btn-outline-success mx-2" type="submit">
+              Submit
+            </button>
           </form>
-          <form onSubmit={handlePriceSubmit}>
-            <label>
-              Price:
-              <select
-                name="sortByPrice"
-                onChange={this.handleChange}
-                value={sortByPrice}
-              >
-                <option value="select">select</option>
-                <option value="maxToMin">Highest To Lowest</option>
-                <option value="minToMax">Lowest to Highest</option>
-              </select>
-            </label>
-            <button type="submit">Submit</button>
+          <form
+            className="d-flex"
+            role="search"
+            onSubmit={this.handleMakeSubmit}
+          >
+            <input
+              className="form-control mx-2"
+              type="search"
+              placeholder="Search Make"
+              aria-label="Search"
+              value={this.state.make}
+              name="make"
+              onChange={this.handleChange}
+            />
+
+            <button className="btn btn-outline-success" type="submit">
+              Submit
+            </button>
           </form>
-        </div>
+        </nav>
       </div>
     );
   }

@@ -114,20 +114,21 @@ span {
 ul {
   list-style-type: none;
 }
-.sidenav {
-  height: 100%; /* Full-height: remove this if you want "auto" height */
-  width: 160px; /* Set the width of the sidebar */
-  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-  /* Stay on top */
-  top: 140px; /* Stay at the top */
+
+/*.sidenav {
+  height: 100%; /* Full-height: remove this if you want "auto" height
+  width: 160px; /* Set the width of the sidebar
+  position: fixed; /* Fixed Sidebar (stay in place on scroll)
+  /* Stay on top
+  top: 140px;
   z-index: 1;
   left: 0;
   border: black;
   background-color: rgb(114, 105, 105); /* Black */
-}
-.sideSearch {
+/* } */
+/* .sideSearch {
   width: 120px;
-}
+} */
 .price {
   color: red;
 }
