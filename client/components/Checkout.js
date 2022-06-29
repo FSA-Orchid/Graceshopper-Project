@@ -6,6 +6,7 @@ import { guestCheckThunk } from "../store/allproducts";
 import { toast } from "react-toastify";
 import {addShippingThunk, fetchShippingThunk} from "../store/shipAddress"
 import {addPaymentThunk, fetchPaymentsThunk} from "../store/payment"
+import axios from "axios";
 
 class Checkout extends React.Component {
   constructor() {
@@ -48,6 +49,7 @@ class Checkout extends React.Component {
     this.guest = this.guest.bind(this);
     this.toggleAddress = this.toggleAddress.bind(this)
     this.handleShipment = this.handleShipment.bind(this)
+    this.handlePayment = this.handlePayment.bind(this)
   }
 
   componentDidMount() {
@@ -152,7 +154,7 @@ class Checkout extends React.Component {
         state,
         city,
         apartmentNumber,
-        zip,
+        zipCode,
       } = this.state.shipping;
 
       if (
@@ -161,7 +163,7 @@ class Checkout extends React.Component {
         streetAddress == "" ||
         state == "" ||
         city == "" ||
-        zip == ""
+        zipCode == ""
       ) {
         toast.error(
           "All marked fields need to be entered to register address"
@@ -169,11 +171,41 @@ class Checkout extends React.Component {
         return;
       }
 
-      let newShipping = this.props.addShipping(this.props.auth.id, this.state.shipping, this.state.shipping.email)
+      let newShipping = this.props.addShipping(this.props.auth.id, this.state.shipping, this.state.email)
       console.log(newShipping)
-
-
   }
+
+  handlePayment() {
+    const {
+      name,
+      streetAddress,
+      zipCode,
+      city,
+      state,
+      cardNumber,
+      cardPreview,
+      securityCode,
+      expirationDate,
+      cardType,
+    } = this.state.payment
+    if (
+      name == "" ||
+      cardNumber == "" ||
+      streetAddress == "" ||
+      state == "" ||
+      city == "" ||
+      zipCode == "" ||
+      securityCode == "" ||
+      expirationDate == "" || cardType == ""
+    ) {
+      toast.error(
+        "All marked fields need to be entered to register address"
+      );
+      return;
+    }
+    this.props.addPayment(this.props.auth.id, this.state.payment, this.state.email)
+  }
+
   handleCheckout() {
     try {
       toast.info("Transaction is processing");
@@ -417,6 +449,7 @@ class Checkout extends React.Component {
           <br />
           </div>
           <button
+          onClick={() => {this.handlePayment()}}
           >
             Save Payment Information
           </button>

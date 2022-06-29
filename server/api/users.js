@@ -246,10 +246,33 @@ router.get("/:id/payment", async (req, res, next) => {
 //post routes for payment and shipping information
 router.post("/:id/payment", async (req, res, next) => {
   try {
-    const payment = await PaymentInfo.create(req.body.payment, {
+    let body = req.body
+    const payment = await PaymentInfo.create({
+      name: body.name,
+      state: body.state,
+      city: body.city,
+      zipCode: 1*body.zipCode,
+      apartmentNumber: body.apartmentNumber,
+      streetAddress: body.streetAddress,
       userId: req.params.id,
+      cardNumber: body.cardNumber,
+      securityCode: body.securityCode,
+      expirationDate: body.expirationDate,
+      cardType: body.cardType,
     });
     res.send(payment);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/:id/shipment", async (req, res, next) => {
+  try {
+    const payments = await PaymentInfo.findAll({
+      where: { userId: req.params.id },
+      exclude: ["cardNumber"],
+    });
+    res.send(payments);
   } catch (err) {
     next(err);
   }
