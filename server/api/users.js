@@ -1,16 +1,23 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
-const { User, ShoppingCart, Product, OrderProducts } = require('../db');
+const {
+  User,
+  ShoppingCart,
+  Product,
+  OrderProducts,
+  PaymentInfo,
+  ShippingAddress,
+} = require("../db");
 module.exports = router;
 
 //get cart
-router.get('/:id/cart', async (req, res, next) => {
+router.get("/:id/cart", async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
-      attributes: {exclude: ['password', 'address']},
+      attributes: { exclude: ["password", "address"] },
       include: {
         model: ShoppingCart,
-        where: { orderFilled: 'false' },
+        where: { orderFilled: "false" },
         include: Product,
       },
     });
@@ -31,9 +38,8 @@ router.get('/:id/cart', async (req, res, next) => {
 
 //add to cart, needs a userId, inventory, and productId
 
-router.post('/:id/cart/add', async (req, res, next) => {
+router.post("/:id/cart/add", async (req, res, next) => {
   try {
-
     let cart = await ShoppingCart.findOne({
       where: {
         userId: req.params.id,
@@ -64,30 +70,33 @@ router.post('/:id/cart/add', async (req, res, next) => {
   }
 });
 
-router.put('/notLogged', async (req, res, next) => {
+router.put("/notLogged", async (req, res, next) => {
   try {
-    console.log(req.body, 'BODY HERE')
+    console.log(req.body, "BODY HERE");
     let exists = await User.findOne({
-      where: {email: req.body.email}
-    })
+      where: { email: req.body.email },
+    });
 
-    if (exists){
-      res.status(401).send('Email is already registered to an account, please login to continue checkout')
-      return
-    }
-    else {
+    if (exists) {
+      res
+        .status(401)
+        .send(
+          "Email is already registered to an account, please login to continue checkout"
+        );
+      return;
+    } else {
       let newCart = await ShoppingCart.create({
         userEmail: req.body.email,
-        orderFilled: true
+        orderFilled: true,
       });
-      res.send(newCart)
+      res.send(newCart);
     }
+  } catch (err) {
+    next(err);
   }
-  catch(err) {next(err)}
-})
+});
 
-
-router.put('/:id/cart/update', async (req, res, next) => {
+router.put("/:id/cart/update", async (req, res, next) => {
   try {
     let cart = await ShoppingCart.findOne({
       where: {
@@ -116,14 +125,13 @@ router.put('/:id/cart/update', async (req, res, next) => {
 });
 
 //remove item from cart
-router.delete('/:id/cart/:productId/remove', async (req, res, next) => {
+router.delete("/:id/cart/:productId/remove", async (req, res, next) => {
   try {
-
     const user = await User.findByPk(req.params.id, {
-      attributes: { exclude: ['password'] },
+      attributes: { exclude: ["password"] },
       include: {
         model: ShoppingCart,
-        where: { orderFilled: 'false' },
+        where: { orderFilled: "false" },
         include: [
           {
             model: Product,
@@ -134,7 +142,7 @@ router.delete('/:id/cart/:productId/remove', async (req, res, next) => {
     });
     let cart = user.carts[0].products[0].orderProduct;
     if (!cart) {
-      res.status(404).send('Item not in cart');
+      res.status(404).send("Item not in cart");
     }
 
     await cart.destroy();
@@ -145,18 +153,18 @@ router.delete('/:id/cart/:productId/remove', async (req, res, next) => {
 });
 
 //this route will delete the entire cart, but only for carts that are pending
-router.delete('/:id/cart/clear', async (req, res, next) => {
+router.delete("/:id/cart/clear", async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
-      attributes: { exclude: ['password'] },
+      attributes: { exclude: ["password"] },
       include: {
         model: ShoppingCart,
-        where: { orderFilled: 'false' },
+        where: { orderFilled: "false" },
       },
     });
     let cart = user.carts[0];
     if (!cart) {
-      res.status(404).send('Item not in cart');
+      res.status(404).send("Item not in cart");
     }
 
     await cart.destroy();
@@ -170,22 +178,22 @@ router.delete('/:id/cart/clear', async (req, res, next) => {
 });
 
 //this route will set the cart to being an archive of the order and will change quantites
-router.put('/:id/cart/complete', async (req, res, next) => {
+router.put("/:id/cart/complete", async (req, res, next) => {
   try {
     let cart = await ShoppingCart.findOne({
       where: {
         userId: req.params.id,
-        orderFilled: 'false',
+        orderFilled: "false",
       },
       include: Product,
     });
     if (!cart) {
-      res.status(404).send('There is no order to fulfill');
+      res.status(404).send("There is no order to fulfill");
     }
 
     //closes the order
     let finalCart = await cart.set({
-      orderFilled: 'true',
+      orderFilled: "true",
     });
 
     //item inventory gets updated
@@ -208,14 +216,14 @@ router.put('/:id/cart/complete', async (req, res, next) => {
   }
 });
 
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const users = await User.findAll({
       // explicitly select only the id and username fields - even though
       // users' passwords are encrypted, it won't help if we just
 
       // send everything to anyone who asks!
-      attributes: ['id', 'username', 'email', 'address', 'isAdmin'],
+      attributes: ["id", "username", "email", "address", "isAdmin"],
     });
     res.json(users);
   } catch (err) {
@@ -223,11 +231,120 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get("/:id/payment", async (req, res, next) => {
+  try {
+    const payments = await PaymentInfo.findAll({
+      where: { userId: req.params.id },
+      exclude: ["cardNumber"],
+    });
+    res.send(payments);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//post routes for payment and shipping information
+router.post("/:id/payment", async (req, res, next) => {
+  try {
+    const payment = await PaymentInfo.create(req.body.payment, {
+      userId: req.params.id,
+    });
+    res.send(payment);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/:id/shipping", async (req, res, next) => {
+  try {
+    const shipping = await ShippingAddress.create(req.body.shipping, {
+      userId: req.params.id,
+    });
+    res.send(shipping);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//In reality will remove the address from user
+router.put("/shippingUp", async (req, res, next) => {
+  try {
+    let shipping = await ShippingAddress.findOne({
+      where: { id: req.body.shipping.id },
+    });
+    shipping.update(req.body.shipping);
+    res.send(shipping);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//will remove payment info from user
+router.put("/paymentUp", async (req, res, next) => {
+  try {
+    let payment = await PaymentInfo.findOne({
+      where: { id: req.body.payment.id },
+    });
+    payment.update(req.body.payment);
+    res.send(payment);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put("/:id/shipping", async (req, res, next) => {
+  try {
+    let shipping = await ShippingAddress.findOne({
+      where: { id: req.body.shipping.id, userId: req.params.id },
+    });
+    shipping.update({ userId: null });
+    res.send(shipping);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put("/:id/payment", async (req, res, next) => {
+  try {
+    let payment = await PaymentInfo.findOne({
+      where: { id: req.body.payment.id, userId: req.params.id },
+    });
+    payment.update({ payment: null });
+    res.send(payment);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put("/notLoggedShipping", async (req, res, next) => {
+  try {
+    let shipping = await ShippingAddress.create(req.body.shipping)
+    res.send(shipping);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//will remove payment info from user
+router.put("/paymentUp", async (req, res, next) => {
+  try {
+    let payment = await PaymentInfo.findOne({
+      where: { id: req.body.payment.id },
+    });
+    payment.update(req.body.payment);
+    res.send(payment);
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+
+router.get("/:id", async (req, res, next) => {
   try {
     const users = await User.findOne({
       where: { id: req.params.id },
-      attributes: ['id', 'username', 'email', 'address', 'isAdmin'],
+      attributes: ["id", "username", "email", "address", "isAdmin"],
     });
     res.json(users);
   } catch (err) {
@@ -235,7 +352,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const users = await User.findOne({
       where: { id: req.params.id },

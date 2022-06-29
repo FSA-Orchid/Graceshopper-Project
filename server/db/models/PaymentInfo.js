@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
+
+
 const paymentInfo = db.define('paymentInfo', {
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
   streetAddress: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -25,11 +31,14 @@ const paymentInfo = db.define('paymentInfo', {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  cardPreview: {
+    type: Sequelize.STRING,
+  },
   securityCode: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-  experationDate: {
+  expirationDate: {
     type: Sequelize.STRING,
     allowNull: false,
   },
@@ -46,5 +55,24 @@ const paymentInfo = db.define('paymentInfo', {
   },
 
 })
+
+const hashCard = async (paymentInfo) => {
+  if (paymentInfo.changed('cardNumber')){
+    let lastFour = ''
+    for(let i = 0; i < paymentInfo.cardNumber.length; i++){
+      if(i >= paymentInfo.cardNumber.length - 4){
+        lastFour += paymentInfo.cardNumber[i]
+      }
+      else {
+        lastFour += 'X'}
+    }
+    paymentInfo.cardPreview = lastFour
+  }
+}
+
+
+paymentInfo.beforeCreate(hashCard)
+paymentInfo.beforeUpdate(hashCard)
+
 
 module.exports = paymentInfo;
