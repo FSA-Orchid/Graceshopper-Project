@@ -33,17 +33,19 @@ export const fetchShippingThunk = (userId) => {
   }
 }
 
-export const addShippingThunk = (userId, shipping, email) => {
+export const addShippingThunk = (userId, shipping) => {
   return async function (dispatch) {
     try{
       if(userId){
-      let response = await axios.post(`/api/users/${userId}/shipping`, shipping)
+      let response = await axios.post(`/api/users/${userId}/shipping`,shipping
+      )
       const newShipping = response.data
+      console.log(newShipping)
       dispatch(addShipping(newShipping))
       }
       else {
+        localStorage.setItem("shipping", JSON.stringify(shipping))
         let response = await axios.post(`/api/users/notLoggedShipping`,
-        email,
         shipping)
         const newShipping = response.data
         dispatch(addShipping(newShipping))

@@ -14,7 +14,6 @@ class Checkout extends React.Component {
       shipping: {
         firstName: "",
         lastName: "",
-        email: "",
         streetAddress: "",
         state: "",
         apartmentNumber: "",
@@ -23,7 +22,6 @@ class Checkout extends React.Component {
       },
       payment: {
         name: "",
-        email: "",
         streetAddress: "",
         city: "",
         state: "",
@@ -39,6 +37,7 @@ class Checkout extends React.Component {
       address: {display: 'block'},
       complete: false,
       cart: [],
+      email: '',
       checked: false,
       shippingID: 0,
       paymentID: 0
@@ -48,13 +47,14 @@ class Checkout extends React.Component {
     this.handleChangeCard = this.handleChangeCard.bind(this)
     this.guest = this.guest.bind(this);
     this.toggleAddress = this.toggleAddress.bind(this)
-    this.handleShipment = this.toggleAddress.bind(this)
+    this.handleShipment = this.handleShipment.bind(this)
   }
 
   componentDidMount() {
     this.props.fetchCart(this.props.auth.id);
     this.setState({
       cart: this.props.cart,
+      email: this.props.auth.email
     });
   }
 
@@ -70,6 +70,7 @@ class Checkout extends React.Component {
     if (prevProps !== this.props) {
       this.setState({
         cart: this.props.cart || [],
+        email: this.props.auth.email
       });
     }
   }
@@ -90,11 +91,7 @@ class Checkout extends React.Component {
   toggleAddress(evt){
     let payment = this.state.payment
     let shipping = this.state.shipping
-    console.log('clicked')
-    console.log(evt.target.checked)
     if(evt.target.checked == true){
-
-      console.log('does it change?')
       payment.streetAddress = shipping.streetAddress
       payment.state = shipping.state
       payment.apartmentNumber = shipping.apartmentNumber
@@ -109,7 +106,7 @@ class Checkout extends React.Component {
     else {
       payment.streetAddress = ""
       payment.state = ""
-      payment.apartmentNumber = null
+      payment.apartmentNumber = ''
       payment.zipCode = ""
       payment.city = ""
       this.setState({
@@ -122,10 +119,19 @@ class Checkout extends React.Component {
 
   handleChange(evt) {
     // in case its not in number format
+    if(evt.target.name === 'email'){
+      this.setState({email: evt.target.value})
+      return
+    }
     let shipping = this.state.shipping;
+    let payment = this.state.payment
+    if(this.state.checked === true){
+      payment[evt.target.name] = evt.target.value
+    }
     shipping[evt.target.name] = evt.target.value;
     this.setState({
       shipping,
+      payment
     });
   }
 
@@ -136,17 +142,15 @@ class Checkout extends React.Component {
       payment,
     });
   }
-  handleShipment(shipping) {
-    if(shipping){
-      this.setState({shippingId: shipping.id})
-    }
-    else {
+
+  handleShipment() {
+
       const {
         firstName,
         lastName,
-        email,
         streetAddress,
         state,
+        city,
         apartmentNumber,
         zip,
       } = this.state.shipping;
@@ -154,9 +158,9 @@ class Checkout extends React.Component {
       if (
         firstName == "" ||
         lastName == "" ||
-        email == "" ||
         streetAddress == "" ||
         state == "" ||
+        city == "" ||
         zip == ""
       ) {
         toast.error(
@@ -164,13 +168,14 @@ class Checkout extends React.Component {
         );
         return;
       }
-      let newShipping = this.props.addShipping(this.props.user.id, this.state.shipping, this.state.shipping.email)
+
+      let newShipping = this.props.addShipping(this.props.auth.id, this.state.shipping, this.state.shipping.email)
       console.log(newShipping)
-    }
+
+
   }
   handleCheckout() {
     try {
-
       toast.info("Transaction is processing");
       this.props.closeOrder(this.props.auth.id, this.state.email, this.state.shipping, this.state.payment);
       this.setState({ complete: true });
@@ -182,6 +187,7 @@ class Checkout extends React.Component {
   }
 
   render() {
+
     if (this.state.complete === true) {
       return <h1>Transaction complete! Thank you for your business.</h1>;
     }
@@ -243,7 +249,9 @@ class Checkout extends React.Component {
             <input type="text" name="lastName" value={address.lastName}/>
           </span>
           <br />
-
+          {/*Email is needed for unlogged in users, otherwise it should get it from auth*/}
+          {this.props.auth.id ? <></> :
+          <div>
           <span>
             <h3>Email*:</h3>
           </span>
@@ -251,6 +259,9 @@ class Checkout extends React.Component {
             <input type="text" name="email" value={address.email} />
           </span>
           <br />
+          </div>
+           }
+
           <span>
             <h3>Address*:</h3>
           </span>
@@ -289,7 +300,10 @@ class Checkout extends React.Component {
           <span>Shipping is limited to to the continental United States</span>
         <button
           type='button'
-          onClick={this.handle}>
+          onClick={() => {
+
+            this.handleShipment()
+            }}>
            Save Address
         </button>
 

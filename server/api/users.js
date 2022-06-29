@@ -257,9 +257,19 @@ router.post("/:id/payment", async (req, res, next) => {
 
 router.post("/:id/shipping", async (req, res, next) => {
   try {
-    const shipping = await ShippingAddress.create(req.body.shipping, {
+    let body = req.body
+    console.log(req.body)
+    const shipping = await ShippingAddress.create({
+      firstName: body.firstName,
+      lastName: body.lastName,
+      state: body.state,
+      city: body.city,
+      zipCode: 1*body.zipCode,
+      apartmentNumber: body.apartmentNumber,
+      streetAddress: body.streetAddress,
       userId: req.params.id,
     });
+
     res.send(shipping);
   } catch (err) {
     next(err);

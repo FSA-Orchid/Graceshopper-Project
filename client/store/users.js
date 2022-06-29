@@ -4,7 +4,7 @@ const initialstate = [];
 
 const FetchUsers = "FETCH_USERS";
 const DeleteUser = "DELETE_USER";
-
+const UpdateUser = 'UPDATE_USER'
 
 //this page is for admin control of users
 

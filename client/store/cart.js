@@ -60,7 +60,6 @@ const updateCart = (product) => {
 export const setCartFromLoginThunk = (id) => {
   return async function (dispatch) {
     try {
-
       let res = await axios.get(`/api/users/${id}/cart`);
       let cart = res.data;
 
