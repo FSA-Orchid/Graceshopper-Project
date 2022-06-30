@@ -36,6 +36,7 @@ img {
   display: flex;
   justify-content: space-evenly;
   background-color: lightgray;
+  margin-bottom: 0px;
 }
 
 .storeTitle {
@@ -44,6 +45,10 @@ img {
 
 .navText {
   color: black;
+}
+
+.navLogged {
+  margin-bottom: 0px;
 }
 
 .guitarFilter {
@@ -56,10 +61,14 @@ img {
   flex-wrap: wrap;
   justify-content: space-between;
   left: 160px;
+  margin-left: 200px;
+
+  margin-top: 20px;
+  /* width: 100%; */
 }
 
 .productItem {
-  width: 32%;
+  width: 25%;
   padding-bottom: 5%; /* 32:18, i.e. 16:9 */
   margin-bottom: 2%; /* (100-32*3)/2 */
 }
@@ -96,15 +105,13 @@ img {
   background-color: #f1f1f1;
   text-align: center;
 }
-.productContainer {
-  margin-left: 160px;
-  width: 100%;
-}
+
 .relativeCheck {
   text-indent: 200px;
 }
 .topScreen {
   z-index: 2;
+  margin-bottom: 0px;
 }
 span {
   display: inline-block;

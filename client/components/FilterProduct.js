@@ -109,8 +109,8 @@ export class FilterProduct extends React.Component {
     const { handlePriceSubmit } = this;
     return (
       <div>
-        <nav className="navbar navbar-expand-lg bg-light">
-          <form className="d-flex mx-2" onSubmit={this.handleInstSubmit}>
+        <nav className="navbar navbar-expand-lg bg-light ">
+          <form className="d-flex mx-3" onSubmit={this.handleInstSubmit}>
             <select
               name="instrument"
               onChange={this.handleChange}
