@@ -41,9 +41,8 @@ class Navbar extends React.Component {
 
   render() {
     return (
-      <div className="topScreen">
+      <div className="navContainer">
         {/* <h1 className="storeTitle">Some Guitar Store</h1> */}
-
         <nav>
           {this.props.isLoggedIn ? (
             <div className="navBar">
@@ -73,13 +72,13 @@ class Navbar extends React.Component {
               </a>
             </div>
           ) : (
-            <div className="navLogged">
+            <div className="navLogged  position-relative">
               {/* The navbar will show these links before you log in */}
               <img src="GuitarMart.png" />
               <Link className="navText" to="/signup">
                 Sign Up
               </Link>
-              <Link className="navText" to="/login">
+              <Link className="navText " to="/login">
                 Log In
               </Link>
               <Link
@@ -89,14 +88,15 @@ class Navbar extends React.Component {
               >
                 All Products
               </Link>{' '}
-              <Link className="bi bi-cart navText" to="/cart/">
+              <Link className="bi bi-cart navText cartClass " to="/cart/">
                 {` (${this.state.count})`}
               </Link>
               {/* <Link to="/products">All Products</Link> */}
             </div>
           )}
+
+          <hr />
         </nav>
-        <hr />
       </div>
     );
   }
