@@ -9,7 +9,7 @@ const Page404 = () => {
       Page Not Found
       </h1>
 
-      <Link to="/" className="mb-3">
+      <Link to="/home" className="mb-3">
         <h3>Click here to return to the Home Page</h3>
       </Link>
     </div>
