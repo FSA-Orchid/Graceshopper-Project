@@ -10,7 +10,7 @@ import {
 } from '../store/allproducts';
 import { addToCartThunk, updateQuantityCartThunk } from '../store/cart';
 import { toast } from 'react-toastify';
-import { injectStyle } from 'react-toastify/dist/inject-style';
+
 
 export function AllProducts(props) {
   const [productPage, setPage] = useState(0);
