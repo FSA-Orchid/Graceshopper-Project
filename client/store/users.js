@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
 const initialstate = [];
 
-const FetchUsers = "FETCH_USERS";
-const DeleteUser = "DELETE_USER";
-
+const FetchUsers = 'FETCH_USERS';
+const DeleteUser = 'DELETE_USER';
+const UpdateUser = 'UPDATE_USER';
 
 //this page is for admin control of users
 
@@ -21,7 +21,7 @@ export const updateUser = (user) => {
 export const fetchUsersThunk = () => {
   return async function (dispatch) {
     try {
-      let response = await axios.get("/api/users");
+      let response = await axios.get('/api/users');
       let users = response.data;
       dispatch(fetchUsers(users));
     } catch (err) {

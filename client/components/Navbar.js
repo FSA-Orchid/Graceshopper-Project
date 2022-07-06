@@ -43,7 +43,6 @@ class Navbar extends React.Component {
 
   render() {
     return (
-
       <div className="navContainer">
         {/* <h1 className="storeTitle">Some Guitar Store</h1> */}
 
