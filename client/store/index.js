@@ -9,6 +9,9 @@ import cart from './cart';
 import orderHistory from './orderHistory';
 import allUsers from './users';
 import singleUser from './singleUser';
+import paymentInfo from './payment'
+import shippingAddresses from './shipAddress'
+
 
 const reducer = combineReducers({
   auth: auth,
@@ -18,6 +21,8 @@ const reducer = combineReducers({
   orders: orderHistory,
   users: allUsers,
   user: singleUser,
+  paymentInfo: paymentInfo,
+  shippingAddresses: shippingAddresses
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware)

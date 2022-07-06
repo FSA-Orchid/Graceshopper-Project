@@ -11,7 +11,7 @@ const RemoveFromCart = "REMOVE_FROM_CART";
 const AddToCart = "ADD_TO_CART";
 const UpdateQuantityCart = "UPDATE_QUANTITY_CART";
 
-//this function will split an array in two depending
+//this function will split an array in two depending if they include part of the array or not
 function split(array, cart) {
   return array.reduce(
     ([toUpdate, toAdd], item) => {
@@ -130,20 +130,53 @@ export const clearCartThunk = (id) => {
 };
 
 //this will complete the order and clear the state for this cart
-export const closeOrderThunk = (id) => {
+export const closeOrderThunk = (id, email, shipping, payment) => {
   return async function (dispatch) {
     try {
       if(id){
-      await axios.put(`/api/users/${id}/cart/complete`);
+
+      await axios.put(`/api/users/${id}/cart/complete`,
+      shipping,
+      payment);
       dispatch(clearCart())
     }
+    else{
+      let cartParse = localStorage.getItem("cart");
+      let localCart = JSON.parse(cartParse)
+
+
+      let cart = await axios.put(`/api/users/notLogged`, {
+        email,
+        shipping,
+        payment
+      })
+      let cartData = cart.data
+
+      localCart.map(async (item) => await axios.post(`/api/carts/notLogged/${cartData.id}`, {
+        productId: item.id,
+        inventory: item.orderProduct.inventory,
+        price: item.price
+      })
+      )
+
       localStorage.removeItem("cart")
       dispatch(clearCart())
+    }
     } catch (err) {
       console.log(err);
     }
   };
 };
+
+// export const closeOrderNotLoggedThunk = (email) => {
+//   return async function (dispatch) {
+//     try {
+//       if(email){
+//         await axios.g
+//       }
+//     }
+//   }
+// }
 
 export const removeFromCartThunk = (id, product) => {
   return async function (dispatch) {

@@ -18,6 +18,7 @@ class Navbar extends React.Component {
 
   componentDidMount() {
     this.props.fetchCart(this.props.auth.id);
+
     let total = this.props.cart.reduce((total, item) => total + 1*(item.orderProduct.inventory), 0)
     this.setState({
       count: total
@@ -41,7 +42,7 @@ class Navbar extends React.Component {
     return (
       <div className='topScreen'>
         <div>
-        <h1 className="storeTitle">Some Guitar Store</h1>
+        <h1 className="storeTitle">Guitar Store</h1>
         <nav>
           {this.props.isLoggedIn ? (
             <div className="navBar">

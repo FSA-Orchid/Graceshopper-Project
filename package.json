@@ -1,7 +1,7 @@
 {
-  "name": "fs-app-template",
-  "version": "2.0.0",
-  "description": "Some boilerplate code to get you started - get shakin'!",
+  "name": "Guitar Store",
+  "version": "1.0.1",
+  "description": "An E-Commerce Bonanza",
   "main": "index.js",
   "scripts": {
     "build": "webpack",
@@ -17,7 +17,7 @@
     "test:dev:models": "npm run test:dev -- --grep=model",
     "test:dev:routes": "npm run test:dev -- --grep=route"
   },
-  "author": "Fullstack Academy of Code",
+  "author": "Chris Ly, James Carmody, Jeff Lupton, Zach Harder, using a boiler plate from the Fullstack Academy of Code",
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.0.0",
@@ -29,8 +29,7 @@
     "morgan": "^1.9.1",
     "pg": "^8.5.1",
     "react-bootstrap": "^2.4.0",
-    "react-paginate": "^8.1.3",
-    "react-toastify": "^9.0.3",
+    "react-toastify": "^9.0.4",
     "sequelize": "^6.3.5"
   },
   "devDependencies": {

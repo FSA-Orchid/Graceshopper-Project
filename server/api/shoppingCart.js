@@ -27,4 +27,21 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+
+//This router will create a filled cart and products within the cart, so when a person sign's up, they will inherit the orders done with their email
+router.post("/notLogged/:cartid", async (req,res,next) => {
+  try{
+    await OrderProducts.create({
+      cartId: req.params.cartid,
+      productId: 1 * req.body.productId,
+      inventory: 1 * req.body.inventory,
+      totalPrice: 1 * req.body.inventory * req.body.price,
+    })
+
+    res.send('Success')
+  }
+  catch(err) {
+    next(err)
+  }
+})
 module.exports = router;

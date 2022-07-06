@@ -12,7 +12,6 @@ module.exports = db.define("cart", {
   },
   userEmail: {
     type: Sequelize.STRING,
-    defaultValue: false,
     allowNull: true,
   }
 });
