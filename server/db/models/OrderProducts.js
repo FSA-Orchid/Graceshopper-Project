@@ -17,6 +17,7 @@ const orderProduct = db.define('orderProduct', {
       notEmpty: true,
     },
   },
+
 });
 
 module.exports = orderProduct;

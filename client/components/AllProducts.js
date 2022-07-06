@@ -1,21 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import FilterProduct from './FilterProduct';
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import FilterProduct from "./FilterProduct";
 import {
   setGuitarsThunk,
   setBassThunk,
   setProductsThunk,
   deleteProductThunk,
+
 } from '../store/allproducts';
 import { addToCartThunk, updateQuantityCartThunk } from '../store/cart';
 import { toast } from 'react-toastify';
 import { injectStyle } from 'react-toastify/dist/inject-style';
 export function AllProducts(props) {
+
+} from "../store/allproducts";
+import { addToCartThunk, updateQuantityCartThunk } from "../store/cart";
+import { toast } from "react-toastify";
+
+export function AllProducts(props) {
+  const [productPage, setPage] = useState(0);
+  const [productsToRender, setProductsRender] = useState([]);
+  const [productsPartition, setPartition] = useState([]);
+
   useEffect(() => {
     props.fetchProducts();
   }, []);
-  injectStyle();
+
+  //This useEffect will carve up all products into separate arrays in one array, each array is a different page, and when the user picks another page, the next set of products will render
+  useEffect(() => {
+    let pages = Math.ceil(props.products.length / 9);
+    let array = [];
+    for (let i = 0; i < pages; i++) {
+      array.push(props.products.slice(i * 9, i * 9 + 9));
+    }
+    setPartition(array);
+    setPage(0);
+  }, [props.products]);
+
+  //When productPage number changes, the products will re-render
+  useEffect(() => {
+    setProductsRender(productsPartition[productPage]);
+  }, [productsPartition, productPage]);
 
   const checkIt = (product) => {
     const cart = props.cart;
@@ -24,23 +50,36 @@ export function AllProducts(props) {
     let filter = cart.filter((cartProd) => cartProd.id === product.id);
     if (filter.length) {
       let quantitynew = 1 + 1 * filter[0].orderProduct.inventory;
+
       let message = 'More Of The Same Added To Cart.';
       let status = 'success';
       if (quantitynew > product.inventory) {
         quantitynew = product.inventory;
         message = 'Max Quantity Already In Cart!';
         status = 'error';
+
       }
       props.updateCart(userId, product.id, quantitynew);
       toast[status](message);
     } else {
       let quantitynew = 1;
       props.addToCart(userId, product, quantitynew);
-      toast.success('Item Added To Cart Successfully!');
+
+      toast.success("Item Added To Cart Successfully!");
     }
   };
 
-  if (!props.products.length) {
+  const handlePageChange = (direction) => {
+    if (direction == "add" && productPage < productsPartition.length - 1) {
+      setPage(productPage + 1);
+    }
+    if (direction == "minus" && productPage >= 1) {
+      setPage(productPage - 1);
+    }
+  };
+
+  if (!productsToRender || !productsToRender.length) {
+
     return (
       <div>
         <FilterProduct />
@@ -55,7 +94,7 @@ export function AllProducts(props) {
         <FilterProduct />
         <div className="productContainer">
           {props.user.isAdmin
-            ? props.products.map((product) => (
+            ? productsToRender.map((product) => (
                 <div className="productItem" key={product.id}>
                   <img src={product.imageUrl} className="photo" />
                   <h2>
@@ -91,7 +130,7 @@ export function AllProducts(props) {
                   </h2>
                 </div>
               ))
-            : props.products.map((product) => (
+            : productsToRender.map((product) => (
                 <div className="productItem" key={product.id}>
                   <img src={product.imageUrl} className="photo" />
                   <h2>
@@ -100,7 +139,7 @@ export function AllProducts(props) {
                       to={`/products/${product.id}/`}
                     >
                       {product.year} {product.make} - {product.model}
-                    </Link>{' '}
+                    </Link>{" "}
                     <br />
                     <div className="price">{`$${(product.price / 100).toFixed(
                       2
@@ -121,6 +160,37 @@ export function AllProducts(props) {
                   </h2>
                 </div>
               ))}
+        </div>
+        <div className='buttons'>
+        <button
+          onClick={() => {
+            handlePageChange("minus");
+          }}
+        >
+          Previous Page
+        </button>
+        {productsPartition.map((notUsed, idx) => (
+          idx > productPage +2 && idx !== productsPartition.length-1 || idx < productPage-2 && idx !== 0 ?
+           <></>
+          :
+          <button
+          className="pageButton"
+          onClick ={() => setPage(idx)}>
+            {idx === productPage ?
+            <div className="pickedButton" ><span>{idx+1}</span></div>
+            :
+           <span>{idx+1}</span>
+              }
+          </button>
+
+        ))}
+        <button
+          onClick={() => {
+            handlePageChange("add");
+          }}
+        >
+          Next Page
+        </button>
         </div>
       </div>
     );
