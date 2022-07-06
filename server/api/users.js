@@ -235,7 +235,7 @@ router.get("/:id/payment", async (req, res, next) => {
   try {
     const payments = await PaymentInfo.findAll({
       where: { userId: req.params.id },
-      exclude: ["cardNumber"],
+      attributes: {exclude: ["cardNumber"]},
     });
     res.send(payments);
   } catch (err) {
@@ -266,13 +266,13 @@ router.post("/:id/payment", async (req, res, next) => {
   }
 });
 
-router.get("/:id/shipment", async (req, res, next) => {
+router.get("/:id/shipping", async (req, res, next) => {
   try {
-    const payments = await PaymentInfo.findAll({
+    const shipments = await ShippingAddress.findAll({
       where: { userId: req.params.id },
-      exclude: ["cardNumber"],
+
     });
-    res.send(payments);
+    res.send(shipments);
   } catch (err) {
     next(err);
   }
@@ -286,6 +286,7 @@ router.post("/:id/shipping", async (req, res, next) => {
       firstName: body.firstName,
       lastName: body.lastName,
       state: body.state,
+      email: body.email,
       city: body.city,
       zipCode: 1*body.zipCode,
       apartmentNumber: body.apartmentNumber,

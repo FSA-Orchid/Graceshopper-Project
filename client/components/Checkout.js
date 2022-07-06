@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import {addShippingThunk, fetchShippingThunk} from "../store/shipAddress"
 import {addPaymentThunk, fetchPaymentsThunk} from "../store/payment"
 import axios from "axios";
+import ShippingList from "./ShippingList";
 
 class Checkout extends React.Component {
   constructor() {
@@ -54,6 +55,8 @@ class Checkout extends React.Component {
 
   componentDidMount() {
     this.props.fetchCart(this.props.auth.id);
+    this.props.fetchPayment(this.props.auth.id)
+    this.props.fetchShipping(this.props.auth.id)
     this.setState({
       cart: this.props.cart,
       email: this.props.auth.email
@@ -171,8 +174,8 @@ class Checkout extends React.Component {
         return;
       }
 
-      let newShipping = this.props.addShipping(this.props.auth.id, this.state.shipping, this.state.email)
-      console.log(newShipping)
+      this.props.addShipping(this.props.auth.id, this.state.shipping, this.state.email)
+
   }
 
   handlePayment() {
@@ -219,7 +222,7 @@ class Checkout extends React.Component {
   }
 
   render() {
-
+    console.log(this.props)
     if (this.state.complete === true) {
       return <h1>Transaction complete! Thank you for your business.</h1>;
     }
@@ -253,7 +256,7 @@ class Checkout extends React.Component {
             Total Price :${((total / 100) * 1.08).toFixed(2)}
           </h3>
         </div>
-
+          <ShippingList />
         <button
           type="button"
           className="collapsible"
@@ -371,7 +374,8 @@ class Checkout extends React.Component {
             <h3>Card Number*:</h3>
           </span>
           <span>
-            <input type="text" name="cardNumber" value={card.cardNumber} />
+            <input type="text"
+            maxLength='16' name="cardNumber" value={card.cardNumber} />
           </span>
 
           <span>
@@ -393,7 +397,8 @@ class Checkout extends React.Component {
           </span>
           <span>
 
-            <input type="text" name="securityCode" value={card.securityCode} />
+            <input type="text"
+            maxLength='4'name="securityCode" value={card.securityCode} />
           </span>
           <br />
           <span>
@@ -449,6 +454,7 @@ class Checkout extends React.Component {
           <br />
           </div>
           <button
+          type='button'
           onClick={() => {this.handlePayment()}}
           >
             Save Payment Information
@@ -470,6 +476,8 @@ class Checkout extends React.Component {
 const mapState = (state) => ({
   cart: state.cart,
   auth: state.auth,
+  payment: state.paymentInfo,
+  shipping: state.shippingAddresses
 });
 
 const mapDispatch = (dispatch) => ({

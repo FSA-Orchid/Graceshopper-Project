@@ -9,6 +9,19 @@ const shippingInfo = db.define('shippingInfo', {
   apartmentNumber: {
     type: Sequelize.STRING,
   },
+  firstName:{
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  lastName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    isEmail: true
+  },
   city: {
     type: Sequelize.STRING,
     allowNull: false,

@@ -33,11 +33,12 @@ export const fetchShippingThunk = (userId) => {
   }
 }
 
-export const addShippingThunk = (userId, shipping) => {
+export const addShippingThunk = (userId, shipping, email) => {
   return async function (dispatch) {
     try{
       if(userId){
-      let response = await axios.post(`/api/users/${userId}/shipping`,shipping
+      shipping.email = email
+      let response = await axios.post(`/api/users/${userId}/shipping`, shipping,
       )
       const newShipping = response.data
       console.log(newShipping)
