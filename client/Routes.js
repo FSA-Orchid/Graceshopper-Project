@@ -34,6 +34,7 @@ class Routes extends Component {
 
             <Redirect from="/login#" to="/home" />
             <Redirect from="/login" to="/home" />
+            <Redirect from="/api/" to="/home" />
             <Route exact path="/products" component={AllProducts} />
             <Route  path="/products/:id" component={SingleProduct} />
             <Route  path="/products/:id/admin" component={UpdateProduct} />
@@ -50,6 +51,7 @@ class Routes extends Component {
         ) : (
           <Switch>
             <Route path="/" exact component={Login} />
+            <Redirect from="/api" to="/" />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/products" component={AllProducts} />
