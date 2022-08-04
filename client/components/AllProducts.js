@@ -155,6 +155,7 @@ export function AllProducts(props) {
                 </div>
               ))}
         </div>
+        {/*pagination */}
         <div className="buttons">
           <button
             onClick={() => {
