@@ -70,17 +70,20 @@ function Navbar (props) {
                 All Products
               </Link>
               <Link to="/user/">User Profile</Link>
-              <Link className="bi bi-cart" to="/cart/">
-                {` (${count})`}
-              </Link>
+              <div className='navSideButtons'>
               {props.isLoggedIn && props.auth.isAdmin ? (
                 <Link to="/users/">All Users</Link>
               ) : (
                 <></>
               )}
+              <Link className="bi bi-cart" to="/cart/">
+                {` (${count})`}
+              </Link>
+
               <a className="navText" href="#" onClick={props.handleClick}>
                 Logout
               </a>
+              </div>
             </div>
           ) : (
             <div className="navLogged  position-relative">

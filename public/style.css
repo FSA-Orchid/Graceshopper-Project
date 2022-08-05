@@ -17,6 +17,11 @@ button {
   border: solid black 2px;
 }
 
+button:hover {
+  color: hotpink;
+  text-shadow: #000 1px 1px;
+}
+
 nav a {
   display: inline-block;
   margin: 1em;
@@ -44,6 +49,10 @@ form div {
   justify-content: space-evenly;
   background-color: lightgray;
   margin: auto;
+}
+
+.navSideButtons {
+  float: right;
 }
 
 .storeTitle {
@@ -91,9 +100,13 @@ form div {
   height: 300px;
   border: hotpink solid;
   background-color: rgb(255, 255, 255);
+  box-shadow: #000 4px 4px;
   border-radius: 30px;
   text-align: center;
   margin-left: 10px;
+}
+.productItem:hover {
+  border: rgba(0, 0, 0, 0.05);
 }
 
 .collapsible {
@@ -165,7 +178,8 @@ ul {
   left: 0;
   background-image: url(/assets/westerbergForSale.jpg);
   width: 70%;
-  height: 700px;
+  height: 900px;
+  background-repeat: no-repeat;
   margin: auto;
 }
 
@@ -175,6 +189,7 @@ ul {
 .photoSingle {
   max-height: 400px;
   max-width: 80%;
+  max-width: 1000px;
 }
 .footer {
   text-align: center;
