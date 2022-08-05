@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
 import { setOrderThunk } from '../store/orderHistory';
@@ -9,66 +8,78 @@ import { updateUserThunk } from '../store/users';
 //Wanted to make the order dates collapsible
 
 
-class UserPage extends React.Component {
-constructor() {
-  super()
-  this.state = {
-    one: {display: 'none'},
-    two: {display: 'none'},
+function UserPage (props){
+// constructor() {
+//   super()
+//   this.state = {
+//     one: {display: 'none'},
+//     two: {display: 'none'},
+//   }
+//   this.accordionContent =[]
+// }
+const [sesame, setSesame] = useState([
+  {display: 'none'},{display: 'none'},
+])
+const [accordianContent, setContent] = useState([])
+
+useEffect(()=> {
+  props.fetcherOrders(props.auth.id);
+  props.fetchUser(props.auth.id)
+}, [])
+
+useEffect(() => {
+  if(props.orders.length > 0){
+  let newAccord = Array(props.orders.length).fill(false)
+  setContent(newAccord)
   }
-  this.accordionContent =[]
-  this.toggler=this.toggler.bind(this)
-  this.accordionToggle = this.accordionToggle.bind(this)
-}
+}, [props.orders])
 
-componentDidMount() {
-  this.props.fetcherOrders(this.props.auth.id);
-  this.props.fetchUser(this.props.auth.id)
-}
-
-toggler (id) {
-  let nestState = this.state[id]
+function toggler (id) {
+  let nestState = sesame[id]
   if(nestState.display === 'none'){
-    nestState.display = 'block'
-  this.setState({nestState})
+    sesame[id] = {display : 'block'}
+  setSesame([...sesame, sesame[id] = {display : 'block'}])
   return
 }
-if(nestState.display === 'block'){
-  nestState.display = 'none'
-  this.setState({nestState})
+else {
+  sesame[id] = {display : 'none'}
+  setSesame([...sesame, sesame[id] = {display : 'none'}])
 }}
 
-accordionToggle(key) {
-  let changes = this.accordionContent[key]
-  if(changes.style.display === 'none'){
-    changes.style.display = 'block'
+function accordionToggle(key) {
+  let changes = accordianContent
+  console.log(changes)
+  if(!changes[key]){
+    changes[key] = true
+    setContent(changes)
     return
   }
   else {
-    changes.style.display = 'none'
+    changes[key] = false
+    setContent(changes)
   }
 }
+  console.log(accordianContent)
+  console.log(sesame)
 
-
-  render (){
 
   return (
     <div>
     <ul className='sidenav'>
-      <li><button onClick= {() => this.toggler('one')}>User Profile Information</button></li>
-      <li><button onClick= {() => this.toggler('two')}> Order History</button></li>
+      <li><button onClick= {() => toggler(0)}>User Profile Information</button></li>
+      <li><button onClick= {() => toggler(1)}> Order History</button></li>
     </ul>
-    <div className= 'contentUser' style= {{display: this.state.one.display}}>
-    <h2>{this.props.auth.username} --- {this.props.auth.email}</h2>
-    <h3>{this.props.auth.address}</h3>
+    <div className= 'contentUser' style= {sesame[0]}>
+    <h2>{props.auth.username} --- {props.auth.email}</h2>
+    <h3>{props.auth.address}</h3>
     </div>
 
-    <div className = 'contentUser' style= {{display: this.state.two.display}}>
-      {this.props.orders.map((order, key)=>{
+    <div className = 'contentUser' style= {sesame[1]}>
+      {props.orders.map((order, key)=>{
       return (
       <div key = {key}>
-      <button type="button" onClick={() => this.accordionToggle(key)} className="collapsible">Ordered on {(order.updatedAt).slice(0,10)} at {(order.updatedAt).slice(11,19)}</button>
-      <form style={{display: 'none'}} ref={accordionContent => this.accordionContent[key] = accordionContent}>
+      <button type="button" onClick={() => accordionToggle(key)} className="collapsible">Ordered on {(order.updatedAt).slice(0,10)} at {(order.updatedAt).slice(11,19)}</button>
+      <form style={{display : accordianContent[key] ? 'block' : 'none'}} >
       {order.products.map((product, key) => {
         return (<div key={key}>
             <h5>{product.name}</h5>
@@ -84,7 +95,7 @@ accordionToggle(key) {
     </div>
     </div>
   )
-}
+
 }
 
 const mapState = (state) => {
