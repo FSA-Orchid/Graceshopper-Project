@@ -59,8 +59,8 @@ function SingleProduct(props) {
   const product = props.product;
   if(!product){return <h1>Product Not Found</h1>}
   return (
-    <div>
-      <img src={product.imageUrl} className="photo" />
+    <div className="singleProduct">
+      <img src={product.imageUrl} className="photoSingle" />
       <p>Instrument: {product.instrument}</p>
       <p>Make: {product.make}</p>
       <p>Model: {product.model}</p>

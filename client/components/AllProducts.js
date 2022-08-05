@@ -84,7 +84,7 @@ export function AllProducts(props) {
     );
   } else
     return (
-      <div>
+      <div className='allProducts'>
         <FilterProduct />
         <div className="productContainer">
           {props.user.isAdmin
@@ -111,7 +111,7 @@ export function AllProducts(props) {
                     {product.inventory > 0 ? (
                       <button
                         type="button"
-                        className="btn btn-danger"
+                        className="btn-danger"
                         onClick={() => {
                           checkIt(product);
                         }}

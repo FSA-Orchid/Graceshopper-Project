@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../store';
@@ -8,76 +8,86 @@ import AllUsers from './AllUsers';
 
 import { Login, Signup } from './AuthForm';
 
-class Navbar extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      count: 0,
-    };
-  }
+function Navbar (props) {
 
-  componentDidMount() {
-    this.props.fetchCart(this.props.auth.id);
+  const [count, setCartCount] = useState(0)
 
-    let total = this.props.cart.reduce(
+  useEffect(()=> {
+    props.fetchCart(props.auth.id)
+  }, [props.auth.id])
+
+  useEffect(() => {
+    let total = props.cart.reduce(
       (total, item) => total + 1 * item.orderProduct.inventory,
       0
-    );
+    )
+    setCartCount(total)
+  }, [props.cart])
 
-    this.setState({
-      count: total,
-    });
-  }
+  // componentDidMount() {
+  //   this.props.fetchCart(this.props.auth.id);
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.cart !== this.props.cart) {
-      let total = this.props.cart.reduce(
-        (total, item) => total + 1 * item.orderProduct.inventory,
-        0
-      );
-      this.setState({
-        count: total,
-      });
-    }
-  }
+  //   let total = this.props.cart.reduce(
+  //     (total, item) => total + 1 * item.orderProduct.inventory,
+  //     0
+  //   );
 
-  render() {
+  //   this.setState({
+  //     count: total,
+  //   });
+  // }
+
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.cart !== this.props.cart) {
+  //     let total = this.props.cart.reduce(
+  //       (total, item) => total + 1 * item.orderProduct.inventory,
+  //       0
+  //     );
+  //     this.setState({
+  //       count: total,
+  //     });
+  //   }
+  // }
+
+
     return (
       <div className="navContainer">
         {/* <h1 className="storeTitle">Some Guitar Store</h1> */}
 
         <nav>
-          {this.props.isLoggedIn ? (
-            <div className="navBar">
+          {props.isLoggedIn ? (
+            <div className="navLogged  position-relative">
               {/* The navbar will show these links after you log in */}
-              <img src="GuitarMart.png" />
-              <Link className="navText" to="/home">
-                Home
+              <Link className="navText" to="/">
+              <img className ='logo'src="guitarmart.png" />
+
               </Link>
               <Link
                 className="navText"
                 to="/products"
-                onClick={() => this.props.fetchAllProducts()}
+                onClick={() => props.fetchAllProducts()}
               >
                 All Products
               </Link>
               <Link to="/user/">User Profile</Link>
               <Link className="bi bi-cart" to="/cart/">
-                {` (${this.state.count})`}
+                {` (${count})`}
               </Link>
-              {this.props.isLoggedIn && this.props.auth.isAdmin ? (
+              {props.isLoggedIn && props.auth.isAdmin ? (
                 <Link to="/users/">All Users</Link>
               ) : (
-                <div />
+                <></>
               )}
-              <a className="navText" href="#" onClick={this.props.handleClick}>
+              <a className="navText" href="#" onClick={props.handleClick}>
                 Logout
               </a>
             </div>
           ) : (
             <div className="navLogged  position-relative">
               {/* The navbar will show these links before you log in */}
-              <img src="GuitarMart.png" />
+              <Link className="navText" to="/">
+              <img className ='logo' src="guitarmart.png" />
+              </Link>
               <Link className="navText" to="/signup">
                 Sign Up
               </Link>
@@ -87,12 +97,12 @@ class Navbar extends React.Component {
               <Link
                 className="navText"
                 to="/products"
-                onClick={() => this.props.fetchAllProducts()}
+                onClick={() => props.fetchAllProducts()}
               >
                 All Products
               </Link>{' '}
               <Link className="bi bi-cart navText cartClass " to="/cart/">
-                {` (${this.state.count})`}
+                {` (${count})`}
               </Link>
               {/* <Link to="/products">All Products</Link> */}
             </div>
@@ -102,7 +112,7 @@ class Navbar extends React.Component {
         </nav>
       </div>
     );
-  }
+
 }
 /**
  * CONTAINER

@@ -9,6 +9,13 @@ a {
 label {
   display: block;
 }
+button {
+  background-color: rgb(14, 177, 169);
+  border-radius: 30px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border: solid black 2px;
+}
 
 nav a {
   display: inline-block;
@@ -20,11 +27,11 @@ form div {
   display: inline-block;
 }
 
-img {
-  min-width: 150px;
-  min-height: 150px;
-  max-width: 150px;
-  max-height: 150px;
+.logo {
+  max-width: 130px;
+  max-height: 130px;
+  border: solid black;
+  border-radius: 10px;
 }
 
 .listingInfo {
@@ -36,7 +43,7 @@ img {
   display: flex;
   justify-content: space-evenly;
   background-color: lightgray;
-  margin-bottom: 0px;
+  margin: auto;
 }
 
 .storeTitle {
@@ -47,11 +54,9 @@ img {
   color: black;
 }
 
-
 .navLogged {
   margin-bottom: 0px;
 }
-
 
 .guitarFilter {
   display: flex;
@@ -62,17 +67,33 @@ img {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  left: 160px;
-  margin-left: 200px;
-
+  width: 95%;
+  text-align: center;
+  margin: auto;
   margin-top: 20px;
   /* width: 100%; */
 }
+.photo {
+  width: auto;
+  max-width: 90%;
+  height: 100px;
+  border-radius: 30px;
+}
 
+.allProducts {
+  background-color: rgb(14, 177, 169);
+  padding-bottom: 20px;
+}
 .productItem {
-  width: 25%;
+  width: 20%;
   padding-bottom: 5%; /* 32:18, i.e. 16:9 */
   margin-bottom: 2%; /* (100-32*3)/2 */
+  height: 300px;
+  border: hotpink solid;
+  background-color: rgb(255, 255, 255);
+  border-radius: 30px;
+  text-align: center;
+  margin-left: 10px;
 }
 
 .collapsible {
@@ -124,6 +145,55 @@ ul {
   list-style-type: none;
 }
 
+.buttons {
+  text-align: center;
+  margin: auto;
+}
+
+.home {
+  text-align: center;
+}
+.homeImage {
+  width: 80%;
+  height: auto;
+}
+
+.greeting {
+  color: hotpink;
+  text-shadow: 1px 1px 0 rgb(0, 0, 0);
+  top: 0;
+  left: 0;
+  background-image: url(/assets/westerbergForSale.jpg);
+  width: 70%;
+  height: 700px;
+  margin: auto;
+}
+
+.singleProduct {
+  text-align: center;
+}
+.photoSingle {
+  max-height: 400px;
+  max-width: 80%;
+}
+.footer {
+  text-align: center;
+  border-top: #000 solid;
+  background-color: black;
+  color: white;
+}
+
+.footerNav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.productList {
+  height: 500px;
+  padding-bottom: 20px;
+}
+
 /*.sidenav {
   height: 100%; /* Full-height: remove this if you want "auto" height
   width: 160px; /* Set the width of the sidebar
@@ -139,8 +209,11 @@ ul {
   width: 120px;
 } */
 .price {
-  color: red;
+  color: hotpink;
+  text-shadow: black 1px 1px;
 }
+
+/*Below is for Toastify */
 
 :root {
   --toastify-color-light: #fff;

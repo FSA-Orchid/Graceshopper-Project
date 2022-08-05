@@ -69,7 +69,7 @@ export function Cart(props) {
     <div className="productList">
       {props.cart.map((product, index) => {
             return (
-              <div key={product.id}>
+              <div  classname='cartItem'key={product.id}>
                 <img src={product.imageUrl} className="photo" />
                 <h4>
                   <Link to={`/products/${product.id}/`}>
@@ -88,6 +88,7 @@ export function Cart(props) {
                     //   (product.orderProduct.inventory)
                     // }
                   ></input>
+                  <div className="editCartButtons">
                   <button
                     type="submit"
                     onClick={() => {
@@ -105,10 +106,12 @@ export function Cart(props) {
                   >
                     X
                   </button>
+                  </div>
                 </h4>
               </div>
             );
           })}
+          <div>
       <button
         type="submit"
         className="clear"
@@ -121,8 +124,8 @@ export function Cart(props) {
         Clear Cart
       </button>
 
-        <Link to="/checkout">Checkout</Link>
-
+        <Link to="/checkout"><button type="button">Checkout</button></Link>
+        </div>
     </div>
   );
 }

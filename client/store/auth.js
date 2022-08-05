@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import history from "../history";
 import { setCartFromLoginThunk, clearCart} from "./cart";
 const TOKEN = "token";
@@ -43,6 +44,7 @@ export const authenticateSign =
 
       window.localStorage.setItem(TOKEN, res.data.token);
       dispatch(me());
+      toast.success("Logged in successfully!")
     } catch (authError) {
       return dispatch(setAuth({ error: authError }));
     }
@@ -55,6 +57,7 @@ export const authenticate =
 
       window.localStorage.setItem(TOKEN, res.data.token);
       dispatch(me());
+      toast.success("Logged in successfully!")
     } catch (authError) {
       return dispatch(setAuth({ error: authError }));
     }
@@ -67,6 +70,7 @@ export const logout = () => {
       localStorage.removeItem("cart");
       dispatch(clearCart());
       history.push("/login");
+
       dispatch(setAuth({}))
     } catch (err) {
       console.log(err);
