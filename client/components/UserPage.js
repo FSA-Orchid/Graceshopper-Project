@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import { setOrderThunk } from '../store/orderHistory';
 import { fetchUserThunk } from '../store/singleUser';
 import { updateUserThunk } from '../store/users';
-
+import {fetchPaymentsThunk, addPaymentThunk, updatePaymentThunk} from '../store/payment'
+import { fetchShippingThunk } from "../store/shipAddress";
+import {AddShipping} from "./addShipping"
+import {AddPayment} from "./addPayment"
 //Wanted to make the order dates collapsible
 
 
@@ -21,11 +24,19 @@ const [sesame, setSesame] = useState([
   {display: 'none'},{display: 'none'},
 ])
 const [accordianContent, setContent] = useState([])
+const [toggleShipping, setShippingToggle] = useState(false)
+const [togglePayment, setPaymentToggle] = useState(false)
+
 
 useEffect(()=> {
   props.fetcherOrders(props.auth.id);
   props.fetchUser(props.auth.id)
+  props.fetchAddresses(props.auth.id)
 }, [])
+
+useEffect(()=> {
+ toggleClick()
+}, [toggleShipping, togglePayment])
 
 useEffect(() => {
   if(props.orders.length > 0){
@@ -46,6 +57,20 @@ else {
   setSesame([...sesame, sesame[id] = {display : 'none'}])
 }}
 
+//This function will darken and lock the screen so the user can enter in information
+function toggleClick () {
+  if(!togglePayment && !toggleShipping){
+    document.body.style.overflow = "visible"
+    document.body.classList.remove("no-scroll")
+  }
+  if(togglePayment || toggleShipping)
+  {
+    window.scrollTo(0, 0)
+    document.body.style.overflow = "hidden"
+    document.body.classList.add("no-scroll")
+  }
+}
+
 function accordionToggle(key) {
   let changes = accordianContent
   console.log(changes)
@@ -59,9 +84,9 @@ function accordionToggle(key) {
     setContent(changes)
   }
 }
-  console.log(accordianContent)
-  console.log(sesame)
-
+  // console.log(accordianContent)
+  // console.log(sesame)
+console.log(props.shipping)
 
   return (
     <div>
@@ -72,6 +97,49 @@ function accordionToggle(key) {
     <div className= 'contentUser' style= {sesame[0]}>
     <h2>{props.auth.username} --- {props.auth.email}</h2>
     <h3>{props.auth.address}</h3>
+    <div>
+      <h1>User Shipping Information</h1>
+
+      {props.shipping && props.shipping.length ?
+      <div className="addressBox">
+      {props.shipping.map((info, index) =>(
+      <div className='addressInfo'key={index}>
+        <div>
+          <h4>{info.lastName}, {info.firstName}</h4>
+          <h5>{info.streetAddress}</h5>
+          {info.apartmentNumber ?
+          <h5>Apt.: {info.apartmentNumber}</h5> :<></>}
+          <h6>{info.city}, {info.state}</h6>
+          <h6>{info.zipCode}</h6>
+          </div>
+      </div>))} </div>
+        :
+        <h3>User has no current shipping information</h3>
+    }
+     <button type='button' onClick={() => setShippingToggle(true)}>Add a Shipping Address</button>
+     </div>
+     <div>
+      <h1>User Payment Information</h1>
+    {
+      props.payment && props.payment.length ?
+      (<div>
+          props.payment.map{(info) => (
+          <div>
+          <h4>{info.name}</h4>
+          <h5>{info.cardPreview}</h5>
+          <h5>Billing Information</h5>
+          {info.streetAddress}
+          {info.city},{info.state}
+          {info.zipcode}
+          {info.expirationDate}
+          </div>
+          )
+        }
+      </div>) :
+      <h3>No payment information stored.</h3>
+    }
+    <button type='button' onClick={() => setPaymentToggle(true)}>Add Payment Method</button>
+      </div>
     </div>
 
     <div className = 'contentUser' style= {sesame[1]}>
@@ -93,6 +161,20 @@ function accordionToggle(key) {
     })}
 
     </div>
+
+    {toggleShipping ?
+    <div className="fullScreenForm">
+    <AddShipping />
+    <button type='button' className="cancel" onClick={() => setShippingToggle(false)}>X</button>
+    </div>
+     :<></>
+    }
+    {togglePayment ?
+    <div className="fullScreenForm">
+    <AddPayment />
+    <button type='button' className="cancel" onClick={() => setPaymentToggle(false)}>X</button>
+    </div> : <></>
+    }
     </div>
   )
 
@@ -102,14 +184,18 @@ const mapState = (state) => {
   return {
     user: state.user,
     auth: state.auth,
-    orders: state.orders
+    orders: state.orders,
+    shipping: state.shippingAddresses,
+    payment: state.paymentInfo
   }
 }
 const mapDispatch = (dispatch) => {
   return {
   fetchUser: (id) => {dispatch(fetchUserThunk(id))},
   updateUser: (user) => {dispatch(updateUserThunk(user))},
-  fetcherOrders: (id) => {dispatch(setOrderThunk(id))}
+  fetcherOrders: (id) => {dispatch(setOrderThunk(id))},
+  fetchPayments: (id) => {dispatch (fetchPaymentsThunk(id))},
+  fetchAddresses: (id) => {dispatch(fetchShippingThunk(id))},
 }}
 
 export default connect(mapState, mapDispatch)(UserPage)

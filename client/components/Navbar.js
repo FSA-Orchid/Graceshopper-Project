@@ -55,13 +55,16 @@ function Navbar (props) {
         {/* <h1 className="storeTitle">Some Guitar Store</h1> */}
 
         <nav>
+          <span>
+        <Link className="navText" to="/">
+              <img className ='logo'src="/assets/guitarmart.png" />
+          </Link>
+          </span>
+          <span>
           {props.isLoggedIn ? (
             <div className="navLogged  position-relative">
               {/* The navbar will show these links after you log in */}
-              <Link className="navText" to="/">
-              <img className ='logo'src="guitarmart.png" />
 
-              </Link>
               <Link
                 className="navText"
                 to="/products"
@@ -76,27 +79,20 @@ function Navbar (props) {
               ) : (
                 <></>
               )}
-              <Link className="bi bi-cart" to="/cart/">
-                {` (${count})`}
-              </Link>
+
 
               <a className="navText" href="#" onClick={props.handleClick}>
                 Logout
               </a>
+              <Link className="bi bi-cart" to="/cart/">
+                {` (${count})`}
+              </Link>
               </div>
             </div>
           ) : (
             <div className="navLogged  position-relative">
               {/* The navbar will show these links before you log in */}
-              <Link className="navText" to="/">
-              <img className ='logo' src="guitarmart.png" />
-              </Link>
-              <Link className="navText" to="/signup">
-                Sign Up
-              </Link>
-              <Link className="navText " to="/login">
-                Log In
-              </Link>
+
               <Link
                 className="navText"
                 to="/products"
@@ -104,13 +100,21 @@ function Navbar (props) {
               >
                 All Products
               </Link>{' '}
+              <div className='navSideButtons'>
+              <Link className="navText" to="/signup">
+                Sign Up
+              </Link>
+              <Link className="navText " to="/login">
+                Log In
+              </Link>
               <Link className="bi bi-cart navText cartClass " to="/cart/">
                 {` (${count})`}
               </Link>
+              </div>
               {/* <Link to="/products">All Products</Link> */}
             </div>
           )}
-
+</span>
           <hr />
         </nav>
       </div>

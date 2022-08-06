@@ -270,7 +270,6 @@ router.get("/:id/shipping", async (req, res, next) => {
   try {
     const shipments = await ShippingAddress.findAll({
       where: { userId: req.params.id },
-
     });
     res.send(shipments);
   } catch (err) {

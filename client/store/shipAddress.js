@@ -25,6 +25,7 @@ export const fetchShippingThunk = (userId) => {
     try {
       let response = await axios.get(`/api/users/${userId}/shipping`)
       let shipping = response.data
+      console.log(shipping)
       dispatch(fetchShipping(shipping))
     }
     catch(err){

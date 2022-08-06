@@ -26,7 +26,7 @@ export default function Footer () {
     <Link className="navText" to="/">
             <img
               className="logo"
-              src="guitarmart.png"
+              src="assets/guitarmart.png"
               width="100px"
               height="100px"
 
