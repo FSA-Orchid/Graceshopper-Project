@@ -68,7 +68,7 @@ function SingleProduct(props) {
       <p>Color: {product.color}</p>
       <p>Condition: {product.condition}</p>
       <p>Description: {product.description}</p>
-      <p>Price: {product.price / 100}</p>
+      <p>Price: ${(product.price / 100).toFixed(2)}</p>
       <div>
         {product.inventory > 0 ? (
           <div>

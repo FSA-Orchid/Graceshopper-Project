@@ -32,6 +32,7 @@ useEffect(()=> {
   props.fetcherOrders(props.auth.id);
   props.fetchUser(props.auth.id)
   props.fetchAddresses(props.auth.id)
+  props.fetchPayments(props.auth.id)
 }, [])
 
 useEffect(()=> {
@@ -86,8 +87,7 @@ function accordionToggle(key) {
 }
   // console.log(accordianContent)
   // console.log(sesame)
-console.log(props.shipping)
-
+console.log(new Date(2022, 0), Date())
   return (
     <div>
     <ul className='sidenav'>
@@ -120,11 +120,10 @@ console.log(props.shipping)
      </div>
      <div>
       <h1>User Payment Information</h1>
-    {
-      props.payment && props.payment.length ?
-      (<div>
-          props.payment.map{(info) => (
-          <div>
+    {props.payment && props.payment.length ?
+      <div>
+          {props.payment.map((info, index) => (
+          <div key={index}>
           <h4>{info.name}</h4>
           <h5>{info.cardPreview}</h5>
           <h5>Billing Information</h5>
@@ -133,9 +132,9 @@ console.log(props.shipping)
           {info.zipcode}
           {info.expirationDate}
           </div>
-          )
+          ))
         }
-      </div>) :
+      </div> :
       <h3>No payment information stored.</h3>
     }
     <button type='button' onClick={() => setPaymentToggle(true)}>Add Payment Method</button>
@@ -161,17 +160,17 @@ console.log(props.shipping)
     })}
 
     </div>
-
+  {/* We're passing in the functions to close the component by signaling back to the parent */}
     {toggleShipping ?
     <div className="fullScreenForm">
-    <AddShipping />
+    <AddShipping selfClose={() => {setShippingToggle(false)}}/>
     <button type='button' className="cancel" onClick={() => setShippingToggle(false)}>X</button>
     </div>
      :<></>
     }
     {togglePayment ?
     <div className="fullScreenForm">
-    <AddPayment />
+    <AddPayment selfClose={() => {setPaymentToggle(false)}}/>
     <button type='button' className="cancel" onClick={() => setPaymentToggle(false)}>X</button>
     </div> : <></>
     }

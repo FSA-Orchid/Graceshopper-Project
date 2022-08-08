@@ -104,6 +104,8 @@ form div {
   height: 100px;
   border-radius: 30px;
 }
+.photoCart {
+}
 
 .allProducts {
   background-color: rgb(14, 177, 169);
@@ -221,7 +223,7 @@ ul {
 }
 
 .productList {
-  height: 500px;
+  min-height: 500px;
   padding-bottom: 20px;
 }
 .fullScreenForm {

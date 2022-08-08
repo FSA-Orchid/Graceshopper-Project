@@ -12,7 +12,7 @@ const [address, setAddress] = useState({
         apartmentNumber: "",
         zipCode: "",
         city: "",
-        email: ","
+        email: "",
 })
 
 
@@ -31,7 +31,7 @@ useEffect(() => {
 
 
 function handleShipment() {
-
+try {
   const {
     firstName,
     lastName,
@@ -55,9 +55,16 @@ function handleShipment() {
     );
     return;
   }
-
+  if(zipCode.length< 5) {
+    toast.error("Zip codes need a length of five or more.")
+  }
   props.addShipping(props.auth.id, address, address.email)
-
+  props.selfClose()
+  toast.success("Shipping Address Added!")
+}
+catch(err){
+  toast.error('There was an error.')
+}
 }
 
 

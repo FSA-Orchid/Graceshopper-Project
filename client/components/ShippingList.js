@@ -4,23 +4,24 @@ import { toast } from "react-toastify";
 import {addShippingThunk, fetchShippingThunk} from "../store/shipAddress"
 
 function ShippingList (props) {
-const [selectedShipping, setShipping] = useState(null)
 
 useEffect(() => {
-  props.fetchShipping()
+  if(props.user){
+  props.fetchShipping(props.user.id)
+  }
 }, [])
 
-
+console.log(props)
 return(
   <div>
     <h3>Select A Shipping Address Below:</h3>
     {props.shipping.map((shipAdd) => {
       return (
-        <div key={shipAdd.id}>
+        <button className='shippingPick'onClick={()=> props.pickedShipping(shipAdd.id)}key={shipAdd.id}>
           <h5>{shipAdd.firstName} {shipAdd.lastName}</h5>
           <h6>{shipAdd.streetAddress}</h6>
           <h6>{shipAdd.state}, {shipAdd.zipCode}</h6>
-        </div>
+        </button>
       )
     })}
   </div>

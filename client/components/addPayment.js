@@ -33,6 +33,7 @@ export function paymentForm (props) {
 
 
   function handlePayment() {
+    try {
     const {
       name,
       streetAddress,
@@ -40,7 +41,6 @@ export function paymentForm (props) {
       city,
       state,
       cardNumber,
-      cardPreview,
       securityCode,
       expirationDate,
       cardType,
@@ -59,16 +59,39 @@ export function paymentForm (props) {
         "All marked fields need to be entered to register address"
       );
       return;
+
     }
+    if(cardNumber.length < 16){
+      toast.error("A valid creedit card number must have 16 digits.")
+      return;
+    }
+    if(!props.auth.id){
+      props.passToParent(payment)
+      props.selfClose()
+      toast.success("Payment Information Added!")
+      return
+    }
+    else {
     props.addPayment(props.auth.id, payment, payment.email)
+    props.selfClose()
+    toast.success("Payment Information Added!")
+    }
+  }
+  catch(err) {
+    toast.error("There Was An Error")
+    console.log(err)
+    return;
   }
 
+  }
+  console.log(props)
   return (
     <div className="centerStage">
       <form
           className="card"
           onChange={(evt) => handleChangeCard(evt)}
         >
+          <div>
           <span>
             <h3>Credit Card*:</h3>
           </span>
@@ -95,19 +118,19 @@ export function paymentForm (props) {
           <span>
             <input type="text" name="name" value={payment.name} />
           </span>
-
+          <br />
           <span>
             <h3>Expiration Date*:</h3>
           </span>
           <span>
-            <input type="text" name="expirationDate" value={payment.expirationDate}/>
+            <input type="text"  size="10" name="expirationDate" value={payment.expirationDate}/>
           </span>
           <span>
             <h3>Security Code*:</h3>
           </span>
           <span>
             <input type="text"
-            maxLength='4'name="securityCode" value={payment.securityCode} />
+            maxLength='4' size="10"name="securityCode" value={payment.securityCode} />
           </span>
 
           <span>
@@ -119,6 +142,9 @@ export function paymentForm (props) {
           name='email'
           value={payment.email} />
           </span>
+          </div>
+
+
           <span><label> Use same address as shipping</label></span>
           {props.shipping && props.shipping.length ?
           <div className="addressBox">
@@ -197,8 +223,9 @@ const mapState = (state) => ({
   shipping: state.shippingAddresses
 });
 
-const mapDispatch = (dispatch) => ({
+const mapDispatch = (dispatch) => {
+ return {
   addPayment: (id, payment, email) => dispatch(addPaymentThunk(id, payment, email)),
-})
+ }}
 
 export const AddPayment = connect(mapState, mapDispatch)(paymentForm)

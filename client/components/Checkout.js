@@ -4,11 +4,14 @@ import { setProductsThunk } from "../store/allproducts";
 import { closeOrderThunk, setCartThunk } from "../store/cart";
 import { guestCheckThunk } from "../store/allproducts";
 import { toast } from "react-toastify";
-import {addShippingThunk, fetchShippingThunk} from "../store/shipAddress"
-import {addPaymentThunk, fetchPaymentsThunk} from "../store/payment"
+import { addShippingThunk, fetchShippingThunk } from "../store/shipAddress"
+import { addPaymentThunk, fetchPaymentsThunk } from "../store/payment"
+import { Link } from "react-router-dom";
 import axios from "axios";
 import ShippingList from "./ShippingList";
-
+import PaymentList from "./PaymentList";
+import { AddShipping } from "./addShipping";
+import { AddPayment } from "./addPayment"
 class Checkout extends React.Component {
   constructor() {
     super();
@@ -36,21 +39,25 @@ class Checkout extends React.Component {
       },
       one: { display: "block" },
       two: { display: "block" },
-      address: {display: 'block'},
+      address: { display: 'block' },
       complete: false,
       cart: [],
       email: '',
       checked: false,
       shippingID: 0,
-      paymentID: 0
+      paymentID: 0,
+      pickedAddress: -1,
+      pickedPayment: -1,
+      toggleShipping: false,
+      togglePayment: false,
+
     };
     this.handleChange = this.handleChange.bind(this);
     this.toggler = this.toggler.bind(this);
     this.handleChangeCard = this.handleChangeCard.bind(this)
-    this.guest = this.guest.bind(this);
     this.toggleAddress = this.toggleAddress.bind(this)
-    this.handleShipment = this.handleShipment.bind(this)
-    this.handlePayment = this.handlePayment.bind(this)
+    // this.handleShipment = this.handleShipment.bind(this)
+    // this.handlePayment = this.handlePayment.bind(this)
   }
 
   componentDidMount() {
@@ -63,19 +70,13 @@ class Checkout extends React.Component {
     });
   }
 
-  guest() {
-    if (!this.props.auth.id) {
-      this.state.cart.map((item) => {
-        this.props.guestCheck(item.id, item.orderProduct.inventory);
-      });
-    }
-  }
 
   componentDidUpdate(prevProps) {
     if (prevProps !== this.props) {
       this.setState({
         cart: this.props.cart || [],
-        email: this.props.auth.email
+        email: this.props.auth.email,
+
       });
     }
   }
@@ -93,10 +94,10 @@ class Checkout extends React.Component {
     }
   }
 
-  toggleAddress(evt){
+  toggleAddress(evt) {
     let payment = this.state.payment
     let shipping = this.state.shipping
-    if(evt.target.checked == true){
+    if (evt.target.checked == true) {
       payment.streetAddress = shipping.streetAddress
       payment.state = shipping.state
       payment.apartmentNumber = shipping.apartmentNumber
@@ -105,7 +106,7 @@ class Checkout extends React.Component {
       this.setState({
         payment,
         checked: true,
-        address:{display:'none'}
+        address: { display: 'none' }
       })
     }
     else {
@@ -117,20 +118,19 @@ class Checkout extends React.Component {
       this.setState({
         payment,
         checked: false,
-        address:{display:'block'}
+        address: { display: 'block' }
       })
     }
   }
 
   handleChange(evt) {
-    // in case its not in number format
-    if(evt.target.name === 'email'){
-      this.setState({email: evt.target.value})
+    if (evt.target.name === 'email') {
+      this.setState({ email: evt.target.value })
       return
     }
     let shipping = this.state.shipping;
     let payment = this.state.payment
-    if(this.state.checked === true){
+    if (this.state.checked === true) {
       payment[evt.target.name] = evt.target.value
     }
     shipping[evt.target.name] = evt.target.value;
@@ -148,66 +148,87 @@ class Checkout extends React.Component {
     });
   }
 
-  handleShipment() {
-
-      const {
-        firstName,
-        lastName,
-        streetAddress,
-        state,
-        city,
-        apartmentNumber,
-        zipCode,
-      } = this.state.shipping;
-
-      if (
-        firstName == "" ||
-        lastName == "" ||
-        streetAddress == "" ||
-        state == "" ||
-        city == "" ||
-        zipCode == ""
-      ) {
-        toast.error(
-          "All marked fields need to be entered to register address"
-        );
-        return;
-      }
-
-      this.props.addShipping(this.props.auth.id, this.state.shipping, this.state.email)
-
+  pickedShipping(id) {
+    this.setState({
+      pickedAddress: id
+    })
+  }
+  pickedPayment(id) {
+    this.setState({
+      pickedPayment: id
+    })
   }
 
-  handlePayment() {
-    const {
-      name,
-      streetAddress,
-      zipCode,
-      city,
-      state,
-      cardNumber,
-      cardPreview,
-      securityCode,
-      expirationDate,
-      cardType,
-    } = this.state.payment
-    if (
-      name == "" ||
-      cardNumber == "" ||
-      streetAddress == "" ||
-      state == "" ||
-      city == "" ||
-      zipCode == "" ||
-      securityCode == "" ||
-      expirationDate == "" || cardType == ""
-    ) {
-      toast.error(
-        "All marked fields need to be entered to register address"
-      );
-      return;
-    }
-    this.props.addPayment(this.props.auth.id, this.state.payment, this.state.email)
+
+  //these functions are for the input components
+  passShipmentToParent (shipping) {
+    this.setState({
+      shipping: shipping
+    })
   }
+
+  passPaymentToParent (payment) {
+    this.setState({
+      payment: payment
+    })
+  }
+
+  // handleShipment() {
+  //   const {
+  //     firstName,
+  //     lastName,
+  //     streetAddress,
+  //     state,
+  //     city,
+  //     apartmentNumber,
+  //     zipCode,
+  //   } = this.state.shipping;
+  //   if (
+  //     firstName == "" ||
+  //     lastName == "" ||
+  //     streetAddress == "" ||
+  //     state == "" ||
+  //     city == "" ||
+  //     zipCode == ""
+  //   ) {
+  //     toast.error(
+  //       "All marked fields need to be entered to register address"
+  //     );
+  //     return;
+  //   }
+  //   this.props.addShipping(this.props.auth.id, this.state.shipping, this.state.email)
+  // }
+
+  // handlePayment() {
+  //   const {
+  //     name,
+  //     streetAddress,
+  //     zipCode,
+  //     city,
+  //     state,
+  //     cardNumber,
+  //     cardPreview,
+  //     securityCode,
+  //     expirationDate,
+  //     cardType,
+  //   } = this.state.payment
+  //   if (
+  //     name == "" ||
+  //     cardNumber == "" ||
+  //     streetAddress == "" ||
+  //     state == "" ||
+  //     city == "" ||
+  //     zipCode == "" ||
+  //     securityCode == "" ||
+  //     expirationDate == "" || cardType == ""
+  //   ) {
+  //     toast.error(
+  //       "All marked fields need to be entered to register address"
+  //     );
+  //     return;
+  //   }
+  //   this.props.addPayment(this.props.auth.id, this.state.payment, this.state.email)
+  // }
 
   handleCheckout() {
     try {
@@ -222,17 +243,15 @@ class Checkout extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     if (this.state.complete === true) {
       return <h1>Transaction complete! Thank you for your business.</h1>;
     }
-    let address = this.state.shipping
-    let card = this.state.payment
+
     let total = 0;
-    console.log(this.state)
+    console.log(this.props)
     return (
       <div className="entryForm">
-        <div>
+        <div className='checkoutSum'>
           {this.props.cart.map((item) => {
             total = total + item.orderProduct.totalPrice;
 
@@ -253,214 +272,51 @@ class Checkout extends React.Component {
             Sales Tax: ${((total / 100) * 0.08).toFixed(2)}
           </h4>
           <h3 className="relativeCheck">
-            Total Price :${((total / 100) * 1.08).toFixed(2)}
+            Total Price: ${((total / 100) * 1.08).toFixed(2)}
           </h3>
         </div>
-          <ShippingList />
-        <button
-          type="button"
-          className="collapsible"
-          onClick={() => this.toggler("one")}
-        >
-          Shipping {"&"} Contact Information{" "}
-        </button>
-        <form
-          className="content"
-          style={{ display: this.state.one.display }}
-          onChange={this.handleChange}
-        >
-          <span>
-            <h3>First Name*:</h3>
-          </span>
-          <span>
-            <input type="text" name="firstName" value={address.firstName} />
-          </span>
 
-          <span>
-            <h3>Last Name*:</h3>
-          </span>
-          <span>
-
-            <input type="text" name="lastName" value={address.lastName}/>
-          </span>
-          <br />
-          {/*Email is needed for unlogged in users, otherwise it should get it from auth*/}
-          {this.props.auth.id ? <></> :
-          <div>
-          <span>
-            <h3>Email*:</h3>
-          </span>
-          <span>
-            <input type="text" name="email" value={address.email} />
-          </span>
-          <br />
-          </div>
-           }
-
-          <span>
-            <h3>Address*:</h3>
-          </span>
-          <span>
-            <input type="text" name="streetAddress" value={address.streetAddress}/>
-          </span>
-          <span>
-            <h3>Apartment Number:</h3>
-          </span>
-          <span>
-            <input type="text" name="apartmentNumber" value={address.apartmentNumber} />
-          </span>
-          <br />
-
-          <span>
-            <h3>Zipcode*:</h3>
-          </span>
-          <span>
-            <input type="text" name="zipCode" maxLength='5'value={address.zipCode} />
-          </span>
-
-          <span>
-            <h3>City*:</h3>
-          </span>
-          <span>
-            <input type="text" name="city" value={address.city} />
-          </span>
-          <br />
-          <span>
-            <h3>State*:</h3>
-          </span>
-          <span>
-            <input type="text" name="state" value = {address.state}/>
-          </span>
-          <br />
-          <span>Shipping is limited to to the continental United States</span>
-        <button
-          type='button'
-          onClick={() => {
-
-            this.handleShipment()
-            }}>
-           Save Address
-        </button>
-
-        </form>
-
-        <button
-          type="button"
-          className="collapsible"
-          onClick={() => this.toggler("two")}
-        >
-          Payment Information{" "}
-        </button>
-
-        <form
-          className="card"
-          style={{ display: this.state.two.display }}
-          onChange={this.handleChangeCard}
-        >
-          <span>
-            <h3>Credit Card*:</h3>
-          </span>
-          <span>
-
-          <select name="cardType">
-          <option value={null} >-</option>
-            <option value={"Visa"} >Visa</option>
-            <option value={"Mastercard"} >Mastercard</option>
-            <option value={"Discover"} >Discover</option>
-            <option value={"American Express"}>AMEX</option>
-            </select>
-          </span>
-          <span>
-            <h3>Card Number*:</h3>
-          </span>
-          <span>
-            <input type="text"
-            maxLength='16' name="cardNumber" value={card.cardNumber} />
-          </span>
-
-          <span>
-            <h3>Name on Card*:</h3>
-          </span>
-          <span>
-            <input type="text" name="name" value={card.name} />
-          </span>
-          <br />
-          <span>
-            <h3>Expiration Date*:</h3>
-          </span>
-          <span>
-
-            <input type="text" name="expirationDate" value={card.expirationDate}/>
-          </span>
-          <span>
-            <h3>Security Code*:</h3>
-          </span>
-          <span>
-
-            <input type="text"
-            maxLength='4'name="securityCode" value={card.securityCode} />
-          </span>
-          <br />
-          <span>
-          <input type="checkbox" className="sameAddress" value="sameAddress"
-          checked={this.state.checked}
-          onChange={this.toggleAddress}
-          />
-          </span>
-          <span><label> Use same address as shipping</label></span>
-          <br />
-          <div className="cardAddress"
-          style={{ display: this.state.address.display }}
-
-          >
-          <span>
-            <h3>Address:</h3>
-          </span>
-          <span>
-            <input type="text" name="streetAddress" value={card.streetAddress}/>
-          </span>
-           <span>
-            <h3>Apartment Number:</h3>
-          </span>
-          <span>
-            <input type="text" name="apartmentNumber" value={card.apartmentNumber}/>
-          </span>
-          <br />
-
-          <span>
-            <h3>Zipcode:</h3>
-          </span>
-          <span>
-            <input type="text" name="zipCode" value={card.zipCode}
-            size='5'
-            maxLength='5'
-            />
-          </span>
-          <span>
-            <h3>City:</h3>
-          </span>
-          <span>
-            <input type="text" name="city" value={card.city} />
-          </span>
-
-
-          <br />
-          <span>
-            <h3>State:</h3>
-          </span>
-          <span>
-            <input type="text" name="state" value={card.state}/>
-          </span>
-          <br />
-          </div>
+        <div>
           <button
-          type='button'
-          onClick={() => {this.handlePayment()}}
+            type="button"
+            className="collapsible"
+            onClick={() => this.toggler("one")}
           >
-            Save Payment Information
+            Shipping {"&"} Contact Information{" "}
           </button>
-        </form>
+          <div style={{ display: this.state.one.display }}>
+            {this.props.shipping && this.props.shipping.length > 0 ?
+              <div>
+                <ShippingList pickedShipping={(id) => this.pickedShipping(id)} />
+                <button type='button' onClick={() => this.setState({ toggleShipping: true })}>Add a Shipping Address</button>
+              </div>
+              : <button type='button' onClick={() => this.setState({ toggleShipping: true })}>Add a Shipping Address</button>
+            }
 
+          </div>
+        </div>
+
+        <div>
+          <button
+            type="button"
+            className="collapsible"
+            onClick={() => this.toggler("two")}
+          >
+            Payment Information{" "}
+          </button>
+          <div style={{ display: this.state.two.display }}>
+
+            {this.props.payment && this.props.payment.length ?
+              <div>
+                <PaymentList pickedPayment={(id) => this.pickedPayment(id) }/>
+                <button type='button' onClick={() => this.setState({ togglePayment: true })}>Add Payment Method</button>
+              </div>
+              : <button type='button' onClick={() => this.setState({ togglePayment: true })}>Add Payment Method</button>
+
+            }
+          </div>
+        </div>
+        <Link to="/cart"><button type="button">Go Back to Cart</button></Link>
         <button
           onClick={() => {
             this.handleCheckout();
@@ -468,6 +324,23 @@ class Checkout extends React.Component {
         >
           Checkout
         </button>
+
+        {this.state.toggleShipping ?
+          <div className="fullScreenForm">
+            <AddShipping selfClose={() => { this.setState({ toggleShipping: false }) }}
+            passToParent={(shipping)=> this.passShipmentToParent(shipping)}
+            />
+            <button type='button' className="cancel" onClick={() => this.setState({ toggleShipping: false })}>X</button>
+          </div>
+          : <></>
+        }
+        {this.state.togglePayment ?
+          <div className="fullScreenForm">
+            <AddPayment selfClose={() => { this.setState({ togglePayment: false }) }}
+            passToParent={(payment)=> {this.passPaymentToParent(payment)}}/>
+            <button type='button' className="cancel" onClick={() => this.setState({ togglePayment: false })}>X</button>
+          </div> : <></>
+        }
       </div>
     );
   }

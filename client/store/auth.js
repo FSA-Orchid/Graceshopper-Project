@@ -2,6 +2,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import history from "../history";
 import { setCartFromLoginThunk, clearCart} from "./cart";
+import { logoutPayment } from "./payment";
+import { logoutShipping } from "./shipAddress";
 const TOKEN = "token";
 
 /**
@@ -70,7 +72,8 @@ export const logout = () => {
       localStorage.removeItem("cart");
       dispatch(clearCart());
       history.push("/login");
-
+      dispatch(logoutPayment())
+      dispatch(logoutShipping())
       dispatch(setAuth({}))
     } catch (err) {
       console.log(err);
