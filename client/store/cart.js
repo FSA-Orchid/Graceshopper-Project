@@ -11,7 +11,7 @@ const RemoveFromCart = "REMOVE_FROM_CART";
 const AddToCart = "ADD_TO_CART";
 const UpdateQuantityCart = "UPDATE_QUANTITY_CART";
 
-//this function will split an array in two depending if they include part of the array or not
+//this function will split an array in two depending if they include part of the array or not. This is used so that logging in will split the guest cart into 'what needs to be added to cart', and 'what quantities need to be updated'
 function split(array, cart) {
   return array.reduce(
     ([toUpdate, toAdd], item) => {
@@ -60,7 +60,6 @@ const updateCart = (product) => {
 export const setCartFromLoginThunk = (id) => {
   return async function (dispatch) {
     try {
-
       let res = await axios.get(`/api/users/${id}/cart`);
       let cart = res.data;
 
@@ -130,14 +129,15 @@ export const clearCartThunk = (id) => {
 };
 
 //this will complete the order and clear the state for this cart
-export const closeOrderThunk = (id, email, shipping, payment) => {
+export const closeOrderThunk = (id, shipping, payment, email) => {
   return async function (dispatch) {
     try {
       if(id){
-
-      await axios.put(`/api/users/${id}/cart/complete`,
+        console.log(payment)
+      await axios.put(`/api/users/${id}/cart/complete`, {
       shipping,
-      payment);
+      payment
+    });
       dispatch(clearCart())
     }
     else{
@@ -275,7 +275,7 @@ export default function cartReducer(state = initialState, action) {
         product.id === action.product.id ? action.product : product
       );
     case AddToCart:
-      return action.newProduct;
+      return [...state, action.newProduct]
     case ClearCart:
       return initialState;
     case RemoveFromCart:

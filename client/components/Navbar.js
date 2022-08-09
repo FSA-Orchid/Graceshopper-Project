@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../store';
@@ -8,101 +8,93 @@ import AllUsers from './AllUsers';
 
 import { Login, Signup } from './AuthForm';
 
-class Navbar extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      count: 0,
-    };
-  }
+function Navbar (props) {
 
-  componentDidMount() {
-    this.props.fetchCart(this.props.auth.id);
+  const [count, setCartCount] = useState(0)
 
-    let total = this.props.cart.reduce(
+  useEffect(()=> {
+    props.fetchCart(props.auth.id)
+  }, [props.auth.id])
+
+  useEffect(() => {
+    let total = props.cart.reduce(
       (total, item) => total + 1 * item.orderProduct.inventory,
       0
-    );
+    )
+    setCartCount(total)
+  }, [props.cart])
 
-    this.setState({
-      count: total,
-    });
-  }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.cart !== this.props.cart) {
-      let total = this.props.cart.reduce(
-        (total, item) => total + 1 * item.orderProduct.inventory,
-        0
-      );
-      this.setState({
-        count: total,
-      });
-    }
-  }
-
-  render() {
     return (
       <div className="navContainer">
         {/* <h1 className="storeTitle">Some Guitar Store</h1> */}
 
         <nav>
-          {this.props.isLoggedIn ? (
-            <div className="navBar">
+          <span>
+        <Link className="navText" to="/">
+              <img className ='logo'src="/assets/guitarmart.png" />
+          </Link>
+          </span>
+          <span>
+          {props.isLoggedIn ? (
+            <div className="navLogged  position-relative">
               {/* The navbar will show these links after you log in */}
-              <img src="GuitarMart.png" />
-              <Link className="navText" to="/home">
-                Home
-              </Link>
+
               <Link
                 className="navText"
                 to="/products"
-                onClick={() => this.props.fetchAllProducts()}
+                onClick={() => props.fetchAllProducts()}
               >
                 All Products
               </Link>
               <Link to="/user/">User Profile</Link>
-              <Link className="bi bi-cart" to="/cart/">
-                {` (${this.state.count})`}
-              </Link>
-              {this.props.isLoggedIn && this.props.auth.isAdmin ? (
+              <div className='navSideButtons'>
+              {props.isLoggedIn && props.auth.isAdmin ? (
                 <Link to="/users/">All Users</Link>
               ) : (
-                <div />
+                <></>
               )}
-              <a className="navText" href="#" onClick={this.props.handleClick}>
+
+
+              <a className="navText" href="#" onClick={props.handleClick}>
                 Logout
               </a>
+              <Link className="bi bi-cart" to="/cart/">
+                {` (${count})`}
+              </Link>
+              </div>
             </div>
           ) : (
             <div className="navLogged  position-relative">
               {/* The navbar will show these links before you log in */}
-              <img src="GuitarMart.png" />
+
+              <Link
+                className="navText"
+                to="/products"
+                onClick={() => props.fetchAllProducts()}
+              >
+                All Products
+              </Link>{' '}
+              <div className='navSideButtons'>
               <Link className="navText" to="/signup">
                 Sign Up
               </Link>
               <Link className="navText " to="/login">
                 Log In
               </Link>
-              <Link
-                className="navText"
-                to="/products"
-                onClick={() => this.props.fetchAllProducts()}
-              >
-                All Products
-              </Link>{' '}
               <Link className="bi bi-cart navText cartClass " to="/cart/">
-                {` (${this.state.count})`}
+                {` (${count})`}
               </Link>
+              </div>
               {/* <Link to="/products">All Products</Link> */}
             </div>
           )}
-
+</span>
           <hr />
         </nav>
       </div>
     );
-  }
+
 }
 /**
  * CONTAINER

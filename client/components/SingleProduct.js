@@ -59,8 +59,8 @@ function SingleProduct(props) {
   const product = props.product;
   if(!product){return <h1>Product Not Found</h1>}
   return (
-    <div>
-      <img src={product.imageUrl} className="photo" />
+    <div className="singleProduct">
+      <img src={product.imageUrl} className="photoSingle" />
       <p>Instrument: {product.instrument}</p>
       <p>Make: {product.make}</p>
       <p>Model: {product.model}</p>
@@ -68,7 +68,7 @@ function SingleProduct(props) {
       <p>Color: {product.color}</p>
       <p>Condition: {product.condition}</p>
       <p>Description: {product.description}</p>
-      <p>Price: {product.price / 100}</p>
+      <p>Price: ${(product.price / 100).toFixed(2)}</p>
       <div>
         {product.inventory > 0 ? (
           <div>

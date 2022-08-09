@@ -8,7 +8,13 @@ export const Home = props => {
   const {username} = props
   return (
     <div>
-      <h3>Welcome, {username}</h3>
+      <div className='home'>
+        <div className='greeting'>
+        <h2>Welcome to Guitar Mart!</h2>
+        <h4>Your one stop shop for used Guitars!</h4>
+        {/* <img className='homeImage'src='/assets/westerbergForSale.jpg'></img> */}
+        </div>
+      </div>
     </div>
   )
 }

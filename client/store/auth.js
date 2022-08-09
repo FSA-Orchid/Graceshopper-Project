@@ -1,6 +1,9 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import history from "../history";
 import { setCartFromLoginThunk, clearCart} from "./cart";
+import { logoutPayment } from "./payment";
+import { logoutShipping } from "./shipAddress";
 const TOKEN = "token";
 
 /**
@@ -32,17 +35,18 @@ export const me = () => async (dispatch) => {
 };
 
 export const authenticateSign =
-  (username, password, email, address, method) => async (dispatch) => {
+  (username, password, email,  method) => async (dispatch) => {
     try {
       const res = await axios.post(`/auth/${method}`, {
         username,
         password,
         email,
-        address,
+
       });
 
       window.localStorage.setItem(TOKEN, res.data.token);
       dispatch(me());
+      toast.success("Logged in successfully!")
     } catch (authError) {
       return dispatch(setAuth({ error: authError }));
     }
@@ -55,6 +59,7 @@ export const authenticate =
 
       window.localStorage.setItem(TOKEN, res.data.token);
       dispatch(me());
+      toast.success("Logged in successfully!")
     } catch (authError) {
       return dispatch(setAuth({ error: authError }));
     }
@@ -67,6 +72,8 @@ export const logout = () => {
       localStorage.removeItem("cart");
       dispatch(clearCart());
       history.push("/login");
+      dispatch(logoutPayment())
+      dispatch(logoutShipping())
       dispatch(setAuth({}))
     } catch (err) {
       console.log(err);

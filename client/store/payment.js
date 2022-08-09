@@ -6,7 +6,7 @@ const FetchPayment = "FETCH_PAYMENTS"
 const AddPayment = "ADD_PAYMENT";
 const UpdatePayment = "UPDATE_PAYMENT";
 const DeletePayment = "DELETE_PAYMENT";
-
+const LogoutPayment= "LOGOUT_PAYMENT"
 export const fetchPayments = (payments) => {
   return {type: FetchPayment, payments}
 }
@@ -20,12 +20,21 @@ export const deletePayment = (payment) => {
   return { type: DeletePayment, payment };
 };
 
+export const logoutPayment = () => {
+  return {type: LogoutPayment}
+}
+
 export const fetchPaymentsThunk = (userId) => {
   return async function (dispatch) {
     try {
+      if(userId){
       let response = await axios.get(`/api/users/${userId}/payment`)
       let payments = response.data
       dispatch(fetchPayments(payments))
+      }
+      else {
+        return []
+      }
     }
     catch(err){
       console.log(err)
@@ -82,7 +91,7 @@ export default function paymentReducer(state = initialState, action) {
     case FetchPayment:
       return action.payments
     case AddPayment:
-      return [...state][action.payment]
+      return [...state, action.payment]
     case UpdatePayment:
       return state.map((paymentState) => {
         if (paymentState.id === action.payment.id) {
@@ -92,7 +101,10 @@ export default function paymentReducer(state = initialState, action) {
       })
     case DeletePayment:
       return state.filter((paymentState) => paymentState.id !== action.payment.id)
+      case LogoutPayment:
+        return []
     default:
       return state
   }
+
 }

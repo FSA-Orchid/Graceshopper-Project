@@ -6,7 +6,8 @@ const FetchShipping = "FETCH_SHIPPING"
 const AddShipping = "ADD_SHIPPING";
 const UpdateShipping = "UPDATE_SHIPPING";
 const DeleteShipping = "DELETE_SHIPPING";
-
+const LogoutShipping =
+"LOGOUT_SHIPPING"
 export const fetchShipping = (shipping) => {
   return {type: FetchShipping, shipping}
 }
@@ -20,12 +21,20 @@ export const deleteShipping = (shipping) => {
   return { type: DeleteShipping, shipping };
 };
 
+export const logoutShipping = () => {
+  return {type: LogoutShipping}
+}
 export const fetchShippingThunk = (userId) => {
   return async function (dispatch) {
     try {
+      if(userId){
       let response = await axios.get(`/api/users/${userId}/shipping`)
       let shipping = response.data
       dispatch(fetchShipping(shipping))
+      }
+      else {
+        return []
+      }
     }
     catch(err){
       console.log(err)
@@ -37,13 +46,15 @@ export const addShippingThunk = (userId, shipping, email) => {
   return async function (dispatch) {
     try{
       if(userId){
-      let response = await axios.post(`/api/users/${userId}/shipping`, shipping)
+      shipping.email = email
+      let response = await axios.post(`/api/users/${userId}/shipping`, shipping,
+      )
       const newShipping = response.data
       dispatch(addShipping(newShipping))
       }
       else {
+        localStorage.setItem("shipping", JSON.stringify(shipping))
         let response = await axios.post(`/api/users/notLoggedShipping`,
-        email,
         shipping)
         const newShipping = response.data
         dispatch(addShipping(newShipping))
@@ -83,7 +94,7 @@ export default function shippingReducer(state = initialState, action) {
     case FetchShipping:
       return action.shipping
     case AddShipping:
-      return [...state][action.shipping]
+      return [...state, action.shipping]
     case UpdateShipping:
       return state.map((shipping) => {
         if (shipping.id === action.shipping.id) {
@@ -93,6 +104,8 @@ export default function shippingReducer(state = initialState, action) {
       })
     case DeleteShipping:
       return state.filter((shippingState) => shippingState.id !== action.shipping.id)
+      case LogoutShipping:
+        return []
     default:
       return state
   }

@@ -11,6 +11,10 @@ const AuthForm = (props) => {
 
   return (
     <div>
+      <h3>
+      Hello, and welcome to Guitar Mart!
+      </h3>
+      <p>For the full customer experience, please login! Otherwise, you can still order items and checkout.</p>
       <form onSubmit={handleSubmit} name={name}>
         <div>
           <label htmlFor="username">
@@ -30,10 +34,6 @@ const AuthForm = (props) => {
           </label>
           <input name="email" type="text" />
         </div><div>
-            <label htmlFor="address">
-              <small>Address</small>
-            </label>
-            <input name="address" type="text" />
           </div></> : <></>
         }
 
@@ -85,6 +85,7 @@ const mapDispatch = (dispatch) => {
       const username = 'demo'
       const password = 'demo'
       dispatch(authenticate(username, password, 'login'))
+
     },
     handleDemoAdminSubmit(evt) {
       evt.preventDefault()
@@ -103,8 +104,8 @@ const mapDispatchSign = (dispatch) => {
       const username = evt.target.username.value;
       const password = evt.target.password.value;
       const email = evt.target.email.value
-      const address = evt.target.address.value
-      dispatch(authenticateSign(username, password, email, address, formName));
+
+      dispatch(authenticateSign(username, password, email, formName));
     },
     handleDemoSubmit(evt) {
       evt.preventDefault()

@@ -28,8 +28,9 @@ const paymentInfo = db.define('paymentInfo', {
     allowNull: false,
   },
   cardNumber: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.BIGINT,
     allowNull: false,
+    unique: true,
   },
   cardPreview: {
     type: Sequelize.STRING,

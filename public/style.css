@@ -1,5 +1,6 @@
 body {
   font-family: sans-serif;
+  align-items: center;
 }
 
 a {
@@ -8,6 +9,18 @@ a {
 
 label {
   display: block;
+}
+button {
+  background-color: rgb(14, 177, 169);
+  border-radius: 30px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border: solid black 2px;
+}
+
+button:hover {
+  color: hotpink;
+  text-shadow: #000 1px 1px;
 }
 
 nav a {
@@ -20,11 +33,18 @@ form div {
   display: inline-block;
 }
 
-img {
-  min-width: 150px;
-  min-height: 150px;
-  max-width: 150px;
-  max-height: 150px;
+.logo {
+  max-width: 130px;
+  max-height: 130px;
+  border: solid black;
+  border-radius: 10px;
+}
+
+.logoFooter {
+  max-width: 130px;
+  max-height: 130px;
+  border: solid hotpink;
+  border-radius: 10px;
 }
 
 .listingInfo {
@@ -32,13 +52,46 @@ img {
   font-size: 20px;
 }
 
-.navBar {
+.navContainer {
   display: flex;
-  justify-content: space-evenly;
-  background-color: lightgray;
-  margin-bottom: 0px;
+  justify-content: space-around;
+  background-color: rgb(255, 255, 255);
+  margin: auto;
 }
 
+.navSideButtons {
+  float: right;
+  margin: auto;
+  padding: auto;
+}
+
+.addressBox {
+  display: flex;
+  margin: auto;
+  align-items: center;
+}
+.addressInfo {
+  margin-left: 10px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: rgb(11, 163, 173) solid;
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+}
+
+.profilePaymentList {
+  align-items: center;
+  text-align: center;
+}
+.profilePayment {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: hotpink solid;
+  border-radius: 10px;
+  width: 300px;
+}
 .storeTitle {
   text-align: center;
 }
@@ -47,11 +100,9 @@ img {
   color: black;
 }
 
-
 .navLogged {
   margin-bottom: 0px;
 }
-
 
 .guitarFilter {
   display: flex;
@@ -62,17 +113,39 @@ img {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  left: 160px;
-  margin-left: 200px;
-
+  width: 95%;
+  text-align: center;
+  margin: auto;
   margin-top: 20px;
   /* width: 100%; */
 }
+.photo {
+  width: auto;
+  max-width: 90%;
+  height: 100px;
+  border-radius: 30px;
+}
+.photoCart {
+}
 
+.allProducts {
+  background-color: rgb(14, 177, 169);
+  padding-bottom: 20px;
+}
 .productItem {
-  width: 25%;
+  width: 20%;
   padding-bottom: 5%; /* 32:18, i.e. 16:9 */
   margin-bottom: 2%; /* (100-32*3)/2 */
+  height: 300px;
+  border: hotpink solid;
+  background-color: rgb(255, 255, 255);
+  box-shadow: #000 4px 4px;
+  border-radius: 30px;
+  text-align: center;
+  margin-left: 10px;
+}
+.productItem:hover {
+  border: rgba(0, 0, 0, 0.05);
 }
 
 .collapsible {
@@ -89,16 +162,19 @@ img {
 }
 
 .content {
-  padding: 0 18px;
   overflow: hidden;
   background-color: #f1f1f1;
   text-align: center;
 }
 .contentUser {
   margin: auto;
-  width: 50%;
-  border: 3px solid green;
+  width: 100%;
+  border: 3px solid hotpink;
+  box-shadow: #000 1px 1px;
   padding: 10px;
+  border-radius: 30px;
+  text-align: center;
+  margin-left: 10px;
 }
 
 .contentOrder {
@@ -124,6 +200,108 @@ ul {
   list-style-type: none;
 }
 
+.buttons {
+  text-align: center;
+  margin: auto;
+}
+
+.home {
+  text-align: center;
+}
+.homeImage {
+  width: 80%;
+  height: auto;
+}
+.userPage {
+  display: flex;
+  margin-bottom: 20px;
+}
+.sidenav {
+  position: sticky;
+  top: 170px;
+  border: 1px solid black;
+  border-radius: 20px;
+  width: 80%;
+  max-width: 300px;
+  margin-left: 20px;
+  margin-right: 20px;
+  left: 10px;
+}
+.userInfo {
+  width: 80%;
+}
+.greeting {
+  color: hotpink;
+  text-shadow: 1px 1px 0 rgb(0, 0, 0);
+  top: 0;
+  left: 0;
+  background-image: url(/assets/westerbergForSale.jpg);
+  width: 70%;
+  height: 900px;
+  background-repeat: no-repeat;
+  margin: auto;
+}
+
+.singleProduct {
+  text-align: center;
+}
+.photoSingle {
+  max-height: 400px;
+  max-width: 80%;
+  max-width: 1000px;
+}
+.footer {
+  text-align: center;
+  border-top: #000 solid;
+  background-color: black;
+  color: white;
+  height: auto;
+}
+
+.footerNav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.productList {
+  min-height: 500px;
+  padding-bottom: 20px;
+}
+.fullScreenForm {
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.8);
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+.centerStage {
+  position: fixed;
+  overflow: auto;
+  display: flex;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border: #000 solid;
+  border-radius: 30px;
+}
+.cancel {
+  background-color: (rgba(156, 136, 136, 0.5));
+  border-radius: 50%;
+  font: bold;
+  text-decoration: none;
+  border: none;
+  top: 5%;
+  left: 90%;
+  position: relative;
+  font-size: 30px;
+  width: 50px;
+  height: 50px;
+  z-index: 400;
+}
 /*.sidenav {
   height: 100%; /* Full-height: remove this if you want "auto" height
   width: 160px; /* Set the width of the sidebar
@@ -139,8 +317,71 @@ ul {
   width: 120px;
 } */
 .price {
-  color: red;
+  color: hotpink;
+  text-shadow: black 1px 1px;
 }
+.card {
+  text-align: center;
+  align-items: center;
+}
+
+.hiddenDiv {
+  display: none;
+}
+.chosenDiv {
+  display: block;
+}
+
+.shippingListItem {
+  min-width: 300px;
+  margin-top: 10px;
+}
+
+.pickedShipping {
+  min-width: 300px;
+  margin-top: 10px;
+  background-color: hotpink;
+}
+
+.pickedShipping:hover {
+  color: rgb(14, 177, 169);
+}
+
+.paymentListItem {
+  min-width: 200px;
+  margin-top: 10px;
+}
+.pickedPayment {
+  min-width: 200px;
+  background-color: hotpink;
+  margin-top: 10px;
+}
+
+.pickedPayment:hover {
+  color: rgb(14, 177, 169);
+}
+
+.entryForm {
+  display: flex;
+  min-height: 700px;
+  margin-bottom: 10px;
+}
+.shippingAndPayment {
+  width: 70%;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.checkoutSum {
+  border: black solid;
+  background-color: hotpink;
+  border-radius: 30px;
+  align-items: center;
+  text-indent: 15px;
+  max-height: fit-content;
+}
+
+/*Below is for Toastify */
 
 :root {
   --toastify-color-light: #fff;

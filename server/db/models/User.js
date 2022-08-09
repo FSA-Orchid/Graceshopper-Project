@@ -22,13 +22,6 @@ const User = db.define('user', {
       isEmail: true,
     },
   },
-  address: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-    },
-  },
   isAdmin: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
@@ -65,7 +58,7 @@ User.authenticate = async function ({ username, password }) {
 User.findByToken = async function (token) {
   try {
     const { id } = await jwt.verify(token, process.env.JWT);
-    const user = User.findByPk(id);
+    const user = User.findByPk(id,  {attributes: {exclude: ["password", "createdAt"]}});
     if (!user) {
       throw 'nooo';
     }

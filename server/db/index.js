@@ -19,7 +19,8 @@ User.hasMany(PaymentInfo)
 User.hasMany(ShippingAddress)
 User.hasMany(ShoppingCart);
 ShoppingCart.belongsTo(User);
-
+ShoppingCart.belongsTo(ShippingAddress)
+ShoppingCart.belongsTo(PaymentInfo)
 
 
 module.exports = {

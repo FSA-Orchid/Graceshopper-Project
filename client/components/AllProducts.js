@@ -23,10 +23,10 @@ export function AllProducts(props) {
 
   //This useEffect will carve up all products into separate arrays in one array, each array is a different page, and when the user picks another page, the next set of products will render
   useEffect(() => {
-    let pages = Math.ceil(props.products.length / 9);
+    let pages = Math.ceil(props.products.length / 12);
     let array = [];
     for (let i = 0; i < pages; i++) {
-      array.push(props.products.slice(i * 9, i * 9 + 9));
+      array.push(props.products.slice(i * 12, i * 12 + 12));
     }
     setPartition(array);
     setPage(0);
@@ -37,6 +37,8 @@ export function AllProducts(props) {
     setProductsRender(productsPartition[productPage]);
   }, [productsPartition, productPage]);
 
+
+  //Checks if item can be added to cart, and will add to cart if possible
   const checkIt = (product) => {
     const cart = props.cart;
     const userId = props.user.id;
@@ -82,7 +84,7 @@ export function AllProducts(props) {
     );
   } else
     return (
-      <div>
+      <div className='allProducts'>
         <FilterProduct />
         <div className="productContainer">
           {props.user.isAdmin
@@ -109,7 +111,7 @@ export function AllProducts(props) {
                     {product.inventory > 0 ? (
                       <button
                         type="button"
-                        className="btn btn-danger"
+                        className="btn-danger"
                         onClick={() => {
                           checkIt(product);
                         }}
@@ -153,6 +155,7 @@ export function AllProducts(props) {
                 </div>
               ))}
         </div>
+        {/*pagination */}
         <div className="buttons">
           <button
             onClick={() => {
