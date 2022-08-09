@@ -275,7 +275,7 @@ export default function cartReducer(state = initialState, action) {
         product.id === action.product.id ? action.product : product
       );
     case AddToCart:
-      return [...state, action.newProduct]
+      return action.newProduct
     case ClearCart:
       return initialState;
     case RemoveFromCart:
@@ -284,3 +284,5 @@ export default function cartReducer(state = initialState, action) {
       return state;
   }
 }
+
+//AddToCart works differently than most state additions because Express is returning the full state
