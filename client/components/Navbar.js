@@ -24,7 +24,7 @@ function Navbar (props) {
     setCartCount(total)
   }, [props.cart])
 
-
+console.log(props.cart)
     return (
       <div className="navContainer">
         {/* <h1 className="storeTitle">Some Guitar Store</h1> */}
