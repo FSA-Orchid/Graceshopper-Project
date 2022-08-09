@@ -16,7 +16,6 @@ router.post('/signup', async (req, res, next) => {
       username: req.body.username,
       password: req.body.password,
       email: req.body.email,
-      address: req.body.address,
   });
     res.send({ token: await user.generateToken() });
   } catch (err) {

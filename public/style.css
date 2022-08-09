@@ -148,9 +148,13 @@ form div {
 }
 .contentUser {
   margin: auto;
-  width: 50%;
-  border: 3px solid green;
+  width: 100%;
+  border: 3px solid hotpink;
+  box-shadow: #000 1px 1px;
   padding: 10px;
+  border-radius: 30px;
+  text-align: center;
+  margin-left: 10px;
 }
 
 .contentOrder {
@@ -188,7 +192,24 @@ ul {
   width: 80%;
   height: auto;
 }
-
+.userPage {
+  display: flex;
+  margin-bottom: 20px;
+}
+.sidenav {
+  position: sticky;
+  top: 170px;
+  border: 1px solid black;
+  border-radius: 20px;
+  width: 80%;
+  max-width: 300px;
+  margin-left: 20px;
+  margin-right: 20px;
+  left: 10px;
+}
+.userInfo {
+  width: 80%;
+}
 .greeting {
   color: hotpink;
   text-shadow: 1px 1px 0 rgb(0, 0, 0);
@@ -214,6 +235,7 @@ ul {
   border-top: #000 solid;
   background-color: black;
   color: white;
+  height: auto;
 }
 
 .footerNav {
@@ -281,6 +303,62 @@ ul {
 .card {
   text-align: center;
   align-items: center;
+}
+
+.hiddenDiv {
+  display: none;
+}
+.chosenDiv {
+  display: block;
+}
+
+.shippingListItem {
+  min-width: 300px;
+  margin-top: 10px;
+}
+
+.pickedShipping {
+  min-width: 300px;
+  margin-top: 10px;
+  background-color: hotpink;
+}
+
+.pickedShipping:hover {
+  color: rgb(14, 177, 169);
+}
+
+.paymentListItem {
+  min-width: 200px;
+  margin-top: 10px;
+}
+.pickedPayment {
+  min-width: 200px;
+  background-color: hotpink;
+  margin-top: 10px;
+}
+
+.pickedPayment:hover {
+  color: rgb(14, 177, 169);
+}
+
+.entryForm {
+  display: flex;
+  min-height: 700px;
+  margin-bottom: 10px;
+}
+.shippingAndPayment {
+  width: 70%;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.checkoutSum {
+  border: black solid;
+  background-color: hotpink;
+  border-radius: 30px;
+  align-items: center;
+  text-indent: 15px;
+  max-height: fit-content;
 }
 
 /*Below is for Toastify */

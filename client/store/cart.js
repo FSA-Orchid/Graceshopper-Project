@@ -129,14 +129,15 @@ export const clearCartThunk = (id) => {
 };
 
 //this will complete the order and clear the state for this cart
-export const closeOrderThunk = (id, email, shipping, payment) => {
+export const closeOrderThunk = (id, shipping, payment, email) => {
   return async function (dispatch) {
     try {
       if(id){
-
-      await axios.put(`/api/users/${id}/cart/complete`,
+        console.log(payment)
+      await axios.put(`/api/users/${id}/cart/complete`, {
       shipping,
-      payment);
+      payment
+    });
       dispatch(clearCart())
     }
     else{

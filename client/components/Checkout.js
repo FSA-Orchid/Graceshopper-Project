@@ -7,11 +7,11 @@ import { toast } from "react-toastify";
 import { addShippingThunk, fetchShippingThunk } from "../store/shipAddress"
 import { addPaymentThunk, fetchPaymentsThunk } from "../store/payment"
 import { Link } from "react-router-dom";
-import axios from "axios";
 import ShippingList from "./ShippingList";
 import PaymentList from "./PaymentList";
 import { AddShipping } from "./addShipping";
 import { AddPayment } from "./addPayment"
+
 class Checkout extends React.Component {
   constructor() {
     super();
@@ -44,8 +44,6 @@ class Checkout extends React.Component {
       cart: [],
       email: '',
       checked: false,
-      shippingID: 0,
-      paymentID: 0,
       pickedAddress: -1,
       pickedPayment: -1,
       toggleShipping: false,
@@ -232,11 +230,19 @@ class Checkout extends React.Component {
 
   handleCheckout() {
     try {
+      if(this.props.auth.id){
+        if(this.state.pickedPayment > 0 && this.state.pickedAddress > 0){
       toast.info("Transaction is processing");
-      this.props.closeOrder(this.props.auth.id, this.state.email, this.state.shipping, this.state.payment);
+      this.props.closeOrder(this.props.auth.id, this.state.pickedAddress, this.state.pickedPayment, );
       this.setState({ complete: true });
 
       toast.success("Transaction complete!", { delay: 4000 });
+      }
+      else {
+        toast.error("Pick a Shipping Address and Credit Card")
+        return
+      }
+    }
     } catch (err) {
       console.log(err);
     }
@@ -248,9 +254,61 @@ class Checkout extends React.Component {
     }
 
     let total = 0;
-    console.log(this.props)
+
     return (
       <div className="entryForm">
+
+
+        <div className="shippingAndPayment">
+          <button
+            type="button"
+            className="collapsible"
+            onClick={() => this.toggler("one")}
+          >
+            Shipping {"&"} Contact Information{" "}
+          </button>
+          <div style={{ display: this.state.one.display }}>
+            {this.props.shipping && this.props.shipping.length > 0 ?
+              <div>
+                <ShippingList pickedShipping={(id) => this.pickedShipping(id)} />
+                <button type='button' onClick={() => this.setState({ toggleShipping: true })}>Add a Shipping Address</button>
+              </div>
+              : <button type='button' onClick={() => this.setState({ toggleShipping: true })}>Add a Shipping Address</button>
+            }
+
+          </div>
+
+
+        <div>
+          <button
+            type="button"
+            className="collapsible"
+            onClick={() => this.toggler("two")}
+          >
+            Payment Information{" "}
+          </button>
+          <div style={{ display: this.state.two.display }}>
+
+            {this.props.payment && this.props.payment.length ?
+              <div>
+                <PaymentList pickedPayment={(id) => this.pickedPayment(id) }/>
+                <button type='button' onClick={() => this.setState({ togglePayment: true })}>Add Payment Method</button>
+              </div>
+              : <button type='button' onClick={() => this.setState({ togglePayment: true })}>Add Payment Method</button>
+
+            }
+          </div>
+
+        <Link to="/cart"><button type="button">Go Back to Cart</button></Link>
+        <button
+          onClick={() => {
+            this.handleCheckout();
+          }}
+        >
+          Checkout
+        </button>
+        </div>
+        </div>
         <div className='checkoutSum'>
           {this.props.cart.map((item) => {
             total = total + item.orderProduct.totalPrice;
@@ -276,54 +334,6 @@ class Checkout extends React.Component {
           </h3>
         </div>
 
-        <div>
-          <button
-            type="button"
-            className="collapsible"
-            onClick={() => this.toggler("one")}
-          >
-            Shipping {"&"} Contact Information{" "}
-          </button>
-          <div style={{ display: this.state.one.display }}>
-            {this.props.shipping && this.props.shipping.length > 0 ?
-              <div>
-                <ShippingList pickedShipping={(id) => this.pickedShipping(id)} />
-                <button type='button' onClick={() => this.setState({ toggleShipping: true })}>Add a Shipping Address</button>
-              </div>
-              : <button type='button' onClick={() => this.setState({ toggleShipping: true })}>Add a Shipping Address</button>
-            }
-
-          </div>
-        </div>
-
-        <div>
-          <button
-            type="button"
-            className="collapsible"
-            onClick={() => this.toggler("two")}
-          >
-            Payment Information{" "}
-          </button>
-          <div style={{ display: this.state.two.display }}>
-
-            {this.props.payment && this.props.payment.length ?
-              <div>
-                <PaymentList pickedPayment={(id) => this.pickedPayment(id) }/>
-                <button type='button' onClick={() => this.setState({ togglePayment: true })}>Add Payment Method</button>
-              </div>
-              : <button type='button' onClick={() => this.setState({ togglePayment: true })}>Add Payment Method</button>
-
-            }
-          </div>
-        </div>
-        <Link to="/cart"><button type="button">Go Back to Cart</button></Link>
-        <button
-          onClick={() => {
-            this.handleCheckout();
-          }}
-        >
-          Checkout
-        </button>
 
         {this.state.toggleShipping ?
           <div className="fullScreenForm">
@@ -361,7 +371,7 @@ const mapDispatch = (dispatch) => ({
   fetchShipping: (id) => dispatch(fetchShippingThunk(id)),
   addShipping: (id, shipping, email) => dispatch(addShippingThunk(id, shipping, email)),
   addPayment: (id, payment, email) => dispatch(addPaymentThunk(id, payment, email)),
-  closeOrder: (id, email) => dispatch(closeOrderThunk(id, email)),
+  closeOrder: (id, shipping, payment, email) => dispatch(closeOrderThunk(id, shipping, payment, email)),
   guestCheck: (id, inventory) => dispatch(guestCheckThunk(id, inventory)),
 });
 export const Guest = connect(null, mapDispatch)(Checkout);

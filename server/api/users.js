@@ -72,7 +72,7 @@ router.post("/:id/cart/add", async (req, res, next) => {
 
 router.put("/notLogged", async (req, res, next) => {
   try {
-    console.log(req.body, "BODY HERE");
+
     let exists = await User.findOne({
       where: { email: req.body.email },
     });
@@ -194,6 +194,8 @@ router.put("/:id/cart/complete", async (req, res, next) => {
     //closes the order
     let finalCart = await cart.set({
       orderFilled: "true",
+      shippingInfoId:req.body.shipping,
+      paymentInfoId: req.body.payment
     });
 
     //item inventory gets updated
@@ -280,7 +282,7 @@ router.get("/:id/shipping", async (req, res, next) => {
 router.post("/:id/shipping", async (req, res, next) => {
   try {
     let body = req.body
-    console.log(req.body)
+
     const shipping = await ShippingAddress.create({
       firstName: body.firstName,
       lastName: body.lastName,

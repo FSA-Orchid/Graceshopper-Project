@@ -34,10 +34,6 @@ const AuthForm = (props) => {
           </label>
           <input name="email" type="text" />
         </div><div>
-            <label htmlFor="address">
-              <small>Address</small>
-            </label>
-            <input name="address" type="text" />
           </div></> : <></>
         }
 
@@ -108,8 +104,8 @@ const mapDispatchSign = (dispatch) => {
       const username = evt.target.username.value;
       const password = evt.target.password.value;
       const email = evt.target.email.value
-      const address = evt.target.address.value
-      dispatch(authenticateSign(username, password, email, address, formName));
+
+      dispatch(authenticateSign(username, password, email, formName));
     },
     handleDemoSubmit(evt) {
       evt.preventDefault()

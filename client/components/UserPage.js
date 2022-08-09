@@ -12,21 +12,14 @@ import {AddPayment} from "./addPayment"
 
 
 function UserPage (props){
-// constructor() {
-//   super()
-//   this.state = {
-//     one: {display: 'none'},
-//     two: {display: 'none'},
-//   }
-//   this.accordionContent =[]
-// }
+
 const [sesame, setSesame] = useState([
-  {display: 'none'},{display: 'none'},
+  {display: 'block'},{display: 'none'},
 ])
 const [accordianContent, setContent] = useState([])
 const [toggleShipping, setShippingToggle] = useState(false)
 const [togglePayment, setPaymentToggle] = useState(false)
-
+const [pickedDiv, setPicked] = useState()
 
 useEffect(()=> {
   props.fetcherOrders(props.auth.id);
@@ -87,16 +80,18 @@ function accordionToggle(key) {
 }
   // console.log(accordianContent)
   // console.log(sesame)
-console.log(new Date(2022, 0), Date())
+
   return (
-    <div>
+    <div className="userPage">
     <ul className='sidenav'>
       <li><button onClick= {() => toggler(0)}>User Profile Information</button></li>
       <li><button onClick= {() => toggler(1)}> Order History</button></li>
     </ul>
+
+    <div className="userInfo">
     <div className= 'contentUser' style= {sesame[0]}>
     <h2>{props.auth.username} --- {props.auth.email}</h2>
-    <h3>{props.auth.address}</h3>
+
     <div>
       <h1>User Shipping Information</h1>
 
@@ -142,11 +137,12 @@ console.log(new Date(2022, 0), Date())
     </div>
 
     <div className = 'contentUser' style= {sesame[1]}>
-      {props.orders.map((order, key)=>{
+    {props.orders && props.orders.length ?
+      props.orders.map((order, key)=>{
       return (
       <div key = {key}>
-      <button type="button" onClick={() => accordionToggle(key)} className="collapsible">Ordered on {(order.updatedAt).slice(0,10)} at {(order.updatedAt).slice(11,19)}</button>
-      <form style={{display : accordianContent[key] ? 'block' : 'none'}} >
+      <button type="button" onClick={() => setPicked(key)} className="collapsible">Ordered on {(order.updatedAt).slice(0,10)} at {(order.updatedAt).slice(11,19)}</button>
+      <form className={pickedDiv == key ? "chosenDiv" : "hiddenDiv"}>
       {order.products.map((product, key) => {
         return (<div key={key}>
             <h5>{product.name}</h5>
@@ -155,10 +151,20 @@ console.log(new Date(2022, 0), Date())
           </div>)
       })}
       <p>Total: ${(order.products.reduce((total, current) => {return total + (current.orderProduct.totalPrice/100)},0)*1.08).toFixed(2)}, with tax</p>
+      <p>Was paid by {order.paymentInfo.name}</p>
+      <p>Using card {order.paymentInfo.cardPreview}, Expiration {order.paymentInfo.expirationDate}</p>
+      <h5>Shipping Information</h5>
+      <p>{order.shippingInfo.firstName} {order.shippingInfo.lastName}</p>
+      <p>{order.shippingInfo.streetAddress},
+      {order.shippingInfo.city}</p>
+      <p>{order.shippingInfo.state}, {order.shippingInfo.zipCode}</p>
       </form>
       </div>)
-    })}
+    })
+    : <h3>User has not placed any orders.</h3>
+    }
 
+    </div>
     </div>
   {/* We're passing in the functions to close the component by signaling back to the parent */}
     {toggleShipping ?

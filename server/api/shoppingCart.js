@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { User, ShoppingCart, Product, OrderProducts } = require("../db");
+const { User, ShoppingCart, Product, OrderProducts, PaymentInfo, ShippingAddress } = require("../db");
 
 
 
@@ -11,8 +11,14 @@ router.get("/:id", async (req, res, next) => {
           orderFilled: 'true',
           userId: req.params.id
         },
-        include:
-          Product
+        include:[
+         {model: Product},
+        {model: ShippingAddress,
+        },
+      {model: PaymentInfo,
+        attributes: {exclude: ["cardNumber"]} }
+        ]
+
     });
 
     if(!order){

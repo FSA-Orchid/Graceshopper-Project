@@ -30,6 +30,7 @@ const paymentInfo = db.define('paymentInfo', {
   cardNumber: {
     type: Sequelize.BIGINT,
     allowNull: false,
+    unique: true,
   },
   cardPreview: {
     type: Sequelize.STRING,
