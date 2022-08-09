@@ -7,11 +7,14 @@ import { fetchPaymentsThunk } from "../store/payment";
 function PaymentList (props) {
 const [picked, setPicked] = useState(-1)
 useEffect(() => {
-  if(props.user.id){
+
   props.fetchPayments(props.user.id)
-  }
+
 }, [])
 
+useEffect(() => {
+
+}, [])
 
 return(
   <div>

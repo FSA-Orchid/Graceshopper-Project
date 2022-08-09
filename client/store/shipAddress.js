@@ -94,7 +94,7 @@ export default function shippingReducer(state = initialState, action) {
     case FetchShipping:
       return action.shipping
     case AddShipping:
-      return action.shipping
+      return [...state, action.shipping]
     case UpdateShipping:
       return state.map((shipping) => {
         if (shipping.id === action.shipping.id) {

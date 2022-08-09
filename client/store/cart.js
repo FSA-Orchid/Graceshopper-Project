@@ -275,7 +275,7 @@ export default function cartReducer(state = initialState, action) {
         product.id === action.product.id ? action.product : product
       );
     case AddToCart:
-      return action.newProduct;
+      return [...state, action.newProduct]
     case ClearCart:
       return initialState;
     case RemoveFromCart:

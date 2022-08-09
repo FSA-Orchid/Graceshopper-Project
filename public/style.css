@@ -61,6 +61,7 @@ form div {
 .addressBox {
   display: flex;
   margin: auto;
+  align-items: center;
 }
 .addressInfo {
   margin-left: 10px;
@@ -69,6 +70,7 @@ form div {
   padding-right: 10px;
   border: black solid;
   width: 200px;
+  border-radius: 10px;
 }
 
 .storeTitle {
@@ -141,7 +143,6 @@ form div {
 }
 
 .content {
-  padding: 0 18px;
   overflow: hidden;
   background-color: #f1f1f1;
   text-align: center;

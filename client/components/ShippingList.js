@@ -6,9 +6,7 @@ import {addShippingThunk, fetchShippingThunk} from "../store/shipAddress"
 function ShippingList (props) {
 const [picked, setPicked] = useState(-1)
 useEffect(() => {
-  if(props.user){
   props.fetchShipping(props.user.id)
-  }
 }, [])
 
 return(

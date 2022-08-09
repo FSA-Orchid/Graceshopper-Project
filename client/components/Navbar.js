@@ -24,31 +24,6 @@ function Navbar (props) {
     setCartCount(total)
   }, [props.cart])
 
-  // componentDidMount() {
-  //   this.props.fetchCart(this.props.auth.id);
-
-  //   let total = this.props.cart.reduce(
-  //     (total, item) => total + 1 * item.orderProduct.inventory,
-  //     0
-  //   );
-
-  //   this.setState({
-  //     count: total,
-  //   });
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.cart !== this.props.cart) {
-  //     let total = this.props.cart.reduce(
-  //       (total, item) => total + 1 * item.orderProduct.inventory,
-  //       0
-  //     );
-  //     this.setState({
-  //       count: total,
-  //     });
-  //   }
-  // }
-
 
     return (
       <div className="navContainer">

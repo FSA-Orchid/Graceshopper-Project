@@ -1,4 +1,4 @@
-import React,  { ReactDOM, useEffect, useState } from "react";
+import React,  { useEffect, useState } from "react";
 import {addShippingThunk,} from "../store/shipAddress"
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
@@ -72,11 +72,12 @@ catch(err){
 
   <div className="centerStage">
     <div className="addinBox">
-    <br />
+
     <form
           className="content"
           onChange={handleChange}
         >
+            <h2>Shipping Information</h2>
           <span>
             <h3>First Name*:</h3>
           </span>

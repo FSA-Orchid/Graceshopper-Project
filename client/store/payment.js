@@ -91,7 +91,7 @@ export default function paymentReducer(state = initialState, action) {
     case FetchPayment:
       return action.payments
     case AddPayment:
-      return action.payment
+      return [...state, action.payment]
     case UpdatePayment:
       return state.map((paymentState) => {
         if (paymentState.id === action.payment.id) {

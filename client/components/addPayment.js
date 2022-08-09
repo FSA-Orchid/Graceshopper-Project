@@ -1,4 +1,4 @@
-import React,  { ReactDOM, useEffect, useState } from "react";
+import React,  {  useEffect, useState } from "react";
 import {addPaymentThunk, fetchPaymentsThunk} from "../store/payment"
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
@@ -91,6 +91,7 @@ export function paymentForm (props) {
           className="card"
           onChange={(evt) => handleChangeCard(evt)}
         >
+          <h2>Payment Information</h2>
           <div>
           <span>
             <h3>Credit Card*:</h3>
@@ -132,9 +133,8 @@ export function paymentForm (props) {
             <input type="text"
             maxLength='4' size="10"name="securityCode" value={payment.securityCode} />
           </span>
-
+    <br />
           <span>
-
             <h3>Email:</h3>
           </span>
           <span>
@@ -145,7 +145,7 @@ export function paymentForm (props) {
           </div>
 
 
-          <span><label> Use same address as shipping</label></span>
+          {/* <span><label> Use same address as shipping</label></span> */}
           {props.shipping && props.shipping.length ?
           <div className="addressBox">
      { props.shipping.map((info, index) =>(

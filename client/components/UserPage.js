@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
 import { setOrderThunk } from '../store/orderHistory';
 import { fetchUserThunk } from '../store/singleUser';
@@ -27,6 +26,7 @@ useEffect(()=> {
   props.fetchAddresses(props.auth.id)
   props.fetchPayments(props.auth.id)
 }, [])
+
 
 useEffect(()=> {
  toggleClick()
