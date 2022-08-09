@@ -27,10 +27,10 @@ export function Footer (props) {
 
     <Link className="navText" to="/">
             <img
-              className="logo"
+              className="logoFooter"
               src="assets/guitarmart.png"
-              width="100px"
-              height="100px"
+              width="120px"
+              height="120px"
 
             />
           </Link>

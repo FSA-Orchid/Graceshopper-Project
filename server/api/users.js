@@ -11,6 +11,7 @@ const {
 module.exports = router;
 
 
+//this will be used to check if a guests payment information matches an existing users email
 router.put("/notLogged", async (req, res, next) => {
   try {
 
@@ -37,7 +38,7 @@ router.put("/notLogged", async (req, res, next) => {
   }
 });
 
-
+//generates a list of users
 router.get("/", async (req, res, next) => {
   try {
     const users = await User.findAll({
@@ -54,7 +55,7 @@ router.get("/", async (req, res, next) => {
 });
 
 
-
+//gets specific user information
 router.get("/:id", async (req, res, next) => {
   try {
     const users = await User.findOne({
@@ -67,6 +68,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+//allows for changing user information
 router.put("/:id", async (req, res, next) => {
   try {
     const users = await User.findOne({

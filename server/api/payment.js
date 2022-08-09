@@ -13,7 +13,7 @@ module.exports = router;
 
 
 
-
+//gets all payment plans of a user
 router.get("/:id/payment", async (req, res, next) => {
   try {
     const payments = await PaymentInfo.findAll({
@@ -50,13 +50,13 @@ router.post("/:id/payment", async (req, res, next) => {
 });
 
 
-//will remove payment info from user
+//We cannot delete a users payment address IF it is used for an existing order
 router.put("/paymentUp", async (req, res, next) => {
   try {
     let payment = await PaymentInfo.findOne({
       where: { id: req.body.payment.id },
     });
-    payment.update(req.body.payment);
+    payment.update({userId: null});
     res.send(payment);
   } catch (err) {
     next(err);

@@ -40,6 +40,13 @@ form div {
   border-radius: 10px;
 }
 
+.logoFooter {
+  max-width: 130px;
+  max-height: 130px;
+  border: solid hotpink;
+  border-radius: 10px;
+}
+
 .listingInfo {
   color: black;
   font-size: 20px;
@@ -68,11 +75,23 @@ form div {
   margin-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
-  border: black solid;
+  border: rgb(11, 163, 173) solid;
   width: 200px;
+  height: 200px;
   border-radius: 10px;
 }
 
+.profilePaymentList {
+  align-items: center;
+  text-align: center;
+}
+.profilePayment {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: hotpink solid;
+  border-radius: 10px;
+  width: 300px;
+}
 .storeTitle {
   text-align: center;
 }

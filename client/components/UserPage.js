@@ -116,9 +116,9 @@ function accordionToggle(key) {
      <div>
       <h1>User Payment Information</h1>
     {props.payment && props.payment.length ?
-      <div>
+      <div className='profilePaymentList'>
           {props.payment.map((info, index) => (
-          <div key={index}>
+          <div className='profilePayment'key={index}>
           <h4>{info.name}</h4>
           <h5>{info.cardPreview}</h5>
           <h5>Billing Information</h5>
