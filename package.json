@@ -1,5 +1,5 @@
 {
-  "name": "Guitar Store",
+  "name": "guitar_store",
   "version": "1.0.1",
   "description": "An E-Commerce Bonanza",
   "main": "index.js",
@@ -7,6 +7,7 @@
     "build": "webpack",
     "build:dev": "npm run build -- --watch --mode=development",
     "seed": "node script/seed.js",
+    "seedonline": "node database.js",
     "start": "node server",
     "start:dev": "npm run build:dev & npm run start-server",
     "start:dev:logger": "LOGGING=true npm run start:dev",
